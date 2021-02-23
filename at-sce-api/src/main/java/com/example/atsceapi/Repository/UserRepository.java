@@ -1,5 +1,5 @@
 package com.example.atsceapi.Repository;
 
-public class UserRepository {
+public interface UserRepository {
 
 }
