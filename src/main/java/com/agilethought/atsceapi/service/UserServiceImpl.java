@@ -1,54 +1,36 @@
 package com.agilethought.atsceapi.service;
 
-import com.agilethought.atsceapi.exceptions.BadRequestException;
-import com.agilethought.atsceapi.exceptions.NotFoundException;
+import com.agilethought.atsceapi.exceptions.UnauthorizedException;
 import com.agilethought.atsceapi.model.LoginData;
 import com.agilethought.atsceapi.model.User;
 import com.agilethought.atsceapi.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-
-
 import java.util.List;
-
 
 @Service
 @Slf4j
 public class UserServiceImpl implements UserService {
+
     @Autowired
     private UserRepository userRepository;
 
     @Override
-    public User loginMethod(LoginData loginData) throws BadRequestException {
+    public User loginMethod(LoginData loginData) {
 
-        if(isValid(loginData.getEmail()) && isStringLowerCase(loginData.getEmail())){
+        if (isValid(loginData.getEmail()) && isStringLowerCase(loginData.getEmail())) {
             List<User> users = userRepository.findUsersByEmail(loginData.getEmail(), loginData.getPassword());
             if (!users.isEmpty()) {
                 log.info("Get user from Database " + users.get(0));
-
                 return users.get(0);
-
-            } else {
-
-                log.info("Email or password not found");
-
-                throw new NotFoundException("Email or password not found");
             }
-
-        } else {
-
-            log.info("Email not valid " + loginData.getEmail());
-
-           throw new BadRequestException("Email and password not valid");
-
         }
-
-
+        log.info("Email not valid " + loginData.getEmail());
+        throw new UnauthorizedException("User not authorized");
     }
 
-    static boolean isValid(String email) {
+    private static boolean isValid(String email) {
         String regex = "^[\\w-_\\.+]*[\\w-_\\.]\\@([\\w]+\\.)+[\\w]+[\\w]$";
         return email.matches(regex);
     }
@@ -66,9 +48,4 @@ public class UserServiceImpl implements UserService {
         }
         return true;
     }
-
-
-
-
-
 }
