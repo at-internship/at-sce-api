@@ -13,7 +13,7 @@ public class UserController {
   @Autowired
   private UserService userService;
 
-  @PostMapping(value= "/login")
+  @PostMapping(value = "/login")
   public User loginUser(@RequestBody LoginData loginData){
       return userService.loginMethod (loginData);
   }

@@ -38,7 +38,7 @@ public class UserServiceImpl implements UserService {
     private static boolean isStringLowerCase(String str){
         //convert String to char array
         char[] charArray = str.toCharArray();
-        for(int i=0; i < charArray.length; i++){
+        for(int i = 0; i < charArray.length; i++){
             //if the character is a letter
             if( Character.isLetter(charArray[i]) ){
                 //if any character is not in lower case, return false
