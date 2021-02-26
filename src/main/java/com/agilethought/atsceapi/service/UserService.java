@@ -1,5 +1,7 @@
 package com.agilethought.atsceapi.service;
 
-public interface UserService {
+import com.agilethought.atsceapi.model.User;
 
+public interface UserService {
+    User getUserById(String id);
 }
