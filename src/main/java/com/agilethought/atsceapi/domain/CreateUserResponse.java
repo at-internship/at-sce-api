@@ -1,5 +1,4 @@
 package com.agilethought.atsceapi.domain;
-
 import lombok.Getter;
 import lombok.Setter;
 
@@ -7,5 +6,4 @@ import lombok.Setter;
 @Setter
 public class CreateUserResponse {
 	private String id;
-
 }
