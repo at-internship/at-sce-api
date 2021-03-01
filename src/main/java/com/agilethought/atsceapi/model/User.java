@@ -1,20 +1,15 @@
 package com.agilethought.atsceapi.model;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
-
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
-import java.lang.annotation.Documented;
-import java.util.UUID;
 
-@Getter
-@Setter
+@Data
 @Document
-
 public class User {
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private String id;
@@ -26,4 +21,3 @@ public class User {
     private int status;
 
 }
-
