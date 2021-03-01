@@ -18,15 +18,15 @@ import org.springframework.web.bind.annotation.*;
 public class UserController {
 	@Autowired
 	private UserService userService;
-	
+
 	@ResponseStatus(HttpStatus.OK)
 	@GetMapping("/users")
 	public List<User> findAllUsers() {
-		 return userService.getAllUsers();	
+		return userService.getAllUsers();
 	}
 
-  @PostMapping(value = "/login")
-  public User loginUser(@RequestBody LoginData loginData){
-      return userService.loginMethod (loginData);
-  }
+	@PostMapping(value = "/login")
+	public User loginUser(@RequestBody LoginData loginData) {
+		return userService.loginMethod(loginData);
+	}
 }

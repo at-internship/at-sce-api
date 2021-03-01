@@ -33,15 +33,10 @@ public class UserServiceImpl implements UserService {
 		throw new UnauthorizedException("User not authorized");
 	}
 
-	private static boolean isValid(String email) {
-		String regex = "^[\\w-_\\.+]*[\\w-_\\.]\\@([\\w]+\\.)+[\\w]+[\\w]$";
-		return email.matches(regex);
-	}
-
 	@Override
 	public List<User> getAllUsers() {
-		List<User> user = userRepository.findAll();
-		return user;
+		List<User> usersList = userRepository.findAll();
+		return usersList;
 	}
 
 	private static boolean isStringLowerCase(String str) {
@@ -56,5 +51,10 @@ public class UserServiceImpl implements UserService {
 			}
 		}
 		return true;
+	}
+
+	private static boolean isValid(String email) {
+		String regex = "^[\\w-_\\.+]*[\\w-_\\.]\\@([\\w]+\\.)+[\\w]+[\\w]$";
+		return email.matches(regex);
 	}
 }
