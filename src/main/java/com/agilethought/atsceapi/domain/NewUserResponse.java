@@ -4,6 +4,6 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class CreateUserResponse {
+public class NewUserResponse {
 	private String id;
 }

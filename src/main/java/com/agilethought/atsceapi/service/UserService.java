@@ -1,7 +1,7 @@
 package com.agilethought.atsceapi.service;
-import com.agilethought.atsceapi.domain.CreateUserRequest;
-import com.agilethought.atsceapi.domain.CreateUserResponse;
+import com.agilethought.atsceapi.domain.NewUserRequest;
+import com.agilethought.atsceapi.domain.NewUserResponse;
 
 public interface UserService {
-	CreateUserResponse createUser(CreateUserRequest request);
+	NewUserResponse createUser(NewUserRequest request);
 }

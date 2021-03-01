@@ -1,8 +1,8 @@
 package com.agilethought.atsceapi.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.agilethought.atsceapi.domain.CreateUserRequest;
-import com.agilethought.atsceapi.domain.CreateUserResponse;
+import com.agilethought.atsceapi.domain.NewUserRequest;
+import com.agilethought.atsceapi.domain.NewUserResponse;
 import com.agilethought.atsceapi.model.User;
 import com.agilethought.atsceapi.repository.UserRepository;
 
@@ -13,9 +13,9 @@ public class UserServiceImpl implements UserService {
 	private UserRepository repository;
 
 	@Override
-	public CreateUserResponse createUser(CreateUserRequest request) {
+	public NewUserResponse createUser(NewUserRequest request) {
 
-		CreateUserResponse response = new CreateUserResponse();
+		NewUserResponse response = new NewUserResponse();
 		User user = new User();
 		user.setType(request.getType());
 		user.setFirstName(request.getFirstName());
