@@ -1,4 +1,4 @@
-	package com.agilethought.atsceapi.controller;
+package com.agilethought.atsceapi.controller;
 
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.GetMapping;
