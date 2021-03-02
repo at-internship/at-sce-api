@@ -1,11 +1,12 @@
 package com.agilethought.atsceapi.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.agilethought.atsceapi.exception.NotFoundException;
-import com.agilethought.atsceapi.exceptions.UnauthorizedException;
+import com.agilethought.atsceapi.exception.UnauthorizedException;
 import com.agilethought.atsceapi.model.LoginData;
 import com.agilethought.atsceapi.model.User;
 import com.agilethought.atsceapi.repository.UserRepository;
@@ -38,6 +39,15 @@ public class UserServiceImpl implements UserService {
 	public List<User> getAllUsers() {
 		List<User> usersList = userRepository.findAll();
 		return usersList;
+	}
+
+	@Override
+	public User getUserById(String id) {
+		Optional<User> userFound = userRepository.findById(id);
+		if (userFound.isPresent())
+			return userFound.get();
+		else
+			throw new NotFoundException("User Not Found with id: " + id);
 	}
 
 	@Override

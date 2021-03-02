@@ -37,4 +37,10 @@ public class UserController {
 	public NewUserResponse postUser(@RequestBody NewUserRequest request) {
 		return userService.createUser(request);
 	}
+
+	@GetMapping("/users/{id}")
+	@ResponseStatus(HttpStatus.OK)
+	public User getUserById(@PathVariable String id){
+		return userService.getUserById(id);
+	}
 }
