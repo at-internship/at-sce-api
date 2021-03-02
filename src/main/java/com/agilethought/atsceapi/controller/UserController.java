@@ -1,4 +1,4 @@
-package com.agilethought.atsceapi.controller;
+	package com.agilethought.atsceapi.controller;
 
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,6 +12,8 @@ import com.agilethought.atsceapi.service.UserService;
 import com.agilethought.atsceapi.model.LoginData;
 import com.agilethought.atsceapi.model.User;
 import org.springframework.web.bind.annotation.*;
+import com.agilethought.atsceapi.domain.NewUserRequest;
+import com.agilethought.atsceapi.domain.NewUserResponse;
 
 @RestController
 @RequestMapping(value = "/at-sce-api/api/v1")
@@ -28,5 +30,11 @@ public class UserController {
 	@PostMapping(value = "/login")
 	public User loginUser(@RequestBody LoginData loginData) {
 		return userService.loginMethod(loginData);
+	}
+	
+	@ResponseStatus(HttpStatus.CREATED)
+	@PostMapping(value = "/users", consumes = "application/json", produces = "application/json")
+	public NewUserResponse postUser(@RequestBody NewUserRequest request) {
+		return userService.createUser(request);
 	}
 }

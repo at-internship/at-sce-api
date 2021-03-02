@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>com.agilethought</groupId>
 	<artifactId>at-sce-api</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>1.0.0-SNAPSHOT</version>
 	<name>at-sce-api</name>
 	<description>at-sce-api project for Spring Boot</description>
 	<properties>
