@@ -13,4 +13,6 @@ public interface UserService {
 	User loginMethod(LoginData loginData);
 	
 	NewUserResponse createUser(NewUserRequest request);
+
+	User getUserById(String id);
 }
