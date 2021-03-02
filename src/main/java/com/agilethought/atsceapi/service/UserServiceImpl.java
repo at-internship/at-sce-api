@@ -10,6 +10,8 @@ import com.agilethought.atsceapi.model.LoginData;
 import com.agilethought.atsceapi.model.User;
 import com.agilethought.atsceapi.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
+import com.agilethought.atsceapi.domain.NewUserRequest;
+import com.agilethought.atsceapi.domain.NewUserResponse;
 
 @Service
 @Slf4j
@@ -38,6 +40,23 @@ public class UserServiceImpl implements UserService {
 		return usersList;
 	}
 
+	@Override
+	public NewUserResponse createUser(NewUserRequest request) {
+		NewUserResponse response = new NewUserResponse();
+		User user = new User();
+
+		user.setType(request.getType());
+		user.setFirstName(request.getFirstName());
+		user.setLastName(request.getLastName());
+		user.setEmail(request.getEmail());
+		user.setPassword(request.getPassword());
+		user.setStatus(request.getStatus());
+		User savedUsers = userRepository.save(user);
+		response.setId(savedUsers.getId());
+
+		return response;
+	}
+	
 	private static boolean isStringLowerCase(String str) {
 		// convert String to char array
 		char[] charArray = str.toCharArray();
