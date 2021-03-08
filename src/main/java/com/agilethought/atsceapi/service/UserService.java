@@ -2,17 +2,17 @@ package com.agilethought.atsceapi.service;
 
 import java.util.List;
 
-import com.agilethought.atsceapi.model.LoginData;
-import com.agilethought.atsceapi.model.User;
+import com.agilethought.atsceapi.domain.LoginData;
 import com.agilethought.atsceapi.domain.NewUserRequest;
 import com.agilethought.atsceapi.domain.NewUserResponse;
+import com.agilethought.atsceapi.domain.UserDTO;
 
 public interface UserService {
-	List<User> getAllUsers();
+	List<UserDTO> getAllUsers();
 
-	User loginMethod(LoginData loginData);
+	UserDTO loginMethod(LoginData loginData);
 	
 	NewUserResponse createUser(NewUserRequest request);
 
-	User getUserById(String id);
+	UserDTO getUserById(String id);
 }
