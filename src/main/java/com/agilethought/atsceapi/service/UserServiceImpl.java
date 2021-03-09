@@ -6,9 +6,9 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.agilethought.atsceapi.domain.LoginData;
-import com.agilethought.atsceapi.domain.NewUserRequest;
-import com.agilethought.atsceapi.domain.NewUserResponse;
+import com.agilethought.atsceapi.dto.LoginData;
+import com.agilethought.atsceapi.dto.NewUserRequest;
+import com.agilethought.atsceapi.dto.NewUserResponse;
 import com.agilethought.atsceapi.dto.UserDTO;
 import com.agilethought.atsceapi.exception.NotFoundException;
 import com.agilethought.atsceapi.exception.UnauthorizedException;
