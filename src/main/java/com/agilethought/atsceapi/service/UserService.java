@@ -15,4 +15,6 @@ public interface UserService {
 	NewUserResponse createUser(NewUserRequest request);
 
 	User getUserById(String id);
+
+	void deleteUserById(String id);
 }

@@ -43,4 +43,11 @@ public class UserController {
 	public User getUserById(@PathVariable String id){
 		return userService.getUserById(id);
 	}
+
+	@DeleteMapping(value = "/users/{id}")
+	@ResponseStatus(HttpStatus.NO_CONTENT)
+	public void deleteUserById(@PathVariable String id){
+		userService.deleteUserById(id);
+	}
+
 }
