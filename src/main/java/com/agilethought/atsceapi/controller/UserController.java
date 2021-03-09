@@ -15,11 +15,11 @@ import org.springframework.web.bind.annotation.RestController;
 import com.agilethought.atsceapi.domain.LoginData;
 import com.agilethought.atsceapi.domain.NewUserRequest;
 import com.agilethought.atsceapi.domain.NewUserResponse;
-import com.agilethought.atsceapi.domain.UserDTO;
+import com.agilethought.atsceapi.dto.UserDTO;
 import com.agilethought.atsceapi.service.UserService;
 
 @RestController
-@RequestMapping(value = "/at-sce-api/api/v1")
+@RequestMapping(value = "/api/v1")
 public class UserController {
 	@Autowired
 	private UserService userService;

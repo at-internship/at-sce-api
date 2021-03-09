@@ -13,7 +13,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import com.agilethought.atsceapi.domain.UserDTO;
+import com.agilethought.atsceapi.dto.UserDTO;
 import com.agilethought.atsceapi.repository.UserRepository;
 
 @RunWith(SpringJUnit4ClassRunner.class)

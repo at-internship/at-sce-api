@@ -1,4 +1,4 @@
-package com.agilethought.atsceapi.domain;
+package com.agilethought.atsceapi.dto;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -10,6 +10,5 @@ public class UserDTO {
 	private String firstName;
 	private String lastName;
 	private String email;
-	private String password;
 	private Integer status;
 }

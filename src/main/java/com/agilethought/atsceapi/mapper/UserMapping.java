@@ -4,7 +4,7 @@ import org.springframework.stereotype.Component;
 
 import com.agilethought.atsceapi.domain.NewUserRequest;
 import com.agilethought.atsceapi.domain.NewUserResponse;
-import com.agilethought.atsceapi.domain.UserDTO;
+import com.agilethought.atsceapi.dto.UserDTO;
 import com.agilethought.atsceapi.model.User;
 
 import ma.glasnost.orika.MapperFactory;
