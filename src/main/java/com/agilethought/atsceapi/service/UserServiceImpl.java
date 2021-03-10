@@ -29,7 +29,7 @@ public class UserServiceImpl implements UserService {
 
 	@Autowired
 	private MapperFacade orikaMapperFacade;
-	
+
 	@Override
 	public UserDTO loginMethod(LoginData loginData) {
 		ValidatorUserService loginDataValidator = new LoginDataValidator();
@@ -58,6 +58,15 @@ public class UserServiceImpl implements UserService {
 			return orikaMapperFacade.map(userFound.get(), UserDTO.class);
 		else
 			throw new NotFoundException("User Not Found with id: " + id);
+	}
+
+	@Override
+	public void deleteUserById(String id) {
+		Optional<User> usFound = userRepository.findById(id);
+		if (!usFound.isPresent())
+			throw new NotFoundException("User Not Found with id: " + id);
+		else
+		userRepository.deleteById(id);
 	}
 
 	@Override
