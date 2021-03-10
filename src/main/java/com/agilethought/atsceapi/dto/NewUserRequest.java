@@ -1,4 +1,4 @@
-package com.agilethought.atsceapi.domain;
+package com.agilethought.atsceapi.dto;
 import lombok.Getter;
 import lombok.Setter;
 
