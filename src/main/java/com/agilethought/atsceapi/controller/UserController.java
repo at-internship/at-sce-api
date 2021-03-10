@@ -12,8 +12,8 @@ import com.agilethought.atsceapi.service.UserService;
 import com.agilethought.atsceapi.model.LoginData;
 import com.agilethought.atsceapi.model.User;
 import org.springframework.web.bind.annotation.*;
-import com.agilethought.atsceapi.domain.NewUserRequest;
-import com.agilethought.atsceapi.domain.NewUserResponse;
+import com.agilethought.atsceapi.dto.NewUserRequest;
+import com.agilethought.atsceapi.dto.NewUserResponse;
 
 @RestController
 @RequestMapping(value = "/at-sce-api/api/v1")

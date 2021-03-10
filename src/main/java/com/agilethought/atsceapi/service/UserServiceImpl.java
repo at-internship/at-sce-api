@@ -11,8 +11,8 @@ import com.agilethought.atsceapi.model.LoginData;
 import com.agilethought.atsceapi.model.User;
 import com.agilethought.atsceapi.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
-import com.agilethought.atsceapi.domain.NewUserRequest;
-import com.agilethought.atsceapi.domain.NewUserResponse;
+import com.agilethought.atsceapi.dto.NewUserRequest;
+import com.agilethought.atsceapi.dto.NewUserResponse;
 
 @Service
 @Slf4j

@@ -4,8 +4,8 @@ import java.util.List;
 
 import com.agilethought.atsceapi.model.LoginData;
 import com.agilethought.atsceapi.model.User;
-import com.agilethought.atsceapi.domain.NewUserRequest;
-import com.agilethought.atsceapi.domain.NewUserResponse;
+import com.agilethought.atsceapi.dto.NewUserRequest;
+import com.agilethought.atsceapi.dto.NewUserResponse;
 
 public interface UserService {
 	List<User> getAllUsers();
