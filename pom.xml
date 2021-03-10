@@ -55,6 +55,11 @@
 			<version>3.0.4</version>
 			<type>maven-plugin</type>
 		</dependency>
+		<dependency>
+			<groupId>net.rakugakibox.spring.boot</groupId>
+			<artifactId>orika-spring-boot-starter</artifactId>
+			<version>1.9.0</version>
+		</dependency>
 	</dependencies>
 
 	<build>
