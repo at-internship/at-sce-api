@@ -35,7 +35,7 @@ public class UserServiceImpl implements UserService {
 	
 	@Override
 	public UserDTO loginMethod(LoginData loginData) {
-		loginValidator.validate(loginData);
+		loginValidator.isValid(loginData);
 		List<User> users = userRepository.findUsersByEmail(loginData.getEmail(), loginData.getPassword());
 		if (!users.isEmpty()) {
 			log.info("Get user from Database " + users.get(0));
