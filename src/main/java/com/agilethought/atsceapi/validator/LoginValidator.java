@@ -1,6 +1,7 @@
 package com.agilethought.atsceapi.validator;
 
 import org.codehaus.plexus.component.annotations.Component;
+import org.springframework.stereotype.Service;
 
 import com.agilethought.atsceapi.dto.LoginData;
 import com.agilethought.atsceapi.exception.UnauthorizedException;
@@ -9,6 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 
 
 @Slf4j
+@Service
 public class LoginValidator implements Validator<LoginData>{
 	
 	@Override
