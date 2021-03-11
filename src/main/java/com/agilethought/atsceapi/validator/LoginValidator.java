@@ -14,7 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 public class LoginValidator implements Validator<LoginData>{
 	
 	@Override
-	public void isValid(LoginData loginData) {
+	public void validate(LoginData loginData) {
 		validateEmail(loginData.getEmail());
 		validatePassword(loginData.getPassword());
 	}
