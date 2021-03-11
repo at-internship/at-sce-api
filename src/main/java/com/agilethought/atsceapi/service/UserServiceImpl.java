@@ -15,6 +15,7 @@ import com.agilethought.atsceapi.exception.NotFoundException;
 import com.agilethought.atsceapi.exception.UnauthorizedException;
 import com.agilethought.atsceapi.model.User;
 import com.agilethought.atsceapi.repository.UserRepository;
+import com.agilethought.atsceapi.validator.LoginValidator;
 import com.agilethought.atsceapi.validator.Validator;
 
 import lombok.extern.slf4j.Slf4j;
@@ -108,7 +109,6 @@ public class UserServiceImpl implements UserService {
 		}else {
 			throw new NotFoundException("User Not Found with id: " + Id);
 		}
-
-		
+    
 	}
 }
