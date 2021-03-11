@@ -14,6 +14,8 @@ import com.agilethought.atsceapi.exception.NotFoundException;
 import com.agilethought.atsceapi.exception.UnauthorizedException;
 import com.agilethought.atsceapi.model.User;
 import com.agilethought.atsceapi.repository.UserRepository;
+import com.agilethought.atsceapi.validator.LoginValidator;
+import com.agilethought.atsceapi.validator.Validator;
 
 import lombok.extern.slf4j.Slf4j;
 import ma.glasnost.orika.MapperFacade;
@@ -27,19 +29,22 @@ public class UserServiceImpl implements UserService {
 
 	@Autowired
 	private MapperFacade orikaMapperFacade;
-
+	
+	@Autowired
+	private Validator<LoginData> loginValidator;
+	
 	@Override
 	public UserDTO loginMethod(LoginData loginData) {
-
-		if (isValid(loginData.getEmail()) && isStringLowerCase(loginData.getEmail())) {
-			List<User> users = userRepository.findUsersByEmail(loginData.getEmail(), loginData.getPassword());
-			if (!users.isEmpty()) {
-				log.info("Get user from Database " + users.get(0));
-				return orikaMapperFacade.map(users.get(0), UserDTO.class);
-			}
+		loginValidator.validate(loginData);
+		List<User> users = userRepository.findUsersByEmail(loginData.getEmail(), loginData.getPassword());
+		if (!users.isEmpty()) {
+			log.info("Get user from Database " + users.get(0));
+			User user = users.get(0);
+			if(user.getStatus() == 0)
+				throw new UnauthorizedException("Unauthorized");
+			return orikaMapperFacade.map(user, UserDTO.class);
 		}
-		log.info("Email not valid " + loginData.getEmail());
-		throw new UnauthorizedException("User not authorized");
+		throw new UnauthorizedException("Unathorized");
 	}
 
 	@Override
@@ -72,24 +77,5 @@ public class UserServiceImpl implements UserService {
 		User savedUsers = userRepository.save(user);
 
 		return orikaMapperFacade.map(savedUsers, NewUserResponse.class);
-	}
-	
-	private static boolean isStringLowerCase(String str) {
-		// convert String to char array
-		char[] charArray = str.toCharArray();
-		for (int i = 0; i < charArray.length; i++) {
-			// if the character is a letter
-			if (Character.isLetter(charArray[i])) {
-				// if any character is not in lower case, return false
-				if (!Character.isLowerCase(charArray[i]))
-					return false;
-			}
-		}
-		return true;
-	}
-
-	private static boolean isValid(String email) {
-		String regex = "^[\\w-_\\.+]*[\\w-_\\.]\\@([\\w]+\\.)+[\\w]+[\\w]$";
-		return email.matches(regex);
 	}
 }
