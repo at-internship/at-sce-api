@@ -6,16 +6,19 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.agilethought.atsceapi.domain.UserRequest;
-import com.agilethought.atsceapi.domain.NewUserResponse;
-import com.agilethought.atsceapi.domain.UpdateUserResponse;
+import com.agilethought.atsceapi.dto.LoginData;
+import com.agilethought.atsceapi.dto.NewUserResponse;
+import com.agilethought.atsceapi.dto.UpdateUserResponse;
+import com.agilethought.atsceapi.dto.UserDTO;
+import com.agilethought.atsceapi.dto.UserRequest;
 import com.agilethought.atsceapi.exception.NotFoundException;
 import com.agilethought.atsceapi.exception.UnauthorizedException;
-import com.agilethought.atsceapi.model.LoginData;
 import com.agilethought.atsceapi.model.User;
 import com.agilethought.atsceapi.repository.UserRepository;
+import com.agilethought.atsceapi.validator.Validator;
 
 import lombok.extern.slf4j.Slf4j;
+import ma.glasnost.orika.MapperFacade;
 
 @Service
 @Slf4j
@@ -24,79 +27,65 @@ public class UserServiceImpl implements UserService {
 	@Autowired
 	private UserRepository userRepository;
 
+	@Autowired
+	private MapperFacade orikaMapperFacade;
+	
+	@Autowired
+	private Validator<LoginData> loginValidator;
+	
 	@Override
-	public User loginMethod(LoginData loginData) {
-
-		if (isValid(loginData.getEmail()) && isStringLowerCase(loginData.getEmail())) {
-			List<User> users = userRepository.findUsersByEmail(loginData.getEmail(), loginData.getPassword());
-			if (!users.isEmpty()) {
-				log.info("Get user from Database " + users.get(0));
-				return users.get(0);
-			}
+	public UserDTO loginMethod(LoginData loginData) {
+		loginValidator.validate(loginData);
+		List<User> users = userRepository.findUsersByEmail(loginData.getEmail(), loginData.getPassword());
+		if (!users.isEmpty()) {
+			log.info("Get user from Database " + users.get(0));
+			User user = users.get(0);
+			if(user.getStatus() == 0)
+				throw new UnauthorizedException("Unauthorized");
+			return orikaMapperFacade.map(user, UserDTO.class);
 		}
-		log.info("Email not valid " + loginData.getEmail());
-		throw new UnauthorizedException("User not authorized");
+		throw new UnauthorizedException("Unathorized");
 	}
 
 	@Override
-	public List<User> getAllUsers() {
+	public List<UserDTO> getAllUsers() {
 		List<User> usersList = userRepository.findAll();
-		return usersList;
+		return orikaMapperFacade.mapAsList(usersList, UserDTO.class);
 	}
 
 	@Override
-	public User getUserById(String id) {
+	public UserDTO getUserById(String id) {
 		Optional<User> userFound = userRepository.findById(id);
 		if (userFound.isPresent())
-			return userFound.get();
+			return orikaMapperFacade.map(userFound.get(), UserDTO.class);
 		else
 			throw new NotFoundException("User Not Found with id: " + id);
 	}
 
 	@Override
-	public NewUserResponse createUser(UserRequest request) {
-		NewUserResponse response = new NewUserResponse();
-		User user = new User();
-
-		user.setType(request.getType());
-		user.setFirstName(request.getFirstName());
-		user.setLastName(request.getLastName());
-		user.setEmail(request.getEmail());
-		user.setPassword(request.getPassword());
-		user.setStatus(request.getStatus());
-		User savedUsers = userRepository.save(user);
-		response.setId(savedUsers.getId());
-
-		return response;
-	}
-	
-	private static boolean isStringLowerCase(String str) {
-		// convert String to char array
-		char[] charArray = str.toCharArray();
-		for (int i = 0; i < charArray.length; i++) {
-			// if the character is a letter
-			if (Character.isLetter(charArray[i])) {
-				// if any character is not in lower case, return false
-				if (!Character.isLowerCase(charArray[i]))
-					return false;
-			}
-		}
-		return true;
-	}
-
-	private static boolean isValid(String email) {
-		String regex = "^[\\w-_\\.+]*[\\w-_\\.]\\@([\\w]+\\.)+[\\w]+[\\w]$";
-		return email.matches(regex);
+	public void deleteUserById(String id) {
+		Optional<User> usFound = userRepository.findById(id);
+		if (!usFound.isPresent())
+			throw new NotFoundException("User Not Found with id: " + id);
+		else
+		userRepository.deleteById(id);
 	}
 
 	@Override
-	//update
-	public UpdateUserResponse updateUser(UserRequest request, String id) {
+	public NewUserResponse createUser(UserRequest request) {
+		User user = orikaMapperFacade.map(request, User.class);
+		User savedUsers = userRepository.save(user);
+
+		return orikaMapperFacade.map(savedUsers, NewUserResponse.class);
+	}
+	
+	@Override
+	public UpdateUserResponse updateUser(UserRequest request, String Id) {
 		UpdateUserResponse response = new UpdateUserResponse();
-		User user = new User();
-		Optional<User> userFound = userRepository.findById(id);
+		User user = orikaMapperFacade.map(request, User.class);
+		Optional<User> userFound = userRepository.findById(Id);
 		if(userFound.isPresent()) {
-			user.setId(id);
+			user.setId(Id);
 			user.setType(request.getType());
 			user.setFirstName(request.getFirstName());
 			user.setLastName(request.getLastName());
@@ -104,7 +93,7 @@ public class UserServiceImpl implements UserService {
 			user.setPassword(request.getPassword());
 			user.setStatus(request.getStatus()); 			
 			
-			userRepository.save(user);
+			User savedUsers = userRepository.save(user);
 			
 			response.setId(user.getId());
 			response.setType(user.getType());
@@ -114,10 +103,12 @@ public class UserServiceImpl implements UserService {
 			response.setPassword(user.getPassword());
 			response.setStatus(user.getStatus());
 			
-			return response;
+			return orikaMapperFacade.map(savedUsers, UpdateUserResponse.class);
+		
 		}else {
-			throw new NotFoundException("User Not Found with id: " + id);
+			throw new NotFoundException("User Not Found with id: " + Id);
 		}
-				
+
+		
 	}
 }

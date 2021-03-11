@@ -4,39 +4,33 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import com.agilethought.atsceapi.domain.NewUserResponse;
-import com.agilethought.atsceapi.domain.UpdateUserResponse;
-import com.agilethought.atsceapi.domain.UserRequest;
-import com.agilethought.atsceapi.model.LoginData;
-import com.agilethought.atsceapi.model.User;
+import com.agilethought.atsceapi.dto.LoginData;
+import com.agilethought.atsceapi.dto.NewUserResponse;
+import com.agilethought.atsceapi.dto.UpdateUserResponse;
+import com.agilethought.atsceapi.dto.UserDTO;
+import com.agilethought.atsceapi.dto.UserRequest;
 import com.agilethought.atsceapi.service.UserService;
 
 @RestController
-@RequestMapping(value = "/api/v1/")
+@RequestMapping(value = "/api/v1")
 public class UserController {
 	@Autowired
 	private UserService userService;
 
 	@ResponseStatus(HttpStatus.OK)
 	@GetMapping("/users")
-	public List<User> findAllUsers() {
+	public List<UserDTO> findAllUsers() {
 		return userService.getAllUsers();
 	}
 
 	@PostMapping(value = "/login")
-	public User loginUser(@RequestBody LoginData loginData) {
+	public UserDTO loginUser(@RequestBody LoginData loginData) {
 		return userService.loginMethod(loginData);
 	}
 	
+
 	@ResponseStatus(HttpStatus.CREATED)
 	@PostMapping(value = "/users", consumes = "application/json", produces = "application/json")
 	public NewUserResponse postUser(@RequestBody UserRequest request) {
@@ -45,8 +39,15 @@ public class UserController {
 
 	@GetMapping("/users/{id}")
 	@ResponseStatus(HttpStatus.OK)
-	public User getUserById(@PathVariable String id){
+	public UserDTO getUserById(@PathVariable String id){
 		return userService.getUserById(id);
+	}
+	
+
+	@DeleteMapping(value = "/users/{id}")
+	@ResponseStatus(HttpStatus.NO_CONTENT)
+	public void deleteUserById(@PathVariable String id){
+		userService.deleteUserById(id);
 	}
 	
 	@ResponseStatus(HttpStatus.OK)
@@ -54,4 +55,5 @@ public class UserController {
 	public UpdateUserResponse putUser(@RequestBody UserRequest request, @PathVariable String id) {
 		return userService.updateUser(request,id);
 	}
+
 }
