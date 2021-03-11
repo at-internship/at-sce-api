@@ -5,14 +5,17 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import com.agilethought.atsceapi.domain.UserRequest;
+import com.agilethought.atsceapi.domain.NewUserResponse;
+import com.agilethought.atsceapi.domain.UpdateUserResponse;
 import com.agilethought.atsceapi.exception.NotFoundException;
 import com.agilethought.atsceapi.exception.UnauthorizedException;
 import com.agilethought.atsceapi.model.LoginData;
 import com.agilethought.atsceapi.model.User;
 import com.agilethought.atsceapi.repository.UserRepository;
+
 import lombok.extern.slf4j.Slf4j;
-import com.agilethought.atsceapi.domain.NewUserRequest;
-import com.agilethought.atsceapi.domain.NewUserResponse;
 
 @Service
 @Slf4j
@@ -51,7 +54,7 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public NewUserResponse createUser(NewUserRequest request) {
+	public NewUserResponse createUser(UserRequest request) {
 		NewUserResponse response = new NewUserResponse();
 		User user = new User();
 
@@ -84,5 +87,37 @@ public class UserServiceImpl implements UserService {
 	private static boolean isValid(String email) {
 		String regex = "^[\\w-_\\.+]*[\\w-_\\.]\\@([\\w]+\\.)+[\\w]+[\\w]$";
 		return email.matches(regex);
+	}
+
+	@Override
+	//update
+	public UpdateUserResponse updateUser(UserRequest request, String id) {
+		UpdateUserResponse response = new UpdateUserResponse();
+		User user = new User();
+		Optional<User> userFound = userRepository.findById(id);
+		if(userFound.isPresent()) {
+			user.setId(id);
+			user.setType(request.getType());
+			user.setFirstName(request.getFirstName());
+			user.setLastName(request.getLastName());
+			user.setEmail(request.getEmail());
+			user.setPassword(request.getPassword());
+			user.setStatus(request.getStatus()); 			
+			
+			userRepository.save(user);
+			
+			response.setId(user.getId());
+			response.setType(user.getType());
+			response.setFirstName(user.getFirstName());
+			response.setLastName(user.getLastName());
+			response.setEmail(user.getEmail());
+			response.setPassword(user.getPassword());
+			response.setStatus(user.getStatus());
+			
+			return response;
+		}else {
+			throw new NotFoundException("User Not Found with id: " + id);
+		}
+				
 	}
 }
