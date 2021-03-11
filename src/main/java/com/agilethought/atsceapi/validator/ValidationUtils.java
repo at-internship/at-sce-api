@@ -1,22 +1,34 @@
 package com.agilethought.atsceapi.validator;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 public class ValidationUtils {
-	public static boolean isStringLowerCase(String str) {
-		// convert String to char array
-		char[] charArray = str.toCharArray();
-		for (int i = 0; i < charArray.length; i++) {
-			// if the character is a letter
-			if (Character.isLetter(charArray[i])) {
-				// if any character is not in lower case, return false
-				if (!Character.isLowerCase(charArray[i]))
-					return false;
-			}
+	public static boolean isStringValid(String str) {
+		if(str == null || str.isBlank()) {
+			return false;
 		}
 		return true;
 	}
 
-	public static boolean isValidEmail(String email) {
-		String regex = "^[\\w-_\\.+]*[\\w-_\\.]\\@([\\w]+\\.)+[\\w]+[\\w]$";
-		return email.matches(regex);
+	static boolean isStringLowerCase(String str) {
+		return str.equals(str.toLowerCase());
+
+	}
+
+	static boolean isValidEmail(String email) {
+		Pattern patternEmail = Pattern.compile(
+				"^[_a-z0-9-]+(\\.[_a-z0-9-]+)*@" + "[a-z0-9-]+(\\.[a-z0-9-]+)*(\\.[a-z]{2,4})$"
+		);
+		Matcher matcherEmail = patternEmail.matcher(email);
+		return matcherEmail.find();
+	}
+
+	static boolean isValidatePassword(String password) {
+		Pattern patternPassword = Pattern.compile(
+				"^(?=.*[0-9])(?=.*[a-z])(?=\\S+$).{10,}$"
+		);
+		Matcher matcherPassword = patternPassword.matcher(password);
+		return matcherPassword.find();
 	}
 }
