@@ -26,62 +26,62 @@ import com.agilethought.atsceapi.service.UserService;
 @RequestMapping(value = "/api/v1")
 @Api(value = "Software Cost Estimation", tags = "SCE")
 public class UserController {
-	@Autowired
-	private UserService userService;
+    @Autowired
+    private UserService userService;
 
-	@ResponseStatus(HttpStatus.OK)
-	@GetMapping("/users")
-	@ApiOperation(value = "Get all users from the database of the application")
-	@ApiResponses(value = {
-			@ApiResponse(code = 200, message = "Search in the database without parameters"),
-			@ApiResponse(code = 201, message = "Resource created succefully"),
-			@ApiResponse(code = 401, message = "Unauthorized"),
-			@ApiResponse(code = 403, message = "Access prohibited"),
-			@ApiResponse(code = 404, message = "Not Found"),
-	})
-	public List<UserDTO> findAllUsers() {
-		return userService.getAllUsers();
-	}
+    @ResponseStatus(HttpStatus.OK)
+    @GetMapping("/users")
+    @ApiOperation(value = "Get all users from the database of the application")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Search in the database without parameters"),
+            @ApiResponse(code = 201, message = "Resource created succefully"),
+            @ApiResponse(code = 401, message = "Unauthorized"),
+            @ApiResponse(code = 403, message = "Access prohibited"),
+            @ApiResponse(code = 404, message = "Not Found"),
+    })
+    public List<UserDTO> findAllUsers() {
+        return userService.getAllUsers();
+    }
 
-	@ResponseStatus(HttpStatus.OK)
-	@PostMapping(value = "/login")
-	@ApiOperation(value = "Let the user log into the application")
-	@ApiResponses(value = {
-			@ApiResponse(code = 200, message = "Search in the database without parameters"),
-			@ApiResponse(code = 201, message = "Resource created succefully"),
-			@ApiResponse(code = 401, message = "Unauthorized"),
-			@ApiResponse(code = 403, message = "Access prohibited"),
-			@ApiResponse(code = 404, message = "Not Found"),
-	})
-	public UserDTO loginUser(@RequestBody LoginData loginData) {
-		return userService.loginMethod(loginData);
-	}
-	
-	@ResponseStatus(HttpStatus.CREATED)
-	@PostMapping(value = "/users", consumes = "application/json", produces = "application/json")
-	@ApiOperation(value = "Create New User in the application")
-	@ApiResponses(value = {
-			@ApiResponse(code = 200, message = "Search in the database without parameters"),
-			@ApiResponse(code = 201, message = "Resource created succefully"),
-			@ApiResponse(code = 401, message = "Unauthorized"),
-			@ApiResponse(code = 403, message = "Access prohibited"),
-			@ApiResponse(code = 404, message = "Not Found"),
-	})
-	public NewUserResponse postUser(@RequestBody NewUserRequest request) {
-		return userService.createUser(request);
-	}
+    @ResponseStatus(HttpStatus.OK)
+    @PostMapping(value = "/login")
+    @ApiOperation(value = "Let the user log into the application")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Search in the database without parameters"),
+            @ApiResponse(code = 201, message = "Resource created succefully"),
+            @ApiResponse(code = 401, message = "Unauthorized"),
+            @ApiResponse(code = 403, message = "Access prohibited"),
+            @ApiResponse(code = 404, message = "Not Found"),
+    })
+    public UserDTO loginUser(@RequestBody LoginData loginData) {
+        return userService.loginMethod(loginData);
+    }
 
-	@GetMapping("/users/{id}")
-	@ResponseStatus(HttpStatus.OK)
-	@ApiOperation(value = "Validation the session of the user")
-	@ApiResponses(value = {
-			@ApiResponse(code = 200, message = "Search in the database without parameters"),
-			@ApiResponse(code = 201, message = "Resource created succefully"),
-			@ApiResponse(code = 401, message = "Unauthorized"),
-			@ApiResponse(code = 403, message = "Access prohibited"),
-			@ApiResponse(code = 404, message = "Not Found"),
-	})
-	public UserDTO getUserById(@PathVariable String id){
-		return userService.getUserById(id);
-	}
+    @ResponseStatus(HttpStatus.CREATED)
+    @PostMapping(value = "/users", consumes = "application/json", produces = "application/json")
+    @ApiOperation(value = "Create New User in the application")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Search in the database without parameters"),
+            @ApiResponse(code = 201, message = "Resource created succefully"),
+            @ApiResponse(code = 401, message = "Unauthorized"),
+            @ApiResponse(code = 403, message = "Access prohibited"),
+            @ApiResponse(code = 404, message = "Not Found"),
+    })
+    public NewUserResponse postUser(@RequestBody NewUserRequest request) {
+        return userService.createUser(request);
+    }
+
+    @GetMapping("/users/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    @ApiOperation(value = "Validation the session of the user")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Search in the database without parameters"),
+            @ApiResponse(code = 201, message = "Resource created succefully"),
+            @ApiResponse(code = 401, message = "Unauthorized"),
+            @ApiResponse(code = 403, message = "Access prohibited"),
+            @ApiResponse(code = 404, message = "Not Found"),
+    })
+    public UserDTO getUserById(@PathVariable String id) {
+        return userService.getUserById(id);
+    }
 }

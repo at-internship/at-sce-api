@@ -14,7 +14,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @Configuration
 @EnableSwagger2
 public class ConfigSwagger {
-    
+
     @Bean
     public Docket api() {
         return new Docket(DocumentationType.SWAGGER_2)
@@ -22,9 +22,7 @@ public class ConfigSwagger {
                 .paths(PathSelectors.any())
                 .apis(RequestHandlerSelectors.basePackage("com.agilethought.atsceapi"))
                 .build()
-                .apiInfo(getApiInfo())
-                ;
-
+                .apiInfo(getApiInfo());
     }
 
     private ApiInfo getApiInfo() {
