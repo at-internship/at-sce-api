@@ -42,10 +42,8 @@ public class UserController {
     @ApiOperation(value = "Let the user log into the application")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Search in the database without parameters"),
-            @ApiResponse(code = 201, message = "Resource created succefully"),
             @ApiResponse(code = 401, message = "Unauthorized"),
             @ApiResponse(code = 403, message = "Access prohibited"),
-            @ApiResponse(code = 404, message = "Not Found"),
     })
     public UserDTO loginUser(@RequestBody LoginData loginData) {
         return userService.loginMethod(loginData);
@@ -55,7 +53,6 @@ public class UserController {
     @PostMapping(value = "/users", consumes = "application/json", produces = "application/json")
     @ApiOperation(value = "Create New User in the application")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Search in the database without parameters"),
             @ApiResponse(code = 201, message = "Resource created succefully"),
             @ApiResponse(code = 401, message = "Unauthorized"),
             @ApiResponse(code = 403, message = "Access prohibited"),
@@ -70,7 +67,6 @@ public class UserController {
     @ApiOperation(value = "Validation the session of the user")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Search in the database without parameters"),
-            @ApiResponse(code = 201, message = "Resource created succefully"),
             @ApiResponse(code = 401, message = "Unauthorized"),
             @ApiResponse(code = 403, message = "Access prohibited"),
             @ApiResponse(code = 404, message = "Not Found"),
