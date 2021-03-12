@@ -24,5 +24,5 @@ public class History {
 	private double taxIVA_r;
 	private double total;
 	private double revenue;
-	private int status;
+	private boolean status;
 }
