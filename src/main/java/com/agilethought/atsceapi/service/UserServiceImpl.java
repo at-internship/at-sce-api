@@ -15,6 +15,7 @@ import com.agilethought.atsceapi.exception.NotFoundException;
 import com.agilethought.atsceapi.exception.UnauthorizedException;
 import com.agilethought.atsceapi.model.User;
 import com.agilethought.atsceapi.repository.UserRepository;
+import com.agilethought.atsceapi.validator.LoginValidator;
 import com.agilethought.atsceapi.validator.Validator;
 
 import lombok.extern.slf4j.Slf4j;
@@ -81,7 +82,6 @@ public class UserServiceImpl implements UserService {
 	
 	@Override
 	public UpdateUserResponse updateUser(UserRequest request, String Id) {
-		UpdateUserResponse response = new UpdateUserResponse();
 		User user = orikaMapperFacade.map(request, User.class);
 		Optional<User> userFound = userRepository.findById(Id);
 		if(userFound.isPresent()) {
@@ -95,20 +95,11 @@ public class UserServiceImpl implements UserService {
 			
 			User savedUsers = userRepository.save(user);
 			
-			response.setId(user.getId());
-			response.setType(user.getType());
-			response.setFirstName(user.getFirstName());
-			response.setLastName(user.getLastName());
-			response.setEmail(user.getEmail());
-			response.setPassword(user.getPassword());
-			response.setStatus(user.getStatus());
-			
 			return orikaMapperFacade.map(savedUsers, UpdateUserResponse.class);
 		
 		}else {
 			throw new NotFoundException("User Not Found with id: " + Id);
 		}
-
-		
+	
 	}
 }
