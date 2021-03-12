@@ -13,7 +13,9 @@ import org.springframework.web.bind.annotation.*;
 import com.agilethought.atsceapi.dto.LoginData;
 import com.agilethought.atsceapi.dto.NewUserRequest;
 import com.agilethought.atsceapi.dto.NewUserResponse;
+import com.agilethought.atsceapi.dto.UpdateUserResponse;
 import com.agilethought.atsceapi.dto.UserDTO;
+import com.agilethought.atsceapi.dto.UpdateUserRequest;
 import com.agilethought.atsceapi.service.UserService;
 
 @RestController
@@ -85,4 +87,18 @@ public class UserController {
 	public void deleteUserById(@PathVariable String id){
 		userService.deleteUserById(id);
 	}
+	
+	@ResponseStatus(HttpStatus.OK)
+	@PutMapping(value = "/users/{id}", consumes = "application/json", produces = "application/json")
+    @ApiOperation(value = "Update a User in the application")
+    @ApiResponses(value = {
+            @ApiResponse(code = 201, message = "Resource update succefully"),
+            @ApiResponse(code = 401, message = "Unauthorized"),
+            @ApiResponse(code = 403, message = "Access prohibited"),
+            @ApiResponse(code = 404, message = "Not Found"),
+    })
+	public UpdateUserResponse putUser(@RequestBody UpdateUserRequest request, @PathVariable String id) {
+		return userService.updateUser(request,id);
+	}
+	
 }
