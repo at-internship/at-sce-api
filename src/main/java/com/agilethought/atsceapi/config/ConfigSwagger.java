@@ -28,6 +28,6 @@ public class ConfigSwagger {
     }
 
     private ApiInfo getApiInfo() {
-        return new ApiInfoBuilder().description("").title("SCE").build();
+        return new ApiInfoBuilder().description("").title("Software Cost Estimation").build();
     }
 }
