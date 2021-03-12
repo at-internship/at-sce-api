@@ -8,6 +8,7 @@ import com.agilethought.atsceapi.dto.NewUserResponse;
 import com.agilethought.atsceapi.dto.UserDTO;
 import com.agilethought.atsceapi.dto.UpdateUserResponse;
 
+
 public interface UserService {
 	List<UserDTO> getAllUsers();
 

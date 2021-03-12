@@ -100,6 +100,6 @@ public class UserServiceImpl implements UserService {
 		}else {
 			throw new NotFoundException("User Not Found with id: " + Id);
 		}
-	
+    
 	}
 }

@@ -30,7 +30,6 @@ public class UserController {
 		return userService.loginMethod(loginData);
 	}
 	
-
 	@ResponseStatus(HttpStatus.CREATED)
 	@PostMapping(value = "/users", consumes = "application/json", produces = "application/json")
 	public NewUserResponse postUser(@RequestBody UserRequest request) {
@@ -42,14 +41,13 @@ public class UserController {
 	public UserDTO getUserById(@PathVariable String id){
 		return userService.getUserById(id);
 	}
-	
 
 	@DeleteMapping(value = "/users/{id}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void deleteUserById(@PathVariable String id){
 		userService.deleteUserById(id);
 	}
-	
+
 	@ResponseStatus(HttpStatus.OK)
 	@PutMapping(value = "/users/{id}", consumes = "application/json", produces = "application/json")
 	public UpdateUserResponse putUser(@RequestBody UserRequest request, @PathVariable String id) {

@@ -21,6 +21,7 @@ public class UserMapping implements OrikaMapperFactoryConfigurer {
 		orikaMapperFactory.classMap(User.class, UserDTO.class).mapNulls(false).byDefault().register();
 		orikaMapperFactory.classMap(UserDTO.class, User.class).mapNulls(false).byDefault().register();
 		orikaMapperFactory.classMap(User.class, UpdateUserResponse.class).mapNulls(false).byDefault().register();
+
 	}
 
 }
