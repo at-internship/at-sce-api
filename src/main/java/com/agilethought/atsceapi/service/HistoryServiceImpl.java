@@ -1,12 +1,16 @@
 package com.agilethought.atsceapi.service;
 
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import com.agilethought.atsceapi.dto.NewHistoryRequest;
 import com.agilethought.atsceapi.dto.NewHistoryResponse;
 import com.agilethought.atsceapi.model.History;
 import com.agilethought.atsceapi.repository.HistoryRepository;
+
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
 @Service
 @Slf4j
@@ -37,4 +41,10 @@ public class HistoryServiceImpl implements HistoryService{
         History savedHistory = historyRepository.save(newHistory);
         return new NewHistoryResponse(savedHistory.getId());
     }
+    
+	@Override
+	public List<History> getAllHistory(String id) {
+		List<History> historyList = historyRepository.findAllById(id);
+		return historyList;
+	}
 }
