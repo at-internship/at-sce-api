@@ -81,6 +81,11 @@ public class UserController {
 
 	@DeleteMapping(value = "/users/{id}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
+    @ApiOperation(value = "Delete a User")
+    @ApiResponses(value = {
+            @ApiResponse(code = 204, message = "No Content"),
+            @ApiResponse(code = 404, message = "Not Found"),
+    })
 	public void deleteUserById(@PathVariable String id){
 		userService.deleteUserById(id);
 	}
