@@ -7,10 +7,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.agilethought.atsceapi.dto.LoginData;
+import com.agilethought.atsceapi.dto.NewUserRequest;
 import com.agilethought.atsceapi.dto.NewUserResponse;
 import com.agilethought.atsceapi.dto.UpdateUserResponse;
 import com.agilethought.atsceapi.dto.UserDTO;
-import com.agilethought.atsceapi.dto.UserRequest;
+import com.agilethought.atsceapi.dto.UpdateUserRequest;
 import com.agilethought.atsceapi.exception.NotFoundException;
 import com.agilethought.atsceapi.exception.UnauthorizedException;
 import com.agilethought.atsceapi.model.User;
@@ -73,7 +74,7 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public NewUserResponse createUser(UserRequest request) {
+	public NewUserResponse createUser(NewUserRequest request) {
 		User user = orikaMapperFacade.map(request, User.class);
 		User savedUsers = userRepository.save(user);
 
@@ -81,7 +82,7 @@ public class UserServiceImpl implements UserService {
 	}
 	
 	@Override
-	public UpdateUserResponse updateUser(UserRequest request, String Id) {
+	public UpdateUserResponse updateUser(UpdateUserRequest request, String Id) {
 		User user = orikaMapperFacade.map(request, User.class);
 		Optional<User> userFound = userRepository.findById(Id);
 		if(userFound.isPresent()) {
