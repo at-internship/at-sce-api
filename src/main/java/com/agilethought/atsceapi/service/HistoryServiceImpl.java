@@ -5,7 +5,6 @@ import com.agilethought.atsceapi.dto.NewHistoryResponse;
 import com.agilethought.atsceapi.model.History;
 import com.agilethought.atsceapi.repository.HistoryRepository;
 import lombok.extern.slf4j.Slf4j;
-import ma.glasnost.orika.MapperFacade;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,9 +13,6 @@ import org.springframework.stereotype.Service;
 public class HistoryServiceImpl implements HistoryService{
     @Autowired
     private HistoryRepository historyRepository;
-
-    @Autowired
-    private MapperFacade orikaMapperFacade;
 
     @Override
     public NewHistoryResponse createHistory(NewHistoryRequest request) {
@@ -30,6 +26,7 @@ public class HistoryServiceImpl implements HistoryService{
                 request.getTotalDays(),
                 request.getCostDay(),
                 request.getCostHour(),
+                request.getProjectCost(),
                 request.getTaxIVA(),
                 request.getTaxISR_r(),
                 request.getTaxIVA_r(),

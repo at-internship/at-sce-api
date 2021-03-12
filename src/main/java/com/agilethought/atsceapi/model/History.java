@@ -19,6 +19,7 @@ public class History {
     private int totalDays;
     private double costDay;
     private double costHour;
+    private double projectCost;
     private double taxIVA;
     private double taxISR_r;
     private double taxIVA_r;
