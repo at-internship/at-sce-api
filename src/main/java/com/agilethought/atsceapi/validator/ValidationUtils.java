@@ -4,6 +4,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class ValidationUtils {
+
 	public static boolean isStringValid(String str) {
 		if(str == null || str.isBlank()) {
 			return false;
@@ -24,7 +25,7 @@ public class ValidationUtils {
 		return matcherEmail.find();
 	}
 
-	static boolean isValidatePassword(String password) {
+	static boolean isValidPassword(String password) {
 		Pattern patternPassword = Pattern.compile(
 				"^(?=.*[0-9])(?=.*[a-z])(?=\\S+$).{10,}$"
 		);
