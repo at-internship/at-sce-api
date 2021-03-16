@@ -78,6 +78,8 @@ public class UserServiceImpl implements UserService {
 	public NewUserResponse createUser(NewUserRequest request) {
 		User user = orikaMapperFacade.map(request, User.class);
 		userValidator.validate(user);
+		user.setFirstName(user.getFirstName().toUpperCase());
+		user.setLastName(user.getLastName().toUpperCase());
 		User savedUsers = userRepository.save(user);
 		return orikaMapperFacade.map(savedUsers, NewUserResponse.class);
 	}
