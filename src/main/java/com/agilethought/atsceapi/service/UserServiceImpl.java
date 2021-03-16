@@ -3,14 +3,11 @@ package com.agilethought.atsceapi.service;
 import java.util.List;
 import java.util.Optional;
 
-import com.agilethought.atsceapi.validator.UserValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.agilethought.atsceapi.dto.LoginData;
-import com.agilethought.atsceapi.dto.NewUserRequest;
-import com.agilethought.atsceapi.dto.NewUserResponse;
-import com.agilethought.atsceapi.dto.UserDTO;
+import com.agilethought.atsceapi.dto.*;
+import com.agilethought.atsceapi.validator.UserValidator;
 import com.agilethought.atsceapi.exception.NotFoundException;
 import com.agilethought.atsceapi.exception.UnauthorizedException;
 import com.agilethought.atsceapi.model.User;
@@ -82,5 +79,28 @@ public class UserServiceImpl implements UserService {
 		user.setLastName(user.getLastName().toUpperCase());
 		User savedUsers = userRepository.save(user);
 		return orikaMapperFacade.map(savedUsers, NewUserResponse.class);
+	}
+
+	@Override
+	public UpdateUserResponse updateUser(UpdateUserRequest request, String Id) {
+		User user = orikaMapperFacade.map(request, User.class);
+		Optional<User> userFound = userRepository.findById(Id);
+		if(userFound.isPresent()) {
+			user.setId(Id);
+			user.setType(request.getType());
+			user.setFirstName(request.getFirstName());
+			user.setLastName(request.getLastName());
+			user.setEmail(request.getEmail());
+			user.setPassword(request.getPassword());
+			user.setStatus(request.getStatus());
+
+			User savedUsers = userRepository.save(user);
+
+			return orikaMapperFacade.map(savedUsers, UpdateUserResponse.class);
+
+		}else {
+			throw new NotFoundException("User Not Found with id: " + Id);
+		}
+
 	}
 }

@@ -20,12 +20,12 @@ public class LoginValidator implements Validator<LoginData>{
 	}
 	
 	private void validateEmail(String email) {
-		if(!ValidationUtils.isValidEmail(email) && !ValidationUtils.isStringLowerCase(email))
+		if(email == null || !ValidationUtils.isValidEmail(email) && !ValidationUtils.isStringLowerCase(email))
 			throw new UnauthorizedException("Unauthorized");
 	}
 
 	private void validatePassword(String password) {
-		if(password.isEmpty())
+		if(password == null || password.isEmpty())
 			throw new UnauthorizedException("Unauthorized");
 	}
 }
