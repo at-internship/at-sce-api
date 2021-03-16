@@ -7,18 +7,18 @@ import lombok.Setter;
 @Setter
 public class HistoryDTO {
 	private String id;
-	private int type;
+	private Integer type;
 	private String user_id;
 	private FixedExpensesDTO fixedExpenses;
-	private int totalHours;
-	private int totalDays;
-	private double costDay;
-	private double costHour;
-	private double projectCost;
-	private double taxIVA;
-	private double taxISR_r;
-	private double taxIVA_r;
-	private double total;
-	private double revenue;
-	private boolean status;
+	private Integer totalHours;
+	private Integer totalDays;
+	private Double costDay;
+	private Double costHour;
+	private Double projectCost;
+	private Double taxIVA;
+	private Double taxISR_r;
+	private Double taxIVA_r;
+	private Double total;
+	private Double revenue;
+	private Integer status;
 }
