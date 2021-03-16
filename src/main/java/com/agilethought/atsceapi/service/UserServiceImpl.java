@@ -6,17 +6,12 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.agilethought.atsceapi.dto.LoginData;
-import com.agilethought.atsceapi.dto.NewUserRequest;
-import com.agilethought.atsceapi.dto.NewUserResponse;
-import com.agilethought.atsceapi.dto.UpdateUserResponse;
-import com.agilethought.atsceapi.dto.UserDTO;
-import com.agilethought.atsceapi.dto.UpdateUserRequest;
+import com.agilethought.atsceapi.dto.*;
+import com.agilethought.atsceapi.validator.UserValidator;
 import com.agilethought.atsceapi.exception.NotFoundException;
 import com.agilethought.atsceapi.exception.UnauthorizedException;
 import com.agilethought.atsceapi.model.User;
 import com.agilethought.atsceapi.repository.UserRepository;
-import com.agilethought.atsceapi.validator.LoginValidator;
 import com.agilethought.atsceapi.validator.Validator;
 
 import lombok.extern.slf4j.Slf4j;
@@ -34,6 +29,9 @@ public class UserServiceImpl implements UserService {
 	
 	@Autowired
 	private Validator<LoginData> loginValidator;
+
+	@Autowired
+	private UserValidator userValidator;
 	
 	@Override
 	public UserDTO loginMethod(LoginData loginData) {
@@ -76,11 +74,13 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public NewUserResponse createUser(NewUserRequest request) {
 		User user = orikaMapperFacade.map(request, User.class);
+		userValidator.validate(user);
+		user.setFirstName(user.getFirstName().toUpperCase());
+		user.setLastName(user.getLastName().toUpperCase());
 		User savedUsers = userRepository.save(user);
-
 		return orikaMapperFacade.map(savedUsers, NewUserResponse.class);
 	}
-	
+
 	@Override
 	public UpdateUserResponse updateUser(UpdateUserRequest request, String Id) {
 		User user = orikaMapperFacade.map(request, User.class);
@@ -92,15 +92,15 @@ public class UserServiceImpl implements UserService {
 			user.setLastName(request.getLastName());
 			user.setEmail(request.getEmail());
 			user.setPassword(request.getPassword());
-			user.setStatus(request.getStatus()); 			
-			
+			user.setStatus(request.getStatus());
+
 			User savedUsers = userRepository.save(user);
-			
+
 			return orikaMapperFacade.map(savedUsers, UpdateUserResponse.class);
-		
+
 		}else {
 			throw new NotFoundException("User Not Found with id: " + Id);
 		}
-    
+
 	}
 }
