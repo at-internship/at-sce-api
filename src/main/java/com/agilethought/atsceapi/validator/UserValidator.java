@@ -4,14 +4,12 @@ import com.agilethought.atsceapi.exception.BadRequestException;
 import static com.agilethought.atsceapi.exception.ErrorMessage.*;
 import com.agilethought.atsceapi.model.User;
 import com.agilethought.atsceapi.repository.UserRepository;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import static com.agilethought.atsceapi.validator.ValidationUtils.*;
 
 @Service
-@Slf4j
 public class UserValidator implements Validator<User> {
 
     @Autowired
@@ -29,37 +27,37 @@ public class UserValidator implements Validator<User> {
 
     private void validateUserTypeField(int type) {
         if(type < 1 || type > 2) {
-            throw new BadRequestException(badRequestMessage + "*TYPE*" + " " + badRequestMessageType);
+            throw new BadRequestException(BAD_REQUEST_MESSAGE + "*TYPE*" + " " + BAD_REQUEST_MESSAGE_TYPE);
         }
     }
 
     private void validateUserFirstName(String firstName) {
         if(!isStringValid(firstName) || !isStringLowerCase(firstName)) {
-            throw new BadRequestException(badRequestMessage + "*NAME*" + " " + badRequestMessageFirstNameLastName);
+            throw new BadRequestException(BAD_REQUEST_MESSAGE + "*NAME*" + " " + BAD_REQUEST_MESSAGE_FIRST_NAME_LASTNAME);
         }
     }
 
     private void validateUserLastName(String lastName) {
         if(!isStringValid(lastName) || !isStringLowerCase(lastName)) {
-            throw new BadRequestException(badRequestMessage + "*LASTNAME*" + " " + badRequestMessageFirstNameLastName);
+            throw new BadRequestException(BAD_REQUEST_MESSAGE + "*LASTNAME*" + " " + BAD_REQUEST_MESSAGE_FIRST_NAME_LASTNAME);
         }
     }
 
     private void validateEmailFormat(String email) {
         if(!isStringValid(email) || !isStringLowerCase(email) || !isValidEmail(email)) {
-            throw new BadRequestException(badRequestMessage + "*EMAIL*" + " " + badRequestMessageEmailPassword);
+            throw new BadRequestException(BAD_REQUEST_MESSAGE + "*EMAIL*" + " " + BAD_REQUEST_MESSAGE_EMAIL_PASSWORD);
         }
     }
 
     private void validatePasswordFormat(String password) {
         if(!isStringValid(password) || !isStringLowerCase(password) || !isValidPassword(password)) {
-            throw new BadRequestException(badRequestMessage + "*PASSWORD*" + " " + badRequestMessageEmailPassword);
+            throw new BadRequestException(BAD_REQUEST_MESSAGE + "*PASSWORD*" + " " + BAD_REQUEST_MESSAGE_EMAIL_PASSWORD);
         }
     }
 
     private void validateEmailInTheDataBase(String email) {
         if(userRepository.existsByEmail(email)) {
-            throw new BadRequestException(badRequestMessage + "*EMAIL*" + " " + badRequestMessageEmailInDB);
+            throw new BadRequestException(BAD_REQUEST_MESSAGE + "*EMAIL*" + " " + BAD_REQUEST_MESSAGE_EMAIL_IN_DB);
         }
     }
 }
