@@ -12,11 +12,11 @@ public class User {
 
 	@Id
 	private String id;
-	private int type;
+	private Integer type;
 	private String firstName;
 	private String lastName;
 	private String email;
 	private String password;
-	private int status;
+	private Integer status;
 
 }
