@@ -44,7 +44,7 @@ public class UserServiceImpl implements UserService {
 				throw new UnauthorizedException("Unauthorized");
 			return orikaMapperFacade.map(user, UserDTO.class);
 		}
-		throw new UnauthorizedException("Unathorized");
+		throw new UnauthorizedException("Unauthorized");
 	}
 
 	@Override
