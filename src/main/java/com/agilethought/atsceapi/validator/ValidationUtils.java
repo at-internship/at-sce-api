@@ -6,7 +6,7 @@ import java.util.regex.Pattern;
 public class ValidationUtils {
 
 	public static boolean isStringValid(String str) {
-		if(str == null || str.isBlank()) {
+		if(str == null || str.isEmpty() || str.equals(" ")) {
 			return false;
 		}
 		return true;
