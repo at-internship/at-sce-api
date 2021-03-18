@@ -67,7 +67,7 @@ public class UserValidator implements Validator<User> {
 
     private void validateEmailInTheDataBase(String email) {
         if(userRepository.existsByEmail(email)) {
-            throw new BadRequestException(BAD_REQUEST_MESSAGE + "*EMAIL*" + " " + BAD_REQUEST_MESSAGE_EMAIL_IN_DB);
+            throw new BadRequestException("The *EMAIL*" + " " + BAD_REQUEST_MESSAGE_EMAIL_IN_DB);
         }
     }
 
