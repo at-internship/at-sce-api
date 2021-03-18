@@ -19,7 +19,7 @@ public class ValidationUtils {
 
 	static boolean isValidEmail(String email) {
 		Pattern patternEmail = Pattern.compile(
-				"^[_a-z0-9-]+(\\.[_a-z0-9-]+)*@" + "[a-z0-9-]+(\\.[a-z0-9-]+)*(\\.[a-z]{2,4})$"
+				"^[\\p{L}\\p{N}\\._%+-]+@[\\p{L}\\p{N}\\.\\-]+\\.[\\p{L}]{2,}$"
 		);
 		Matcher matcherEmail = patternEmail.matcher(email);
 		return matcherEmail.find();

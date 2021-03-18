@@ -22,6 +22,7 @@ public class UserValidator implements Validator<User> {
         validateUserLastName(user.getLastName());
         validateEmailFormat(user.getEmail());
         validatePasswordFormat(user.getPassword());
+        validateUserStatus(user.getStatus());
         validateEmailInTheDataBase(user.getEmail());
     }
 
@@ -32,27 +33,36 @@ public class UserValidator implements Validator<User> {
     }
 
     private void validateUserFirstName(String firstName) {
-        if(!isStringValid(firstName) || !isStringLowerCase(firstName)) {
+        if(!isStringValid(firstName)) {
             throw new BadRequestException(BAD_REQUEST_MESSAGE + "*NAME*" + " " + BAD_REQUEST_MESSAGE_FIRST_NAME_LASTNAME);
         }
     }
 
     private void validateUserLastName(String lastName) {
-        if(!isStringValid(lastName) || !isStringLowerCase(lastName)) {
+        if(!isStringValid(lastName)) {
             throw new BadRequestException(BAD_REQUEST_MESSAGE + "*LASTNAME*" + " " + BAD_REQUEST_MESSAGE_FIRST_NAME_LASTNAME);
         }
     }
 
     private void validateEmailFormat(String email) {
         if(!isStringValid(email) || !isStringLowerCase(email) || !isValidEmail(email)) {
-            throw new BadRequestException(BAD_REQUEST_MESSAGE + "*EMAIL*" + " " + BAD_REQUEST_MESSAGE_EMAIL_PASSWORD);
+            throw new BadRequestException(BAD_REQUEST_MESSAGE + "*EMAIL*" + " " + BAD_REQUEST_MESSAGE_EMAIL);
         }
     }
 
     private void validatePasswordFormat(String password) {
         if(!isStringValid(password) || !isStringLowerCase(password) || !isValidPassword(password)) {
-            throw new BadRequestException(BAD_REQUEST_MESSAGE + "*PASSWORD*" + " " + BAD_REQUEST_MESSAGE_EMAIL_PASSWORD);
+            throw new BadRequestException(BAD_REQUEST_MESSAGE + "*PASSWORD*" + " " + BAD_REQUEST_MESSAGE_PASSWORD);
         }
+    }
+
+    private void validateUserStatus(Integer status) {
+        if(status != null) {
+            if( status < 0 || status > 1) {
+                throw new BadRequestException(BAD_REQUEST_MESSAGE_STATUS);
+            }
+        }
+
     }
 
     private void validateEmailInTheDataBase(String email) {
@@ -60,4 +70,5 @@ public class UserValidator implements Validator<User> {
             throw new BadRequestException(BAD_REQUEST_MESSAGE + "*EMAIL*" + " " + BAD_REQUEST_MESSAGE_EMAIL_IN_DB);
         }
     }
+
 }
