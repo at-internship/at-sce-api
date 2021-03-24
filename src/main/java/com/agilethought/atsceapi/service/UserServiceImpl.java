@@ -18,6 +18,8 @@ import com.agilethought.atsceapi.validator.Validator;
 import lombok.extern.slf4j.Slf4j;
 import ma.glasnost.orika.MapperFacade;
 
+import static com.agilethought.atsceapi.validator.ValidationUtils.*;
+
 @Service
 @Slf4j
 public class UserServiceImpl implements UserService {
@@ -27,7 +29,7 @@ public class UserServiceImpl implements UserService {
 
 	@Autowired
 	private MapperFacade orikaMapperFacade;
-	
+
 	@Autowired
 	private Validator<LoginData> loginValidator;
 
@@ -36,7 +38,7 @@ public class UserServiceImpl implements UserService {
 
 	@Autowired
 	private UpdateValidator updateValidator;
-	
+
 	@Override
 	public UserDTO loginMethod(LoginData loginData) {
 		loginValidator.validate(loginData);
@@ -44,7 +46,7 @@ public class UserServiceImpl implements UserService {
 		if (!users.isEmpty()) {
 			log.info("Get user from Database " + users.get(0));
 			User user = users.get(0);
-			if(user.getStatus() == 0)
+			if (user.getStatus() == 0)
 				throw new UnauthorizedException("Unauthorized");
 			return orikaMapperFacade.map(user, UserDTO.class);
 		}
@@ -72,15 +74,14 @@ public class UserServiceImpl implements UserService {
 		if (!usFound.isPresent())
 			throw new NotFoundException("User Not Found with id: " + id);
 		else
-		userRepository.deleteById(id);
+			userRepository.deleteById(id);
 	}
 
 	@Override
 	public NewUserResponse createUser(NewUserRequest request) {
 		User user = orikaMapperFacade.map(request, User.class);
 		userValidator.validate(user);
-		user.setFirstName(user.getFirstName().toUpperCase());
-		user.setLastName(user.getLastName().toUpperCase());
+		setUpperCase(user);
 		User savedUsers = userRepository.save(user);
 		return orikaMapperFacade.map(savedUsers, NewUserResponse.class);
 	}
@@ -90,12 +91,13 @@ public class UserServiceImpl implements UserService {
 		request.setId(id);
 		updateValidator.validate(request);
 		User user = orikaMapperFacade.map(request, User.class);
-		user.setFirstName(user.getFirstName().toUpperCase());
-		user.setLastName(user.getLastName().toUpperCase());
+		setUpperCase(user);
 		User updatedUser = userRepository.save(user);
 		return orikaMapperFacade.map(updatedUser, UpdateUserResponse.class);
 	}
 
-
-
+	private static void setUpperCase(User request){
+		request.setFirstName(request.getFirstName().toUpperCase());
+		request.setLastName(request.getLastName().toUpperCase());
+	}
 }
