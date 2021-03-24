@@ -34,7 +34,7 @@ public class UserServiceImpl implements UserService {
 	private UserValidator userValidator;
 	
 	@Override
-	public UserDTO loginMethod(LoginData loginData) {
+	public LoginDataResponse loginMethod(LoginData loginData) {
 		loginValidator.validate(loginData);
 		List<User> users = userRepository.findUsersByEmail(loginData.getEmail(), loginData.getPassword());
 		if (!users.isEmpty()) {
@@ -42,7 +42,7 @@ public class UserServiceImpl implements UserService {
 			User user = users.get(0);
 			if(user.getStatus() == 0)
 				throw new UnauthorizedException("Unauthorized");
-			return orikaMapperFacade.map(user, UserDTO.class);
+			return orikaMapperFacade.map(user, LoginDataResponse.class);
 		}
 		throw new UnauthorizedException("Unauthorized");
 	}
