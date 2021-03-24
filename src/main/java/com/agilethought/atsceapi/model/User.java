@@ -7,7 +7,7 @@ import javax.persistence.GenerationType;
 import lombok.Data;
 
 @Data
-@Document(collection = "users")
+@Document(collection = "user")
 public class User {
 
 	@Id

@@ -62,7 +62,6 @@ public class UserValidator implements Validator<User> {
                 throw new BadRequestException(BAD_REQUEST_MESSAGE_STATUS);
             }
         }
-
     }
 
     private void validateEmailInTheDataBase(String email) {
@@ -70,5 +69,4 @@ public class UserValidator implements Validator<User> {
             throw new BadRequestException("The *EMAIL*" + " " + BAD_REQUEST_MESSAGE_EMAIL_IN_DB);
         }
     }
-
 }

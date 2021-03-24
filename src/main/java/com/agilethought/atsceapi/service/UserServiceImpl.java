@@ -3,6 +3,7 @@ package com.agilethought.atsceapi.service;
 import java.util.List;
 import java.util.Optional;
 
+import com.agilethought.atsceapi.validator.UpdateValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -32,6 +33,9 @@ public class UserServiceImpl implements UserService {
 
 	@Autowired
 	private UserValidator userValidator;
+
+	@Autowired
+	private UpdateValidator updateValidator;
 	
 	@Override
 	public UserDTO loginMethod(LoginData loginData) {
@@ -82,25 +86,16 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public UpdateUserResponse updateUser(UpdateUserRequest request, String Id) {
+	public UpdateUserResponse updateUser(UpdateUserRequest request, String id) {
+		request.setId(id);
+		updateValidator.validate(request);
 		User user = orikaMapperFacade.map(request, User.class);
-		Optional<User> userFound = userRepository.findById(Id);
-		if(userFound.isPresent()) {
-			user.setId(Id);
-			user.setType(request.getType());
-			user.setFirstName(request.getFirstName());
-			user.setLastName(request.getLastName());
-			user.setEmail(request.getEmail());
-			user.setPassword(request.getPassword());
-			user.setStatus(request.getStatus());
-
-			User savedUsers = userRepository.save(user);
-
-			return orikaMapperFacade.map(savedUsers, UpdateUserResponse.class);
-
-		}else {
-			throw new NotFoundException("User Not Found with id: " + Id);
-		}
-
+		user.setFirstName(user.getFirstName().toUpperCase());
+		user.setLastName(user.getLastName().toUpperCase());
+		User updatedUser = userRepository.save(user);
+		return orikaMapperFacade.map(updatedUser, UpdateUserResponse.class);
 	}
+
+
+
 }
