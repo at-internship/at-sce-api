@@ -3,6 +3,7 @@ package com.agilethought.atsceapi.service;
 import java.util.List;
 import java.util.Optional;
 
+import com.agilethought.atsceapi.validator.UpdateValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,6 +18,8 @@ import com.agilethought.atsceapi.validator.Validator;
 import lombok.extern.slf4j.Slf4j;
 import ma.glasnost.orika.MapperFacade;
 
+import static com.agilethought.atsceapi.validator.ValidationUtils.*;
+
 @Service
 @Slf4j
 public class UserServiceImpl implements UserService {
@@ -26,13 +29,16 @@ public class UserServiceImpl implements UserService {
 
 	@Autowired
 	private MapperFacade orikaMapperFacade;
-	
+
 	@Autowired
 	private Validator<LoginData> loginValidator;
 
 	@Autowired
 	private UserValidator userValidator;
-	
+
+	@Autowired
+	private UpdateValidator updateValidator;
+
 	@Override
 	public LoginDataResponse loginMethod(LoginData loginData) {
 		loginValidator.validate(loginData);
@@ -40,7 +46,7 @@ public class UserServiceImpl implements UserService {
 		if (!users.isEmpty()) {
 			log.info("Get user from Database " + users.get(0));
 			User user = users.get(0);
-			if(user.getStatus() == 0)
+			if (user.getStatus() == 0)
 				throw new UnauthorizedException("Unauthorized");
 			return orikaMapperFacade.map(user, LoginDataResponse.class);
 		}
@@ -68,39 +74,30 @@ public class UserServiceImpl implements UserService {
 		if (!usFound.isPresent())
 			throw new NotFoundException("User Not Found with id: " + id);
 		else
-		userRepository.deleteById(id);
+			userRepository.deleteById(id);
 	}
 
 	@Override
 	public NewUserResponse createUser(NewUserRequest request) {
 		User user = orikaMapperFacade.map(request, User.class);
 		userValidator.validate(user);
-		user.setFirstName(user.getFirstName().toUpperCase());
-		user.setLastName(user.getLastName().toUpperCase());
+		setUpperCase(user);
 		User savedUsers = userRepository.save(user);
 		return orikaMapperFacade.map(savedUsers, NewUserResponse.class);
 	}
 
 	@Override
-	public UpdateUserResponse updateUser(UpdateUserRequest request, String Id) {
+	public UpdateUserResponse updateUser(UpdateUserRequest request, String id) {
+		request.setId(id);
+		updateValidator.validate(request);
 		User user = orikaMapperFacade.map(request, User.class);
-		Optional<User> userFound = userRepository.findById(Id);
-		if(userFound.isPresent()) {
-			user.setId(Id);
-			user.setType(request.getType());
-			user.setFirstName(request.getFirstName());
-			user.setLastName(request.getLastName());
-			user.setEmail(request.getEmail());
-			user.setPassword(request.getPassword());
-			user.setStatus(request.getStatus());
+		setUpperCase(user);
+		User updatedUser = userRepository.save(user);
+		return orikaMapperFacade.map(updatedUser, UpdateUserResponse.class);
+	}
 
-			User savedUsers = userRepository.save(user);
-
-			return orikaMapperFacade.map(savedUsers, UpdateUserResponse.class);
-
-		}else {
-			throw new NotFoundException("User Not Found with id: " + Id);
-		}
-
+	private static void setUpperCase(User request){
+		request.setFirstName(request.getFirstName().toUpperCase());
+		request.setLastName(request.getLastName().toUpperCase());
 	}
 }
