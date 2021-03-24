@@ -7,6 +7,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -16,6 +17,7 @@ import com.agilethought.atsceapi.service.UserService;
 @RestController
 @RequestMapping(value = "/api/v1")
 @Api(value = "Software Cost Estimation", tags = "SCE")
+@Slf4j
 public class UserController {
     @Autowired
     private UserService userService;
@@ -69,6 +71,7 @@ public class UserController {
             @ApiResponse(code = 404, message = "Not Found"),
     })
     public UserDTO getUserById(@PathVariable String id) {
+        log.info("New commit");
         return userService.getUserById(id);
     }
 
