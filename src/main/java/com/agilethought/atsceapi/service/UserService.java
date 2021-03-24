@@ -8,7 +8,7 @@ import com.agilethought.atsceapi.dto.*;
 public interface UserService {
 	List<UserDTO> getAllUsers();
 
-	UserDTO loginMethod(LoginData loginData);
+	LoginDataResponse loginMethod(LoginData loginData);
 	
 	NewUserResponse createUser(NewUserRequest request);
 

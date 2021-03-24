@@ -42,7 +42,7 @@ public class UserController {
             @ApiResponse(code = 401, message = "Unauthorized"),
             @ApiResponse(code = 403, message = "Access prohibited"),
     })
-    public UserDTO loginUser(@RequestBody LoginData loginData) {
+    public LoginDataResponse loginUser(@RequestBody LoginData loginData) {
         return userService.loginMethod(loginData);
     }
 
