@@ -2,12 +2,7 @@ package com.agilethought.atsceapi.service;
 
 import java.util.List;
 
-import com.agilethought.atsceapi.dto.LoginData;
-import com.agilethought.atsceapi.dto.NewUserRequest;
-import com.agilethought.atsceapi.dto.UpdateUserRequest;
-import com.agilethought.atsceapi.dto.NewUserResponse;
-import com.agilethought.atsceapi.dto.UserDTO;
-import com.agilethought.atsceapi.dto.UpdateUserResponse;
+import com.agilethought.atsceapi.dto.*;
 
 
 public interface UserService {
