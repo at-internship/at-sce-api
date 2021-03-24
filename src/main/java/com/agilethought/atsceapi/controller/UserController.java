@@ -17,7 +17,6 @@ import com.agilethought.atsceapi.service.UserService;
 @RestController
 @RequestMapping(value = "/api/v1")
 @Api(value = "Software Cost Estimation", tags = "SCE")
-@Slf4j
 public class UserController {
     @Autowired
     private UserService userService;
