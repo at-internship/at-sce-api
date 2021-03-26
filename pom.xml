@@ -134,6 +134,9 @@
                             <excludes>
                                 <exclude>com/agilethought/atsceapi/config/**/*</exclude>
                                 <exclude>com/agilethought/atsceapi/model/**/*</exclude>
+                                <exclude>com/agilethought/atsceapi/domain/**/*</exclude>
+                                <exclude>com/agilethought/atsceapi/exception/**/*</exclude>
+                                <exclude>com/agilethought/atsceapi/dto/**/*</exclude>
                             </excludes>
                         </configuration>
                         <executions>
