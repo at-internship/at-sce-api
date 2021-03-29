@@ -24,7 +24,7 @@ import io.swagger.annotations.ApiResponses;
 
 @RestController
 @RequestMapping(value = "/api/v1")
-@Api(value = "Api de History")
+@Api(value = "History Api")
 public class HistoryController {
     @Autowired
     private HistoryService historyService;
