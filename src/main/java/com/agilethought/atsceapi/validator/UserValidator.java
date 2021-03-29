@@ -26,7 +26,7 @@ public class UserValidator implements Validator<User> {
         validateEmailInTheDataBase(user.getEmail());
     }
 
-    private void validateUserTypeField(int type) {
+    private void validateUserTypeField(Integer type) {
         if(type < 1 || type > 2) {
             throw new BadRequestException(BAD_REQUEST_MESSAGE + "*TYPE*" + " " + BAD_REQUEST_MESSAGE_TYPE);
         }

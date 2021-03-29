@@ -9,6 +9,7 @@ import com.agilethought.atsceapi.dto.NewHistoryRequest;
 import com.agilethought.atsceapi.dto.NewHistoryResponse;
 import com.agilethought.atsceapi.model.History;
 import com.agilethought.atsceapi.repository.HistoryRepository;
+import com.agilethought.atsceapi.validator.HistoryValidator;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -17,9 +18,14 @@ import lombok.extern.slf4j.Slf4j;
 public class HistoryServiceImpl implements HistoryService{
     @Autowired
     private HistoryRepository historyRepository;
-
+    
+    @Autowired
+	private HistoryValidator historyValidator;
+    
     @Override
     public NewHistoryResponse createHistory(NewHistoryRequest request) {
+    	historyValidator.validate(request);
+    	
         // Manual mapping from NewHistoryRequest to History classes.
         History newHistory = new History(
                 null,
@@ -36,8 +42,7 @@ public class HistoryServiceImpl implements HistoryService{
                 request.getTaxIVA_r(),
                 request.getTotal(),
                 request.getRevenue(),
-                request.getStatus() > 0
-        );
+                (request.getStatus() == null) ? false : (request.getStatus() > 0) ? true : false);
         History savedHistory = historyRepository.save(newHistory);
         return new NewHistoryResponse(savedHistory.getId());
     }
