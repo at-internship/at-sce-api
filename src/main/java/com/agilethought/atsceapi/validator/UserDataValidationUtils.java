@@ -9,7 +9,7 @@ import static com.agilethought.atsceapi.validator.ValidationUtils.*;
 
 @Service
 public class UserDataValidationUtils {
-    public void validateUserData(int type, String firstName, String lastName, String email, String password, Integer status){
+    public void validateUserData(Integer type, String firstName, String lastName, String email, String password, Integer status){
         validateUserTypeField(type);
         validateUserFirstName(firstName);
         validateUserLastName(lastName);
@@ -52,7 +52,7 @@ public class UserDataValidationUtils {
         }
     }
 
-    private void validateUserTypeField(int type) {
+    private void validateUserTypeField(Integer type) {
         if(type < 1 || type > 2) {
             throw new BadRequestException(BAD_REQUEST_MESSAGE + "*TYPE*" + " " + BAD_REQUEST_MESSAGE_TYPE);
         }
