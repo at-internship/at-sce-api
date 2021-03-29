@@ -2,6 +2,7 @@ package com.agilethought.atsceapi.controller;
 
 import java.util.List;
 
+import com.agilethought.atsceapi.dto.*;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
@@ -10,12 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
-import com.agilethought.atsceapi.dto.LoginData;
-import com.agilethought.atsceapi.dto.NewUserRequest;
-import com.agilethought.atsceapi.dto.NewUserResponse;
-import com.agilethought.atsceapi.dto.UpdateUserResponse;
-import com.agilethought.atsceapi.dto.UserDTO;
-import com.agilethought.atsceapi.dto.UpdateUserRequest;
 import com.agilethought.atsceapi.service.UserService;
 
 @RestController
@@ -43,11 +38,11 @@ public class UserController {
     @PostMapping(value = "/login")
     @ApiOperation(value = "Let the user log into the application")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "The resource has been retrieved successfully"),
+            @ApiResponse(code = 200, message = "Search in the database without parameters"),
             @ApiResponse(code = 401, message = "Unauthorized"),
             @ApiResponse(code = 403, message = "Access prohibited"),
     })
-    public UserDTO loginUser(@RequestBody LoginData loginData) {
+    public LoginDataResponse loginUser(@RequestBody LoginData loginData) {
         return userService.loginMethod(loginData);
     }
 
@@ -56,7 +51,6 @@ public class UserController {
     @ApiOperation(value = "Create New User in the application")
     @ApiResponses(value = {
             @ApiResponse(code = 201, message = "Resource created succefully"),
-            @ApiResponse(code = 400, message = "Bad request"),
             @ApiResponse(code = 401, message = "Unauthorized"),
             @ApiResponse(code = 403, message = "Access prohibited"),
             @ApiResponse(code = 404, message = "Not Found"),
