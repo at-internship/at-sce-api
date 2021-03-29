@@ -43,7 +43,7 @@ public class UserController {
     @PostMapping(value = "/login")
     @ApiOperation(value = "Let the user log into the application")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Search in the database without parameters"),
+            @ApiResponse(code = 200, message = "The resource has been retrieved successfully"),
             @ApiResponse(code = 401, message = "Unauthorized"),
             @ApiResponse(code = 403, message = "Access prohibited"),
     })
@@ -56,6 +56,7 @@ public class UserController {
     @ApiOperation(value = "Create New User in the application")
     @ApiResponses(value = {
             @ApiResponse(code = 201, message = "Resource created succefully"),
+            @ApiResponse(code = 400, message = "Bad request"),
             @ApiResponse(code = 401, message = "Unauthorized"),
             @ApiResponse(code = 403, message = "Access prohibited"),
             @ApiResponse(code = 404, message = "Not Found"),
