@@ -7,11 +7,11 @@ import lombok.Setter;
 
 @Getter
 @Setter
-@ApiModel(description = "User Login")
+@ApiModel(description = "Template that saves temporary user credentials")
 public class LoginData {
 
-    @ApiModelProperty(example = "juan.perez@agilethought.com", value = "User's email that allows us to log in the application, has to be unique")
+    @ApiModelProperty(required = true, example = "juan.perez@agilethought.com", value = "User's email that allows us to log in the application, has to be unique")
     private String email;
-    @ApiModelProperty(example = "jp087gadf0", value = "Secret code to enter to the email")
+    @ApiModelProperty(required = true, example = "jp087gadf0", value = "Secret code to enter to the email")
     private String password;
 }
