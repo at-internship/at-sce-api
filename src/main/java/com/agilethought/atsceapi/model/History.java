@@ -2,16 +2,14 @@ package com.agilethought.atsceapi.model;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
-
 import com.agilethought.atsceapi.domain.FixedExpenses;
-
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.*;
 
 @Data
 @AllArgsConstructor
+@NoArgsConstructor
 @Document(collection = "histories")
 @ApiModel(description = "Template that saves history info")
 public class History {

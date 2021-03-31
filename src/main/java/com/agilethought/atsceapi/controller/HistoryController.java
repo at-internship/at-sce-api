@@ -5,18 +5,16 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-
 import com.agilethought.atsceapi.dto.*;
-import com.agilethought.atsceapi.model.History;
 import com.agilethought.atsceapi.service.HistoryService;
-
 import io.swagger.annotations.*;
 
 @RestController
 @RequestMapping(value = "/api/v1")
 @Api(value = "History Api")
 public class HistoryController {
-    @Autowired
+    
+	@Autowired
     private HistoryService historyService;
 
     @ResponseStatus(HttpStatus.CREATED)
@@ -42,7 +40,7 @@ public class HistoryController {
             @ApiResponse(code = 403, message = "Access prohibited"),
             @ApiResponse(code = 404, message = "Not Found"),
     })
-	public List<History> getHistory(@RequestParam("userid") String id){
+	public List<HistoryDTO> getHistory(@RequestParam("userid") String id){
 		return historyService.getAllHistory(id);
 	}
 }
