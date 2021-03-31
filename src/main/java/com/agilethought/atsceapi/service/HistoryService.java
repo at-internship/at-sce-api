@@ -2,12 +2,11 @@ package com.agilethought.atsceapi.service;
 
 import java.util.List;
 
-import com.agilethought.atsceapi.dto.NewHistoryRequest;
-import com.agilethought.atsceapi.dto.NewHistoryResponse;
-import com.agilethought.atsceapi.model.History;
+import com.agilethought.atsceapi.dto.*;
 
 public interface HistoryService {
-    NewHistoryResponse createHistory(NewHistoryRequest request);
+    
+	NewHistoryResponse createHistory(NewHistoryRequest request);
 
-	List<History> getAllHistory(String id);
+	List<HistoryDTO> getAllHistory(String id);
 }
