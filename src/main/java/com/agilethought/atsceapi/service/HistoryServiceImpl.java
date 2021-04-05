@@ -4,47 +4,37 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import com.agilethought.atsceapi.dto.NewHistoryRequest;
-import com.agilethought.atsceapi.dto.NewHistoryResponse;
+import com.agilethought.atsceapi.dto.*;
 import com.agilethought.atsceapi.model.History;
 import com.agilethought.atsceapi.repository.HistoryRepository;
-
+import com.agilethought.atsceapi.validator.HistoryValidator;
 import lombok.extern.slf4j.Slf4j;
+import ma.glasnost.orika.MapperFacade;
 
 @Service
 @Slf4j
 public class HistoryServiceImpl implements HistoryService{
-    @Autowired
+   
+	@Autowired
     private HistoryRepository historyRepository;
+    
+    @Autowired
+    private HistoryValidator historyValidator;
+    
+    @Autowired
+   	private MapperFacade orikaMapperFacade;
 
     @Override
     public NewHistoryResponse createHistory(NewHistoryRequest request) {
-        // Manual mapping from NewHistoryRequest to History classes.
-        History newHistory = new History(
-                null,
-                request.getType().byteValue(),
-                request.getUser_id(),
-                request.getFixedExpenses(),
-                request.getTotalHours(),
-                request.getTotalDays(),
-                request.getCostDay(),
-                request.getCostHour(),
-                request.getProjectCost(),
-                request.getTaxIVA(),
-                request.getTaxISR_r(),
-                request.getTaxIVA_r(),
-                request.getTotal(),
-                request.getRevenue(),
-                request.getStatus() > 0
-        );
+    	historyValidator.validate(request);
+    	History newHistory = orikaMapperFacade.map(request, History.class);
         History savedHistory = historyRepository.save(newHistory);
-        return new NewHistoryResponse(savedHistory.getId());
+        return orikaMapperFacade.map(savedHistory, NewHistoryResponse.class);
     }
     
 	@Override
-	public List<History> getAllHistory(String id) {
+	public List<HistoryDTO> getAllHistory(String id) {
 		List<History> historyList = historyRepository.findAllById(id);
-		return historyList;
+		return orikaMapperFacade.mapAsList(historyList, HistoryDTO.class);
 	}
 }

@@ -7,7 +7,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-@ApiModel(description = "User Model")
+@ApiModel(description = "Template that saves relevant user info")
 public class UserDTO {
     @ApiModelProperty(example = "6fbd5", value = "Unique Identifier")
     private String id;

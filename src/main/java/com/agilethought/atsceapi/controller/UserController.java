@@ -25,7 +25,7 @@ public class UserController {
     @ApiOperation(value = "Get all users from the database of the application")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Search in the database without parameters"),
-            @ApiResponse(code = 201, message = "Resource created succefully"),
+            @ApiResponse(code = 201, message = "Resource created successfully"),
             @ApiResponse(code = 401, message = "Unauthorized"),
             @ApiResponse(code = 403, message = "Access prohibited"),
             @ApiResponse(code = 404, message = "Not Found"),
@@ -50,7 +50,7 @@ public class UserController {
     @PostMapping(value = "/users", consumes = "application/json", produces = "application/json")
     @ApiOperation(value = "Create New User in the application")
     @ApiResponses(value = {
-            @ApiResponse(code = 201, message = "Resource created succefully"),
+            @ApiResponse(code = 201, message = "Resource created successfully"),
             @ApiResponse(code = 401, message = "Unauthorized"),
             @ApiResponse(code = 403, message = "Access prohibited"),
             @ApiResponse(code = 404, message = "Not Found"),
@@ -87,7 +87,7 @@ public class UserController {
 	@PutMapping(value = "/users/{id}", consumes = "application/json", produces = "application/json")
     @ApiOperation(value = "Update a User in the application")
     @ApiResponses(value = {
-            @ApiResponse(code = 201, message = "Resource update succefully"),
+            @ApiResponse(code = 201, message = "Resource update successfully"),
             @ApiResponse(code = 401, message = "Unauthorized"),
             @ApiResponse(code = 403, message = "Access prohibited"),
             @ApiResponse(code = 404, message = "Not Found"),
