@@ -1,9 +1,12 @@
 package com.agilethought.atsceapi.mapper;
 
+import com.agilethought.atsceapi.dto.history.FixedExpensesDTO;
+import com.agilethought.atsceapi.dto.history.HistoryDTO;
+import com.agilethought.atsceapi.dto.history.NewHistoryRequest;
+import com.agilethought.atsceapi.dto.history.NewHistoryResponse;
 import org.springframework.stereotype.Component;
 import com.agilethought.atsceapi.converter.*;
 import com.agilethought.atsceapi.domain.FixedExpenses;
-import com.agilethought.atsceapi.dto.*;
 import com.agilethought.atsceapi.model.History;
 import ma.glasnost.orika.MapperFactory;
 import net.rakugakibox.spring.boot.orika.OrikaMapperFactoryConfigurer;

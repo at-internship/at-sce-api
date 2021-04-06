@@ -2,14 +2,15 @@ package com.agilethought.atsceapi.controller;
 
 import java.util.List;
 
-import com.agilethought.atsceapi.dto.*;
+import com.agilethought.atsceapi.dto.user.*;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
+
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.*;
 
 import com.agilethought.atsceapi.service.UserService;
 
@@ -17,6 +18,7 @@ import com.agilethought.atsceapi.service.UserService;
 @RequestMapping(value = "/api/v1")
 @Api(value = "Software Cost Estimation", tags = "SCE")
 public class UserController {
+
     @Autowired
     private UserService userService;
 
@@ -31,7 +33,9 @@ public class UserController {
             @ApiResponse(code = 404, message = "Not Found"),
     })
     public List<UserDTO> findAllUsers() {
+
         return userService.getAllUsers();
+
     }
 
     @ResponseStatus(HttpStatus.OK)
@@ -42,8 +46,10 @@ public class UserController {
             @ApiResponse(code = 401, message = "Unauthorized"),
             @ApiResponse(code = 403, message = "Access prohibited"),
     })
-    public LoginDataResponse loginUser(@RequestBody LoginData loginData) {
-        return userService.loginMethod(loginData);
+    public LoginResponse loginUser(@RequestBody LoginRequest loginRequest) {
+
+        return userService.loginUser(loginRequest);
+
     }
 
     @ResponseStatus(HttpStatus.CREATED)
@@ -56,7 +62,9 @@ public class UserController {
             @ApiResponse(code = 404, message = "Not Found"),
     })
     public NewUserResponse postUser(@RequestBody NewUserRequest request) {
+
         return userService.createUser(request);
+
     }
 
     @GetMapping("/users/{id}")
@@ -69,7 +77,9 @@ public class UserController {
             @ApiResponse(code = 404, message = "Not Found"),
     })
     public UserDTO getUserById(@PathVariable String id) {
+
         return userService.getUserById(id);
+
     }
 
 	@DeleteMapping(value = "/users/{id}")
@@ -80,7 +90,9 @@ public class UserController {
             @ApiResponse(code = 404, message = "Not Found"),
     })
 	public void deleteUserById(@PathVariable String id){
-		userService.deleteUserById(id);
+
+        userService.deleteUserById(id);
+
 	}
 	
 	@ResponseStatus(HttpStatus.OK)
@@ -93,7 +105,9 @@ public class UserController {
             @ApiResponse(code = 404, message = "Not Found"),
     })
 	public UpdateUserResponse putUser(@RequestBody UpdateUserRequest request, @PathVariable String id) {
-		return userService.updateUser(request,id);
+
+        return userService.updateUser(request,id);
+
 	}
 	
 }

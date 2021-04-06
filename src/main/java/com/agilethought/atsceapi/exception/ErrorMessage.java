@@ -2,17 +2,24 @@ package com.agilethought.atsceapi.exception;
 
 public class ErrorMessage {
 
-    public static final String BAD_REQUEST_MESSAGE = "The field ";
-    public static final String BAD_REQUEST_MESSAGE_TYPE = "needs to be 1 or 2";
-    public static final String BAD_REQUEST_MESSAGE_FIRST_NAME_LASTNAME = "is required and you didn't type it";
-    public static final String BAD_REQUEST_MESSAGE_EMAIL = "is not valid, because it doesn't have the correct format, " +
-            "try without capital letters and the format like this xxx@domail.xxx";
-    public static final String BAD_REQUEST_MESSAGE_PASSWORD = "is not valid, because it doesn't have the correct format, " +
-            "try with at least 10 characters, a numeric value and without capital letters characters";
-    public static final String BAD_REQUEST_MESSAGE_EMAIL_IN_DB = "can not be store, because it already exists in the Database, try with another email";
-    public static final String BAD_REQUEST_MESSAGE_STATUS = "The status needs to be 0 or 1";
-    public static final String BAD_REQUEST_MESSAGE_UNMATCHED_EMAIL = "Email provided does not match";
-    public static final String BAD_REQUEST_MESSAGE_HISTORY_TYPE = "needs to be either 1, 2, 3 or 4";
-	public static final String BAD_REQUEST_MESSAGE_USER_ID = "needs to be a valid user id";
-	public static final String BAD_REQUEST_MESSAGE_REQUIRED_NUMERIC = "needs to have a numeric value of 0 or more";
+    public static final String MISSING_REQUIRED_INPUT = "Required field %s is missing.";
+
+    public static final String INVALID_INPUT = "Invalid input on field %s. Correct format is: %s";
+    public static final String CORRECT_FORMAT_NUMERIC = "A number with or " +
+            "without a decimal point.";
+
+    public static final String EMAIL = "Email";
+    public static final String ALREADY_EXISTING_EMAIL = "Email %s is already in use, " +
+            "try with another one or login.";
+
+    public static final String PASSWORD = "Password";
+
+    public static final String NOT_FOUND_RESOURCE = "%s was not found with the given id: %s";
+
+    public static final String HISTORY = "History";
+    public static final String USER = "User";
+
+    public static final String INVALID_CREDENTIALS = "Invalid login credentials.";
+    public static final String UNAVAILABLE_ENTITY = "This %s is currently unavailable.";
+
 }
