@@ -1,15 +1,23 @@
-package com.agilethought.atsceapi.dto;
+package com.agilethought.atsceapi.dto.user;
+
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
-public class UpdateUserRequest {
+public class UpdateUserResponse {
+
+	//The Response will be a 200 HttpStatus.OK with the following Response Body
 	private String id;
+
 	private Integer type;
+
 	private String firstName;
+
 	private String lastName;
+
 	private String email;
-	private String password;
+
 	private Integer status;
+
 }

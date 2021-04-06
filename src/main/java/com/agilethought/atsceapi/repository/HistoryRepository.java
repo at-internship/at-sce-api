@@ -12,5 +12,6 @@ import com.agilethought.atsceapi.model.History;
 public interface HistoryRepository extends MongoRepository<History, String> {
 	
 	@Query("{ 'user_id' : ?0 }")
-	List<History> findAllById(String id);
+	List<History> findAllByUserId(String userId);
+
 }

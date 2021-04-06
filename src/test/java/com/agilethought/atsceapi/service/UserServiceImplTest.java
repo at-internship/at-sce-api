@@ -6,6 +6,7 @@ import static org.mockito.Mockito.when;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.agilethought.atsceapi.service.implementation.UserServiceImpl;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -13,7 +14,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import com.agilethought.atsceapi.dto.UserDTO;
+import com.agilethought.atsceapi.dto.user.UserDTO;
 import com.agilethought.atsceapi.repository.UserRepository;
 
 @RunWith(SpringJUnit4ClassRunner.class)

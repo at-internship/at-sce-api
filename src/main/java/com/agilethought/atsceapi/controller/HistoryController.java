@@ -2,11 +2,15 @@ package com.agilethought.atsceapi.controller;
 
 import java.util.List;
 
+import com.agilethought.atsceapi.dto.history.HistoryDTO;
+import com.agilethought.atsceapi.dto.history.NewHistoryRequest;
+import com.agilethought.atsceapi.dto.history.NewHistoryResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import com.agilethought.atsceapi.dto.*;
+
 import com.agilethought.atsceapi.service.HistoryService;
+
 import io.swagger.annotations.*;
 
 @RestController
@@ -28,12 +32,14 @@ public class HistoryController {
             @ApiResponse(code = 404, message = "Not Found"),
     })
     public NewHistoryResponse postHistory(@RequestBody NewHistoryRequest request) {
+
         return historyService.createHistory(request);
+
     }
     
 	@ResponseStatus(HttpStatus.OK)
 	@GetMapping("/histories")
-	@ApiOperation(value="Obtain a specific history by user id")
+	@ApiOperation(value="Obtain all histories created by a user (through user id)")
 	@ApiResponses(value = {
 			@ApiResponse(code = 200, message = "The resource has been retrieved successfully"),
     		@ApiResponse(code = 401, message = "Unauthorized"),
@@ -41,6 +47,9 @@ public class HistoryController {
             @ApiResponse(code = 404, message = "Not Found"),
     })
 	public List<HistoryDTO> getHistory(@RequestParam("userid") String id){
-		return historyService.getAllHistory(id);
+
+		return historyService.getUserHistories(id);
+
 	}
+
 }
