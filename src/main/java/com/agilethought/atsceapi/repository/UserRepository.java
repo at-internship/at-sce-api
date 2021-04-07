@@ -10,10 +10,12 @@ import com.agilethought.atsceapi.model.User;
 
 @Repository
 public interface UserRepository extends MongoRepository<User, String> {
+
+	@Override
 	List<User> findAll();
 
 	@Query("{ 'email' : ?0, 'password' : ?1 }")
-	List<User> findUsersByEmail(String email, String password);
+	List<User> findUserWithCredentials(String email, String password);
 
 	boolean existsByEmail(String email);
 }
