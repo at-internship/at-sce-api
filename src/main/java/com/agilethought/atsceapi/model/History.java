@@ -7,6 +7,8 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
 
+import java.time.LocalDate;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -44,4 +46,5 @@ public class History {
 	private Double revenue;
 	@ApiModelProperty(allowEmptyValue = true, example = "false", allowableValues = "true, false")
 	private Boolean status;
+	private LocalDate creationDate;
 }
