@@ -1,10 +1,12 @@
-package com.agilethought.atsceapi.dto;
+package com.agilethought.atsceapi.dto.user;
 
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
-public class LoginDataResponse {
+public class LoginResponse {
+
     private String id;
+
 }

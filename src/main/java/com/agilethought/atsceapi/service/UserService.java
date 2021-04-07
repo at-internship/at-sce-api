@@ -2,13 +2,13 @@ package com.agilethought.atsceapi.service;
 
 import java.util.List;
 
-import com.agilethought.atsceapi.dto.*;
-
+import com.agilethought.atsceapi.dto.user.*;
 
 public interface UserService {
+
 	List<UserDTO> getAllUsers();
 
-	LoginDataResponse loginMethod(LoginData loginData);
+	LoginResponse loginUser(LoginRequest loginRequest);
 	
 	NewUserResponse createUser(NewUserRequest request);
 
@@ -16,6 +16,9 @@ public interface UserService {
 
 	void deleteUserById(String id);
 	
-	UpdateUserResponse updateUser(UpdateUserRequest request, String id);
+	UpdateUserResponse updateUser(
+			UpdateUserRequest request,
+			String id
+	);
 
 }
