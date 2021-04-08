@@ -3,6 +3,7 @@ package com.agilethought.atsceapi.service.implementation;
 import java.util.List;
 
 import com.agilethought.atsceapi.service.HistoryService;
+import com.agilethought.atsceapi.population.HistoryPopulation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -35,7 +36,8 @@ public class HistoryServiceImpl implements HistoryService {
 
     	historyValidator.validate(request);
     	History newHistory = orikaMapperFacade.map(request, History.class);
-        History savedHistory = historyRepository.save(newHistory);
+        HistoryPopulation.populate(newHistory);
+    	History savedHistory = historyRepository.save(newHistory);
         return orikaMapperFacade.map(savedHistory, NewHistoryResponse.class);
 
     }

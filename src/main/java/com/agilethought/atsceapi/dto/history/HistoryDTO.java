@@ -106,5 +106,6 @@ public class HistoryDTO {
 			allowableValues = "0, 1"
 	)
 	private Integer status;
+	private String creationDate;
 
 }

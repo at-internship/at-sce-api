@@ -4,6 +4,7 @@ import static com.agilethought.atsceapi.exception.ErrorMessage.MISSING_REQUIRED_
 import static com.agilethought.atsceapi.exception.ErrorMessage.INVALID_INPUT;
 import static com.agilethought.atsceapi.exception.ErrorMessage.CORRECT_FORMAT_NUMERIC;
 
+import com.agilethought.atsceapi.repository.UserRepository;
 import com.agilethought.atsceapi.validator.Validator;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,6 +49,9 @@ public class HistoryValidator implements Validator<NewHistoryRequest> {
 
     @Autowired
 	private FixedExpensesValidator fixedExpensesValidator;
+
+	@Autowired
+	private UserRepository userRepository;
     
 	@Override
 	public void validate(NewHistoryRequest historyRequest) {
@@ -85,13 +89,11 @@ public class HistoryValidator implements Validator<NewHistoryRequest> {
 	}
 
 	private void validateUserId(String user_id) {
-
-		if (StringUtils.isBlank(user_id)) {
+		if (!userRepository.existsById(user_id) || StringUtils.isBlank(user_id)) {
 			throw new BadRequestException(
 					String.format(MISSING_REQUIRED_INPUT, USER_ID)
 			);
 		}
-
 	}
 
 	private void validateTotalHours(Integer totalHours) {

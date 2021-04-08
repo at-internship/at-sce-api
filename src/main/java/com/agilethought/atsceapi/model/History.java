@@ -10,6 +10,8 @@ import io.swagger.annotations.ApiModelProperty;
 
 import lombok.Data;
 
+import java.time.LocalDate;
+
 @Data
 @Document(collection = "histories")
 @ApiModel(description = "Template that saves history info")
@@ -75,5 +77,6 @@ public class History {
 			allowableValues = "true, false"
 	)
 	private Boolean status;
+	private LocalDate creationDate;
 
 }
