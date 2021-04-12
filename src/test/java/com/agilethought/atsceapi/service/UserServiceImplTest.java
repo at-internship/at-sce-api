@@ -1,6 +1,6 @@
 package com.agilethought.atsceapi.service;
 
-import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.Mockito.when;
@@ -28,7 +28,7 @@ public class UserServiceImplTest {
     private UserRepository userRepository;
 
     @Mock
-    private MapperFacade userRepositoryMapper;
+    private MapperFacade orikaMapperFacade;
 
     @InjectMocks
     private UserServiceImpl userService;
@@ -39,10 +39,11 @@ public class UserServiceImplTest {
     }
 
     @Test
-    public void itShouldGetAllUsers(){
+    public void getAllUsersTest(){
         when(userRepository.findAll()).thenReturn(new ArrayList<>());
-        when(userRepositoryMapper.mapAsList(anyList(),any())).thenReturn(new ArrayList<>());
+        when(orikaMapperFacade.mapAsList(anyList(),any())).thenReturn(new ArrayList<>());
         List<UserDTO> result = userService.getAllUsers();
         assertNotNull(result);
     }
+
 }
