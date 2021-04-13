@@ -39,14 +39,13 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.junit.vintage</groupId>
-                    <artifactId>junit-vintage-engine</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
-
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.12</version>
+            <scope>test</scope>
+        </dependency>
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
@@ -87,14 +86,12 @@
             <artifactId>org.jacoco.agent</artifactId>
             <version>0.8.6</version>
         </dependency>
-
         <!-- JSON template -->
         <dependency>
             <groupId>org.apache.logging.log4j</groupId>
             <artifactId>log4j-layout-template-json</artifactId>
             <version>2.14.1</version>
         </dependency>
-
     </dependencies>
 
     <build>
@@ -112,6 +109,62 @@
                         <web>java -Dserver.port=$PORT $JAVA_OPTS -jar target/${project.name}-${project.version}.jar</web>
                     </processTypes>
                 </configuration>
+            </plugin>
+            <!-- JaCoCo -->
+            <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <version>0.8.6</version>
+                <configuration>
+                    <!-- execute classes -->
+                    <outputDirectory>${project.reporting.outputDirectory}/jacoco-ut</outputDirectory>
+                    <excludes>
+                        <exclude>com/agilethought/atsceapi/config/**/*</exclude>
+                        <exclude>com/agilethought/atsceapi/model/**/*</exclude>
+                        <exclude>com/agilethought/atsceapi/domain/**/*</exclude>
+                        <exclude>com/agilethought/atsceapi/exception/**/*</exclude>
+                        <exclude>com/agilethought/atsceapi/dto/**/*</exclude>
+                    </excludes>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>prepare-agent</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>report</id>
+                        <phase>test</phase>
+                        <goals>
+                            <goal>report</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>default-check</id>
+                        <goals>
+                            <goal>check</goal>
+                        </goals>
+                        <configuration>
+                            <rules>
+                                <rule>
+                                    <element>BUNDLE</element>
+                                    <limits>
+                                        <limit>
+                                            <counter>COMPLEXITY</counter>
+                                            <value>COVEREDRATIO</value>
+                                            <minimum>0.01</minimum>
+                                        </limit>
+                                    </limits>
+                                </rule>
+                            </rules>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <!-- SonarQube -->
+            <plugin>
+                <groupId>org.sonarsource.scanner.maven</groupId>
+                <artifactId>sonar-maven-plugin</artifactId>
             </plugin>
         </plugins>
     </build>
@@ -143,62 +196,6 @@
                             <appName>at-sce-api-qa</appName>
                         </configuration>
                     </plugin>
-                    <!-- JaCoCo -->
-                    <plugin>
-                        <groupId>org.jacoco</groupId>
-                        <artifactId>jacoco-maven-plugin</artifactId>
-                        <version>0.8.6</version>
-                        <configuration>
-                            <!-- execute classes -->
-                            <outputDirectory>${project.reporting.outputDirectory}/jacoco-ut</outputDirectory>
-                            <excludes>
-                                <exclude>com/agilethought/atsceapi/config/**/*</exclude>
-                                <exclude>com/agilethought/atsceapi/model/**/*</exclude>
-                                <exclude>com/agilethought/atsceapi/domain/**/*</exclude>
-                                <exclude>com/agilethought/atsceapi/exception/**/*</exclude>
-                                <exclude>com/agilethought/atsceapi/dto/**/*</exclude>
-                            </excludes>
-                        </configuration>
-                        <executions>
-                            <execution>
-                                <goals>
-                                    <goal>prepare-agent</goal>
-                                </goals>
-                            </execution>
-                            <execution>
-                                <id>report</id>
-                                <phase>test</phase>
-                                <goals>
-                                    <goal>report</goal>
-                                </goals>
-                            </execution>
-                            <execution>
-                                <id>default-check</id>
-                                <goals>
-                                    <goal>check</goal>
-                                </goals>
-                                <configuration>
-                                    <rules>
-                                        <rule>
-                                            <element>BUNDLE</element>
-                                            <limits>
-                                                <limit>
-                                                    <counter>COMPLEXITY</counter>
-                                                    <value>COVEREDRATIO</value>
-                                                    <minimum>0.01</minimum>
-                                                </limit>
-                                            </limits>
-                                        </rule>
-                                    </rules>
-                                </configuration>
-                            </execution>
-                        </executions>
-                    </plugin>
-                    <!-- SonarQube -->
-					<plugin>
-                		<groupId>org.sonarsource.scanner.maven</groupId>
-               		 	<artifactId>sonar-maven-plugin</artifactId>
-            		</plugin>
                 </plugins>
             </build>
         </profile>
