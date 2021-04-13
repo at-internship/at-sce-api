@@ -89,6 +89,12 @@ public class HistoryValidator implements Validator<NewHistoryRequest> {
 	}
 
 	private void validateUserId(String user_id) {
+
+		if (user_id == null){
+			throw new BadRequestException(
+					String.format(MISSING_REQUIRED_INPUT, USER_ID)
+			);
+		}
 		if (!userRepository.existsById(user_id) || StringUtils.isBlank(user_id)) {
 			throw new BadRequestException(
 					String.format(MISSING_REQUIRED_INPUT, USER_ID)
