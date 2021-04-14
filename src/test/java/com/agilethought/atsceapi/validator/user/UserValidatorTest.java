@@ -67,5 +67,96 @@ public class UserValidatorTest {
             }
         );
     }
-    
+
+    @Test
+    public void itShouldThrowErrorMessagesInFirstNameField() {
+        User user = new User();
+        user.setType(2);
+        user.setFirstName(null);
+        user.setLastName("Ramirez");
+        user.setEmail("owen@example.com");
+        user.setPassword("HelloWorld123");
+        user.setStatus(0);
+
+        Assertions.assertAll(
+            () -> {
+                Exception exception = Assertions.assertThrows(BadRequestException.class, () -> {
+                    UserValidator userValidator = new UserValidator();
+                    userValidator.validate(user);
+                });
+                Assertions.assertEquals(
+                        "Required field First name is missing.",
+                        exception.getMessage()
+                );
+            },
+            () -> {
+                user.setFirstName("");
+                Exception exception = Assertions.assertThrows(BadRequestException.class, () -> {
+                    UserValidator userValidator = new UserValidator();
+                    userValidator.validate(user);
+                });
+                Assertions.assertEquals(
+                        "Required field First name is missing.",
+                        exception.getMessage()
+                );
+            },
+            () -> {
+                user.setFirstName("   ");
+                Exception exception = Assertions.assertThrows(BadRequestException.class, () -> {
+                    UserValidator userValidator = new UserValidator();
+                    userValidator.validate(user);
+                });
+                Assertions.assertEquals(
+                        "Required field First name is missing.",
+                        exception.getMessage()
+                );
+            }
+        );
+    }
+
+    @Test
+    public void itShouldThrowErrorMessagesInLastNameField() {
+        User user = new User();
+        user.setType(2);
+        user.setFirstName("Owen");
+        user.setLastName(null);
+        user.setEmail("owen@example.com");
+        user.setPassword("HelloWorld123");
+        user.setStatus(0);
+
+        Assertions.assertAll(
+                () -> {
+                    Exception exception = Assertions.assertThrows(BadRequestException.class, () -> {
+                        UserValidator userValidator = new UserValidator();
+                        userValidator.validate(user);
+                    });
+                    Assertions.assertEquals(
+                            "Required field Last name is missing.",
+                            exception.getMessage()
+                    );
+                },
+                () -> {
+                    user.setLastName("");
+                    Exception exception = Assertions.assertThrows(BadRequestException.class, () -> {
+                        UserValidator userValidator = new UserValidator();
+                        userValidator.validate(user);
+                    });
+                    Assertions.assertEquals(
+                            "Required field Last name is missing.",
+                            exception.getMessage()
+                    );
+                },
+                () -> {
+                    user.setLastName("   ");
+                    Exception exception = Assertions.assertThrows(BadRequestException.class, () -> {
+                        UserValidator userValidator = new UserValidator();
+                        userValidator.validate(user);
+                    });
+                    Assertions.assertEquals(
+                            "Required field Last name is missing.",
+                            exception.getMessage()
+                    );
+                }
+        );
+    }
 }
