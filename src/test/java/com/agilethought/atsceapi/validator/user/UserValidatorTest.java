@@ -159,4 +159,72 @@ public class UserValidatorTest {
                 }
         );
     }
+
+    @Test
+    public void itShouldThrowErrorMessagesInEmailField() {
+        User user = new User();
+        user.setType(2);
+        user.setFirstName("Owen");
+        user.setLastName("Ramirez");
+        user.setEmail(null);
+        user.setPassword("HelloWorld123");
+        user.setStatus(0);
+
+        Assertions.assertAll(
+            () -> {
+                // check if the email is null
+                Exception exception = Assertions.assertThrows(BadRequestException.class, () -> {
+                    UserValidator userValidator = new UserValidator();
+                    userValidator.validate(user);
+                });
+                Assertions.assertEquals(
+                        "Required field Email is missing.",
+                        exception.getMessage()
+                );
+            },
+            () -> {
+                user.setEmail("");
+                Exception exception = Assertions.assertThrows(BadRequestException.class, () -> {
+                    UserValidator userValidator = new UserValidator();
+                    userValidator.validate(user);
+                });
+                Assertions.assertEquals(
+                        "Required field Email is missing.",
+                        exception.getMessage()
+                );
+            },
+            () -> {
+                user.setEmail("  ");
+                Exception exception = Assertions.assertThrows(BadRequestException.class, () -> {
+                    UserValidator userValidator = new UserValidator();
+                    userValidator.validate(user);
+                });
+                Assertions.assertEquals("Required field Email is missing.",
+                        exception.getMessage()
+                );
+            },
+            () -> {
+                user.setEmail("owenexample.com");
+                Exception exception = Assertions.assertThrows(BadRequestException.class, () -> {
+                    UserValidator userValidator = new UserValidator();
+                    userValidator.validate(user);
+                });
+                Assertions.assertEquals(
+                        "Invalid input on field Email. Correct format is: an_accepted-email.example@domain.com.mx",
+                        exception.getMessage()
+                );
+            },
+            () -> {
+                user.setEmail("owen@example");
+                Exception exception = Assertions.assertThrows(BadRequestException.class, () -> {
+                    UserValidator userValidator = new UserValidator();
+                    userValidator.validate(user);
+                });
+                Assertions.assertEquals(
+                        "Invalid input on field Email. Correct format is: an_accepted-email.example@domain.com.mx",
+                        exception.getMessage()
+                );
+            }
+        );
+    }
 }
