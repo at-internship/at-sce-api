@@ -10,7 +10,6 @@ public class UserValidatorTest {
     @Test
     public void itShouldThrowErrorMessagesInTypeField() {
         User user = new User();
-        user.setType(null);
         user.setFirstName("Owen");
         user.setLastName("Ramirez");
         user.setEmail("owen@example.com");
@@ -20,6 +19,7 @@ public class UserValidatorTest {
         Assertions.assertAll(
             () -> {
                 // Check the message when the type field is null
+                user.setType(null);
                 Exception errorMessageException = Assertions.assertThrows(BadRequestException.class, () -> {
                     UserValidator userValidator = new UserValidator();
                     userValidator.validate(user);
@@ -72,7 +72,6 @@ public class UserValidatorTest {
     public void itShouldThrowErrorMessagesInFirstNameField() {
         User user = new User();
         user.setType(2);
-        user.setFirstName(null);
         user.setLastName("Ramirez");
         user.setEmail("owen@example.com");
         user.setPassword("HelloWorld123");
@@ -80,6 +79,7 @@ public class UserValidatorTest {
 
         Assertions.assertAll(
             () -> {
+                user.setFirstName(null);
                 Exception exception = Assertions.assertThrows(BadRequestException.class, () -> {
                     UserValidator userValidator = new UserValidator();
                     userValidator.validate(user);
@@ -119,13 +119,13 @@ public class UserValidatorTest {
         User user = new User();
         user.setType(2);
         user.setFirstName("Owen");
-        user.setLastName(null);
         user.setEmail("owen@example.com");
         user.setPassword("HelloWorld123");
         user.setStatus(0);
 
         Assertions.assertAll(
                 () -> {
+                    user.setLastName(null);
                     Exception exception = Assertions.assertThrows(BadRequestException.class, () -> {
                         UserValidator userValidator = new UserValidator();
                         userValidator.validate(user);
@@ -166,12 +166,12 @@ public class UserValidatorTest {
         user.setType(2);
         user.setFirstName("Owen");
         user.setLastName("Ramirez");
-        user.setEmail(null);
         user.setPassword("HelloWorld123");
         user.setStatus(0);
 
         Assertions.assertAll(
             () -> {
+                user.setEmail(null);
                 // check if the email is null
                 Exception exception = Assertions.assertThrows(BadRequestException.class, () -> {
                     UserValidator userValidator = new UserValidator();
@@ -235,11 +235,11 @@ public class UserValidatorTest {
         user.setFirstName("Owen");
         user.setLastName("Ramirez");
         user.setEmail("owen@example.com");
-        user.setPassword(null);
         user.setStatus(0);
 
         Assertions.assertAll(
             () -> {
+                user.setPassword(null);
                 Exception errorMessagePassword = Assertions.assertThrows(BadRequestException.class, () -> {
                     UserValidator userValidator = new UserValidator();
                     userValidator.validate(user);
@@ -297,6 +297,83 @@ public class UserValidatorTest {
                                 + "at least one lowercase letter, one uppercase letter, and one number.",
                         errorMessagePassword.getMessage()
                 );
+            }
+        );
+    }
+
+    @Test
+    public void itShouldThrowErrorMessagesInStatusField() {
+        User user = new User();
+        user.setType(2);
+        user.setFirstName("Owen");
+        user.setLastName("Ramirez");
+        user.setEmail("owen@example.com");
+        user.setPassword("HelloWorld123");
+
+        Assertions.assertAll(
+            () -> {
+                user.setStatus(null);
+                Exception errorMessageStatus = Assertions.assertThrows(BadRequestException.class, () -> {
+                    UserValidator userValidator = new UserValidator();
+                    userValidator.validate(user);
+                });
+                Assertions.assertEquals(
+                        "Required field Status of user is missing.",
+                        errorMessageStatus.getMessage()
+                );
+            },
+            () -> {
+                user.setStatus(-1);
+                Exception errorMessageStatus = Assertions.assertThrows(BadRequestException.class, () -> {
+                    UserValidator userValidator = new UserValidator();
+                    userValidator.validate(user);
+                });
+                Assertions.assertEquals(
+                    "Invalid input on field Status of user. Correct format is: Number 0 for unavailable or "
+                        + "number 1 for available",
+                        errorMessageStatus.getMessage()
+                );
+            },
+            () -> {
+                user.setStatus(2);
+                Exception errorMessageStatus = Assertions.assertThrows(BadRequestException.class, () -> {
+                    UserValidator userValidator = new UserValidator();
+                    userValidator.validate(user);
+                });
+                Assertions.assertEquals(
+                        "Invalid input on field Status of user. Correct format is: Number 0 for unavailable or "
+                                + "number 1 for available",
+                        errorMessageStatus.getMessage()
+                );
+            },
+            () -> {
+                user.setStatus(10);
+                Exception errorMessageStatus = Assertions.assertThrows(BadRequestException.class, () -> {
+                    UserValidator userValidator = new UserValidator();
+                    userValidator.validate(user);
+                });
+                Assertions.assertEquals(
+                        "Invalid input on field Status of user. Correct format is: Number 0 for unavailable or "
+                                + "number 1 for available",
+                        errorMessageStatus.getMessage()
+                );
+            },
+            () -> {
+                user.setStatus(-10);
+                Exception errorMessageStatus = Assertions.assertThrows(BadRequestException.class, () -> {
+                    UserValidator userValidator = new UserValidator();
+                    userValidator.validate(user);
+                });
+                Assertions.assertEquals(
+                        "Invalid input on field Status of user. Correct format is: Number 0 for unavailable or "
+                                + "number 1 for available",
+                        errorMessageStatus.getMessage()
+                );
+            },
+            () -> {
+                user.setStatus(0);
+                UserValidator userValidator = new UserValidator();
+                userValidator.validate(user);
             }
         );
     }
