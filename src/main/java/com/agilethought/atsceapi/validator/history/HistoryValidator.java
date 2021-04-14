@@ -3,6 +3,7 @@ package com.agilethought.atsceapi.validator.history;
 import static com.agilethought.atsceapi.exception.ErrorMessage.MISSING_REQUIRED_INPUT;
 import static com.agilethought.atsceapi.exception.ErrorMessage.INVALID_INPUT;
 import static com.agilethought.atsceapi.exception.ErrorMessage.CORRECT_FORMAT_NUMERIC;
+import static com.agilethought.atsceapi.validator.user.ValidationUtils.isValidString;
 
 import com.agilethought.atsceapi.repository.UserRepository;
 import com.agilethought.atsceapi.validator.Validator;
@@ -89,9 +90,15 @@ public class HistoryValidator implements Validator<NewHistoryRequest> {
 	}
 
 	private void validateUserId(String user_id) {
-		if (!userRepository.existsById(user_id) || StringUtils.isBlank(user_id)) {
+
+		if (!isValidString(user_id)) {
 			throw new BadRequestException(
 					String.format(MISSING_REQUIRED_INPUT, USER_ID)
+			);
+		}
+		if (!userRepository.existsById(user_id) || StringUtils.isBlank(user_id)) {
+			throw new BadRequestException(
+						String.format(MISSING_REQUIRED_INPUT, USER_ID)
 			);
 		}
 	}
