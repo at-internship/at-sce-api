@@ -227,4 +227,77 @@ public class UserValidatorTest {
             }
         );
     }
+
+    @Test
+    public void itShouldThrowErrorMessagesPasswordField() {
+        User user = new User();
+        user.setType(2);
+        user.setFirstName("Owen");
+        user.setLastName("Ramirez");
+        user.setEmail("owen@example.com");
+        user.setPassword(null);
+        user.setStatus(0);
+
+        Assertions.assertAll(
+            () -> {
+                Exception errorMessagePassword = Assertions.assertThrows(BadRequestException.class, () -> {
+                    UserValidator userValidator = new UserValidator();
+                    userValidator.validate(user);
+                });
+                Assertions.assertEquals("Required field Password is missing.", errorMessagePassword.getMessage());
+            },
+            () -> {
+                user.setPassword("");
+                Exception errorMessagePassword = Assertions.assertThrows(BadRequestException.class, () -> {
+                    UserValidator userValidator = new UserValidator();
+                    userValidator.validate(user);
+                });
+                Assertions.assertEquals("Required field Password is missing.", errorMessagePassword.getMessage());
+            },
+            () -> {
+                user.setPassword("  ");
+                Exception errorMessagePassword = Assertions.assertThrows(BadRequestException.class, () -> {
+                    UserValidator userValidator = new UserValidator();
+                    userValidator.validate(user);
+                });
+                Assertions.assertEquals("Required field Password is missing.", errorMessagePassword.getMessage());
+            },
+            () -> {
+                user.setPassword("hiWorld");
+                Exception errorMessagePassword = Assertions.assertThrows(BadRequestException.class, () -> {
+                    UserValidator userValidator = new UserValidator();
+                    userValidator.validate(user);
+                });
+                Assertions.assertEquals(
+                    "Invalid input on field Password. Correct format is: 10 characters minimum with "
+                        + "at least one lowercase letter, one uppercase letter, and one number.",
+                        errorMessagePassword.getMessage()
+                );
+            },
+            () -> {
+                user.setPassword("helloworld");
+                Exception errorMessagePassword = Assertions.assertThrows(BadRequestException.class, () -> {
+                    UserValidator userValidator = new UserValidator();
+                    userValidator.validate(user);
+                });
+                Assertions.assertEquals(
+                        "Invalid input on field Password. Correct format is: 10 characters minimum with "
+                                + "at least one lowercase letter, one uppercase letter, and one number.",
+                        errorMessagePassword.getMessage()
+                );
+            },
+            () -> {
+                user.setPassword("helloWorld");
+                Exception errorMessagePassword = Assertions.assertThrows(BadRequestException.class, () -> {
+                    UserValidator userValidator = new UserValidator();
+                    userValidator.validate(user);
+                });
+                Assertions.assertEquals(
+                        "Invalid input on field Password. Correct format is: 10 characters minimum with "
+                                + "at least one lowercase letter, one uppercase letter, and one number.",
+                        errorMessagePassword.getMessage()
+                );
+            }
+        );
+    }
 }
