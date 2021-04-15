@@ -28,7 +28,7 @@ public class LoginValidator implements Validator<LoginRequest> {
 
 	private void validateEmail(String email) {
 
-		if (email == null) {
+		if (!isValidString(email)) {
 			throw new BadRequestException(
 					String.format(MISSING_REQUIRED_INPUT, EMAIL)
 			);
