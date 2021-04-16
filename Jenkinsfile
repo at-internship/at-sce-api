@@ -8,14 +8,11 @@ pipeline {
         }
         stage('Jacoco Report') {
             steps{
-                jacoco exclusionPattern: '**/*Test*,**/model/**', minimumInstructionCoverage: '1'
+                jacoco exclusionPattern: '**/*Test*,**/config/**,**/domain/**,**/dto/**/,**/exception/**,**/mapper/**,**/model/**,**/repository/**', minimumInstructionCoverage: '1'
             }
         }
 
         stage('Deploy DEV') {
-            when {
-                branch 'develop'
-            }
             steps{
             input 'Deploy to Dev?'
                 withCredentials([string(credentialsId: 'API_KEY_DEV_B', variable: 'API_KEY')]) {
