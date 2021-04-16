@@ -8,13 +8,13 @@ pipeline {
         }
         stage('Jacoco Report') {
             steps{
-                jacoco exclusionPattern: '**/*Test*,**/model/**', minimumInstructionCoverage: '1'
+                jacoco exclusionPattern: '**/*Test*,**/config/**,**/domain/**,**/dto/**/,**/exception/**,**/mapper/**,**/model/**,**/repository/**', minimumInstructionCoverage: '1'
             }
         }
 
         stage('Deploy DEV') {
             when {
-                branch 'develop'
+                branch 'feature,develop'
             }
             steps{
             input 'Deploy to Dev?'
