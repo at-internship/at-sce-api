@@ -12,7 +12,7 @@ public class LoginValidatorTest {
     @Test
     public void validateEmailTest() {
         LoginRequest loginRequest = new LoginRequest();
-        loginRequest.setEmail("blanca.galindo@agilethought.com");
+        loginRequest.setEmail("juan.perez@agilethought.com");
         loginRequest.setPassword("HelloWorld123");
 
         Assertions.assertAll(
@@ -20,8 +20,8 @@ public class LoginValidatorTest {
                     loginRequest.setEmail(null);
                     // check if the email is null
                     Exception exception = Assertions.assertThrows(BadRequestException.class, () -> {
-                        LoginValidator userValidator = new LoginValidator();
-                        userValidator.validate(loginRequest);
+                        LoginValidator loginValidator = new LoginValidator();
+                        loginValidator.validate(loginRequest);
                     });
                     Assertions.assertEquals(
                             "Required field Email is missing.",
@@ -31,8 +31,8 @@ public class LoginValidatorTest {
                 () -> {
                     loginRequest.setEmail("");
                     Exception exception = Assertions.assertThrows(BadRequestException.class, () -> {
-                        LoginValidator userValidator = new LoginValidator();
-                        userValidator.validate(loginRequest);
+                        LoginValidator loginValidator = new LoginValidator();
+                        loginValidator.validate(loginRequest);
                     });
                     Assertions.assertEquals(
                             "Required field Email is missing.",
@@ -42,35 +42,108 @@ public class LoginValidatorTest {
                 () -> {
                     loginRequest.setEmail("  ");
                     Exception exception = Assertions.assertThrows(BadRequestException.class, () -> {
-                        LoginValidator userValidator = new LoginValidator();
-                        userValidator.validate(loginRequest);
+                        LoginValidator loginValidator = new LoginValidator();
+                        loginValidator.validate(loginRequest);
                     });
                     Assertions.assertEquals("Required field Email is missing.",
                             exception.getMessage()
                     );
                 },
                 () -> {
-                    loginRequest.setEmail("owenexample.com");
+                    loginRequest.setEmail("juanperez.com");
                     Exception exception = Assertions.assertThrows(UnauthorizedException.class, () -> {
-                        LoginValidator userValidator = new LoginValidator();
-                        userValidator.validate(loginRequest);
+                        LoginValidator loginValidator = new LoginValidator();
+                        loginValidator.validate(loginRequest);
                     });
                     Assertions.assertEquals(
-                            "Invalid input on field Email. Correct format is: an_accepted-email.example@domain.com.mx",
+                            "Invalid login credentials.",
                             exception.getMessage()
                     );
                 },
                 () -> {
-                    loginRequest.setEmail("owen@example");
+                    loginRequest.setEmail("juan@example");
                     Exception exception = Assertions.assertThrows(UnauthorizedException.class, () -> {
-                        LoginValidator userValidator = new LoginValidator();
-                        userValidator.validate(loginRequest);
+                        LoginValidator loginValidator = new LoginValidator();
+                        loginValidator.validate(loginRequest);
                     });
                     Assertions.assertEquals(
-                            "Invalid input on field Email. Correct format is: an_accepted-email.example@domain.com.mx",
+                            "Invalid login credentials.",
                             exception.getMessage()
                     );
                 }
         );
     }
+
+    @Test
+    public void validatePasswordTest() {
+        LoginRequest loginRequest = new LoginRequest();
+        loginRequest.setEmail("owen@example.com");
+        loginRequest.setPassword("Holamundo123");
+
+        Assertions.assertAll(
+                () -> {
+                    loginRequest.setPassword(null);
+                    Exception errorMessagePassword = Assertions.assertThrows(BadRequestException.class, () -> {
+                        LoginValidator loginValidator = new LoginValidator();
+                        loginValidator.validate(loginRequest);
+                    });
+                    Assertions.assertEquals("Required field Password is missing.", errorMessagePassword.getMessage());
+                },
+                () -> {
+                    loginRequest.setPassword("");
+                    Exception errorMessagePassword = Assertions.assertThrows(BadRequestException.class, () -> {
+                        LoginValidator loginValidator = new LoginValidator();
+                        loginValidator.validate(loginRequest);
+                    });
+                    Assertions.assertEquals("Required field Password is missing.", errorMessagePassword.getMessage());
+                },
+                () -> {
+                    loginRequest.setPassword("  ");
+                    Exception errorMessagePassword = Assertions.assertThrows(BadRequestException.class, () -> {
+                        LoginValidator loginValidator = new LoginValidator();
+                        loginValidator.validate(loginRequest);
+                    });
+                    Assertions.assertEquals("Required field Password is missing.", errorMessagePassword.getMessage());
+                },
+                () -> {
+                    loginRequest.setPassword("hiWorld");
+                    Exception errorMessagePassword = Assertions.assertThrows(UnauthorizedException.class, () -> {
+                        LoginValidator loginValidator = new LoginValidator();
+                        loginValidator.validate(loginRequest);
+                    });
+                    Assertions.assertEquals(
+                            "Invalid login credentials.",
+                            errorMessagePassword.getMessage()
+                    );
+                },
+                () -> {
+                    loginRequest.setPassword("helloworld");
+                    Exception errorMessagePassword = Assertions.assertThrows(UnauthorizedException.class, () -> {
+                        LoginValidator  loginValidator = new LoginValidator();
+                        loginValidator.validate(loginRequest);
+                    });
+                    Assertions.assertEquals(
+                            "Invalid login credentials.",
+                            errorMessagePassword.getMessage()
+                    );
+                },
+                () -> {
+                    loginRequest.setPassword("helloWorld");
+                    Exception errorMessagePassword = Assertions.assertThrows(UnauthorizedException.class, () -> {
+                        LoginValidator  loginValidator = new LoginValidator();
+                        loginValidator.validate(loginRequest);
+                    });
+                    Assertions.assertEquals(
+                            "Invalid login credentials.",
+                            errorMessagePassword.getMessage()
+                    );
+                },
+                ()-> {
+                    loginRequest.setPassword("Helloworld1234");
+                    LoginValidator  loginValidator = new LoginValidator();
+                    loginValidator.validate(loginRequest);
+                }
+        );
+    }
+
 }
