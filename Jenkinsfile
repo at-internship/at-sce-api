@@ -13,9 +13,6 @@ pipeline {
         }
 
         stage('Deploy DEV') {
-            when {
-                branch 'feature,develop'
-            }
             steps{
             input 'Deploy to Dev?'
                 withCredentials([string(credentialsId: 'API_KEY_DEV_B', variable: 'API_KEY')]) {
