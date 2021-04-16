@@ -124,6 +124,7 @@
                         <exclude>com/agilethought/atsceapi/domain/**/*</exclude>
                         <exclude>com/agilethought/atsceapi/exception/**/*</exclude>
                         <exclude>com/agilethought/atsceapi/dto/**/*</exclude>
+                        <exclude>com/agilethought/atsceapi/mapper/**</exclude>
                     </excludes>
                 </configuration>
                 <executions>
