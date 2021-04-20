@@ -100,10 +100,6 @@ public class UserServiceImpl implements UserService {
 
 		User user = orikaMapperFacade.map(request, User.class);
 		userValidator.validate(user);
-		if (userRepository.existsByEmail(user.getEmail()))
-			throw new BadRequestException(
-					String.format(ALREADY_EXISTING_EMAIL, user.getEmail())
-			);
 		setLetterCases(user);
 		User savedUsers = userRepository.save(user);
 		return orikaMapperFacade.map(savedUsers, NewUserResponse.class);
@@ -118,18 +114,9 @@ public class UserServiceImpl implements UserService {
 			throw new NotFoundException(
 					String.format(NOT_FOUND_RESOURCE, USER, id)
 			);
-		User userToBeUpdated = userFoundById.get();
 		request.setId(id);
 		User userUpdatedFields = orikaMapperFacade.map(request, User.class);
 		userValidator.validate(userUpdatedFields);
-		if (userRepository.existsByEmail(userUpdatedFields.getEmail()))
-			// If the email in the update request exists, it must be equal
-			// than the one inside the user to be updated. Otherwise, the
-			// email in the request already belongs to somebody else.
-			if (!userUpdatedFields.getEmail().equals(userToBeUpdated.getEmail()))
-				throw new BadRequestException(
-						String.format(ALREADY_EXISTING_EMAIL, userUpdatedFields.getEmail())
-				);
 		setLetterCases(userUpdatedFields);
 		User updatedUser = userRepository.save(userUpdatedFields);
 		return orikaMapperFacade.map(updatedUser, UpdateUserResponse.class);
