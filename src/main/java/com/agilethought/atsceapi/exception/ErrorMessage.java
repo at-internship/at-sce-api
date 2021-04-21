@@ -21,5 +21,5 @@ public class ErrorMessage {
 
     public static final String INVALID_CREDENTIALS = "Invalid login credentials.";
     public static final String UNAVAILABLE_ENTITY = "This %s is currently unavailable.";
-
+    public static final String VALIDATION_ERROR = "One or more fields are invalid";
 }

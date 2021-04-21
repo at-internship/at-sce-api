@@ -100,10 +100,6 @@ public class UserServiceImpl implements UserService {
 
 		User user = orikaMapperFacade.map(request, User.class);
 		userValidator.validate(user);
-		if (userRepository.existsByEmail(user.getEmail()))
-			throw new BadRequestException(
-					String.format(ALREADY_EXISTING_EMAIL, user.getEmail())
-			);
 		setLetterCases(user);
 		User savedUsers = userRepository.save(user);
 		return orikaMapperFacade.map(savedUsers, NewUserResponse.class);
