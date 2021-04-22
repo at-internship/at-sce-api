@@ -9,6 +9,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import com.agilethought.atsceapi.validator.user.LoginValidator;
+import com.agilethought.atsceapi.validator.user.NewUserValidator;
+import com.agilethought.atsceapi.validator.user.UpdateUserValidator;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -18,13 +21,10 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.agilethought.atsceapi.dto.user.*;
-import com.agilethought.atsceapi.exception.BadRequestException;
 import com.agilethought.atsceapi.exception.NotFoundException;
 import com.agilethought.atsceapi.exception.UnauthorizedException;
 import com.agilethought.atsceapi.model.User;
 import com.agilethought.atsceapi.service.implementation.UserServiceImpl;
-import com.agilethought.atsceapi.validator.Validator;
-import com.agilethought.atsceapi.validator.user.UserValidator;
 import com.agilethought.atsceapi.repository.UserRepository;
 
 import ma.glasnost.orika.MapperFacade;
@@ -39,10 +39,13 @@ public class UserServiceImplTest {
     private MapperFacade orikaMapperFacade;
 
     @Mock
-    private Validator<LoginRequest> loginValidator;
+    private LoginValidator loginValidator;
 
     @Mock
-    private UserValidator userValidator;
+    private NewUserValidator newUserValidator;
+
+    @Mock
+    private UpdateUserValidator updateUserValidator;
 
     @InjectMocks
     private UserServiceImpl userService;
@@ -63,7 +66,7 @@ public class UserServiceImplTest {
     }
 
     @Test
-    public void testLoginUser_ValidCredentials_Available() {
+    public void testLoginUserWithValidCredentialsAndAvailable() {
 
         // Given
         LoginRequest mockLoginRequest = new LoginRequest();
@@ -85,7 +88,7 @@ public class UserServiceImplTest {
     }
 
     @Test
-    public void testLoginUser_ValidCredentials_Unavailable() {
+    public void testLoginUserWithValidCredentialsAndUnavailable() {
 
         // Given
         LoginRequest mockLoginRequest = new LoginRequest();
@@ -112,7 +115,7 @@ public class UserServiceImplTest {
     }
 
     @Test
-    public void testLoginUser_InvalidCredentials() {
+    public void testLoginUserWithInvalidCredentials() {
 
         // Given
         LoginRequest mockLoginRequest = new LoginRequest();
@@ -134,7 +137,7 @@ public class UserServiceImplTest {
     }
 
     @Test
-    public void testGetUserById_Found() {
+    public void testGetUserByIdSuccessfully() {
 
         when(userRepository.findById(anyString())).thenReturn(Optional.of(new User()));
         when(orikaMapperFacade.map(any(), any())).thenReturn(new UserDTO());
@@ -144,7 +147,7 @@ public class UserServiceImplTest {
     }
 
     @Test
-    public void testGetUserById_NotFound() {
+    public void testGetUserByIdWithIdNotFound() {
 
         when(userRepository.findById(anyString())).thenReturn(Optional.empty());
         NotFoundException thrownException = assertThrows(
@@ -159,7 +162,7 @@ public class UserServiceImplTest {
     }
 
     @Test
-    public void testDeleteUserById_Found() {
+    public void testDeleteUserByIdSuccessfully() {
 
         when(userRepository.findById(anyString())).thenReturn(Optional.of(new User()));
         doNothing().when(userRepository).deleteById(anyString());
@@ -169,7 +172,7 @@ public class UserServiceImplTest {
     }
 
     @Test
-    public void testDeleteUserById_NotFound() {
+    public void testDeleteUserByIdWithIdNotFound() {
 
         when(userRepository.findById(anyString())).thenReturn(Optional.empty());
         doNothing().when(userRepository).deleteById(anyString());
@@ -185,18 +188,18 @@ public class UserServiceImplTest {
     }
 
     @Test
-    public void testCreateUser_Successful() {
+    public void testCreateUserSuccessfully() {
 
         // Given
-        User mockNewUser = new User();
-        mockNewUser.setFirstName("");
-        mockNewUser.setLastName("");
-        mockNewUser.setEmail("");
+        User mockCreateUser = new User();
+        mockCreateUser.setFirstName("");
+        mockCreateUser.setLastName("");
+        mockCreateUser.setEmail("");
 
         // Then
         when(orikaMapperFacade.map(any(NewUserRequest.class), any()))
-                .thenReturn(mockNewUser);
-        doNothing().when(userValidator).validate(any());
+                .thenReturn(mockCreateUser);
+        doNothing().when(newUserValidator).validate(any());
         when(userRepository.existsByEmail(anyString())).thenReturn(false);
         when(userRepository.save(any())).thenReturn(new User());
         when(orikaMapperFacade.map(any(User.class), any())).thenReturn(new NewUserResponse());
@@ -205,31 +208,7 @@ public class UserServiceImplTest {
     }
 
     @Test
-    public void testCreateUser_AlreadyExistingEmail() {
-
-        // Given
-        User mockNewUser = new User();
-        mockNewUser.setFirstName("");
-        mockNewUser.setLastName("");
-        mockNewUser.setEmail("");
-
-        // Then
-        when(orikaMapperFacade.map(any(), any())).thenReturn(mockNewUser);
-        doNothing().when(userValidator).validate(any());
-        when(userRepository.existsByEmail(anyString())).thenReturn(true);
-        BadRequestException thrownException = assertThrows(
-                BadRequestException.class,
-                () -> userService.createUser(new NewUserRequest())
-        );
-        assertEquals(
-                String.format(ALREADY_EXISTING_EMAIL, ""),
-                thrownException.getMessage()
-        );
-
-    }
-
-    @Test
-    public void testUpdateUser_Successful() {
+    public void testUpdateUserByIdSuccessfully() {
 
         // Given
         User mockUpdateUser = new User();
@@ -238,28 +217,13 @@ public class UserServiceImplTest {
         mockUpdateUser.setEmail("");
 
         // Then
-        when(userRepository.findById(anyString())).thenReturn(Optional.of(new User()));
         when(orikaMapperFacade.map(any(UpdateUserRequest.class), any()))
                 .thenReturn(mockUpdateUser);
-        doNothing().when(userValidator).validate(any());
+        doNothing().when(updateUserValidator).validate(any());
         when(userRepository.save(any())).thenReturn(new User());
         when(orikaMapperFacade.map(any(User.class), any())).thenReturn(new UpdateUserResponse());
-        assertNotNull(userService.updateUser(new UpdateUserRequest(), anyString()));
+        assertNotNull(userService.updateUserById(new UpdateUserRequest(), ""));
 
-    }
-
-    @Test
-    public void testUpdateUser_NotFound() {
-
-        when(userRepository.findById(anyString())).thenReturn(Optional.empty());
-        NotFoundException thrownException = assertThrows(
-                NotFoundException.class,
-                () -> userService.updateUser(new UpdateUserRequest(), anyString())
-        );
-        assertEquals(
-                String.format(NOT_FOUND_RESOURCE, USER, ""),
-                thrownException.getMessage()
-        );
     }
 
 }

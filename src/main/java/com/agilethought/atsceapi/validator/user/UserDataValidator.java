@@ -1,10 +1,7 @@
 package com.agilethought.atsceapi.validator.user;
 
+import static com.agilethought.atsceapi.exception.ErrorMessage.*;
 import static com.agilethought.atsceapi.validator.user.ValidationUtils.*;
-import static com.agilethought.atsceapi.exception.ErrorMessage.MISSING_REQUIRED_INPUT;
-import static com.agilethought.atsceapi.exception.ErrorMessage.INVALID_INPUT;
-import static com.agilethought.atsceapi.exception.ErrorMessage.EMAIL;
-import static com.agilethought.atsceapi.exception.ErrorMessage.PASSWORD;
 
 import com.agilethought.atsceapi.validator.Validator;
 import org.springframework.stereotype.Service;
@@ -13,7 +10,7 @@ import com.agilethought.atsceapi.exception.BadRequestException;
 import com.agilethought.atsceapi.model.User;
 
 @Service
-public class UserValidator implements Validator<User> {
+public class UserDataValidator implements Validator<User> {
 
     private static final String TYPE = "Type";
     private static final String CORRECT_FORMAT_TYPE = "Number 1 for admin or number 2 " +
@@ -38,7 +35,7 @@ public class UserValidator implements Validator<User> {
         validateType(user.getType());
         validateFirstName(user.getFirstName());
         validateLastName(user.getLastName());
-        validateEmail(user.getEmail());
+        validateEmailFormat(user.getEmail());
         validatePassword(user.getPassword());
         validateStatus(user.getStatus());
 
@@ -79,7 +76,7 @@ public class UserValidator implements Validator<User> {
 
     }
 
-    private void validateEmail(String email) {
+    private void validateEmailFormat(String email) {
 
         if (!isValidString(email)) {
             throw new BadRequestException(

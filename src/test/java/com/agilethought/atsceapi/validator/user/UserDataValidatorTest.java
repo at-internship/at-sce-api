@@ -2,10 +2,18 @@ package com.agilethought.atsceapi.validator.user;
 
 import com.agilethought.atsceapi.exception.BadRequestException;
 import com.agilethought.atsceapi.model.User;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.jupiter.api.Assertions;
 
-public class UserValidatorTest {
+public class UserDataValidatorTest {
+
+    private UserDataValidator userDataValidator;
+
+    @Before
+    public void setup() {
+        userDataValidator = new UserDataValidator();
+    }
 
     @Test
     public void itShouldThrowErrorMessagesInTypeField() {
@@ -21,8 +29,7 @@ public class UserValidatorTest {
                 // Check the message when the type field is null
                 user.setType(null);
                 Exception errorMessageException = Assertions.assertThrows(BadRequestException.class, () -> {
-                    UserValidator userValidator = new UserValidator();
-                    userValidator.validate(user);
+                    userDataValidator.validate(user);
                 });
                 Assertions.assertEquals(
                         "Required field Type is missing.",
@@ -33,8 +40,7 @@ public class UserValidatorTest {
                 // Check the message when the type field is 0
                 user.setType(0);
                 Exception errorMessageException = Assertions.assertThrows(BadRequestException.class, () -> {
-                    UserValidator userValidator = new UserValidator();
-                    userValidator.validate(user);
+                    userDataValidator.validate(user);
                 });
                 Assertions.assertEquals(
                         "Invalid input on field Type. Correct format is: Number 1 for admin or number 2 for normal user",
@@ -45,8 +51,7 @@ public class UserValidatorTest {
                 // Check the message when the type field is -1
                 user.setType(-1);
                 Exception errorMessageException = Assertions.assertThrows(BadRequestException.class, () -> {
-                    UserValidator userValidator = new UserValidator();
-                    userValidator.validate(user);
+                    userDataValidator.validate(user);
                 });
                 Assertions.assertEquals(
                         "Invalid input on field Type. Correct format is: Number 1 for admin or number 2 for normal user",
@@ -57,8 +62,7 @@ public class UserValidatorTest {
                 // Check the message when the type field is 3
                 user.setType(3);
                 Exception errorMessageException = Assertions.assertThrows(BadRequestException.class, () -> {
-                    UserValidator userValidator = new UserValidator();
-                    userValidator.validate(user);
+                    userDataValidator.validate(user);
                 });
                 Assertions.assertEquals(
                         "Invalid input on field Type. Correct format is: Number 1 for admin or number 2 for normal user",
@@ -81,8 +85,7 @@ public class UserValidatorTest {
             () -> {
                 user.setFirstName(null);
                 Exception exception = Assertions.assertThrows(BadRequestException.class, () -> {
-                    UserValidator userValidator = new UserValidator();
-                    userValidator.validate(user);
+                    userDataValidator.validate(user);
                 });
                 Assertions.assertEquals(
                         "Required field First name is missing.",
@@ -92,8 +95,7 @@ public class UserValidatorTest {
             () -> {
                 user.setFirstName("");
                 Exception exception = Assertions.assertThrows(BadRequestException.class, () -> {
-                    UserValidator userValidator = new UserValidator();
-                    userValidator.validate(user);
+                    userDataValidator.validate(user);
                 });
                 Assertions.assertEquals(
                         "Required field First name is missing.",
@@ -103,8 +105,7 @@ public class UserValidatorTest {
             () -> {
                 user.setFirstName("   ");
                 Exception exception = Assertions.assertThrows(BadRequestException.class, () -> {
-                    UserValidator userValidator = new UserValidator();
-                    userValidator.validate(user);
+                    userDataValidator.validate(user);
                 });
                 Assertions.assertEquals(
                         "Required field First name is missing.",
@@ -127,8 +128,7 @@ public class UserValidatorTest {
                 () -> {
                     user.setLastName(null);
                     Exception exception = Assertions.assertThrows(BadRequestException.class, () -> {
-                        UserValidator userValidator = new UserValidator();
-                        userValidator.validate(user);
+                        userDataValidator.validate(user);
                     });
                     Assertions.assertEquals(
                             "Required field Last name is missing.",
@@ -138,8 +138,7 @@ public class UserValidatorTest {
                 () -> {
                     user.setLastName("");
                     Exception exception = Assertions.assertThrows(BadRequestException.class, () -> {
-                        UserValidator userValidator = new UserValidator();
-                        userValidator.validate(user);
+                        userDataValidator.validate(user);
                     });
                     Assertions.assertEquals(
                             "Required field Last name is missing.",
@@ -149,8 +148,7 @@ public class UserValidatorTest {
                 () -> {
                     user.setLastName("   ");
                     Exception exception = Assertions.assertThrows(BadRequestException.class, () -> {
-                        UserValidator userValidator = new UserValidator();
-                        userValidator.validate(user);
+                        userDataValidator.validate(user);
                     });
                     Assertions.assertEquals(
                             "Required field Last name is missing.",
@@ -161,7 +159,7 @@ public class UserValidatorTest {
     }
 
     @Test
-    public void itShouldThrowErrorMessagesInEmailField() {
+    public void itShouldThrowErrorMessagesInEmailFieldFormat() {
         User user = new User();
         user.setType(2);
         user.setFirstName("Owen");
@@ -174,8 +172,7 @@ public class UserValidatorTest {
                 user.setEmail(null);
                 // check if the email is null
                 Exception exception = Assertions.assertThrows(BadRequestException.class, () -> {
-                    UserValidator userValidator = new UserValidator();
-                    userValidator.validate(user);
+                    userDataValidator.validate(user);
                 });
                 Assertions.assertEquals(
                         "Required field Email is missing.",
@@ -185,8 +182,7 @@ public class UserValidatorTest {
             () -> {
                 user.setEmail("");
                 Exception exception = Assertions.assertThrows(BadRequestException.class, () -> {
-                    UserValidator userValidator = new UserValidator();
-                    userValidator.validate(user);
+                    userDataValidator.validate(user);
                 });
                 Assertions.assertEquals(
                         "Required field Email is missing.",
@@ -196,8 +192,7 @@ public class UserValidatorTest {
             () -> {
                 user.setEmail("  ");
                 Exception exception = Assertions.assertThrows(BadRequestException.class, () -> {
-                    UserValidator userValidator = new UserValidator();
-                    userValidator.validate(user);
+                    userDataValidator.validate(user);
                 });
                 Assertions.assertEquals("Required field Email is missing.",
                         exception.getMessage()
@@ -206,8 +201,7 @@ public class UserValidatorTest {
             () -> {
                 user.setEmail("owenexample.com");
                 Exception exception = Assertions.assertThrows(BadRequestException.class, () -> {
-                    UserValidator userValidator = new UserValidator();
-                    userValidator.validate(user);
+                    userDataValidator.validate(user);
                 });
                 Assertions.assertEquals(
                         "Invalid input on field Email. Correct format is: an_accepted-email.example@domain.com.mx",
@@ -217,8 +211,7 @@ public class UserValidatorTest {
             () -> {
                 user.setEmail("owen@example");
                 Exception exception = Assertions.assertThrows(BadRequestException.class, () -> {
-                    UserValidator userValidator = new UserValidator();
-                    userValidator.validate(user);
+                    userDataValidator.validate(user);
                 });
                 Assertions.assertEquals(
                         "Invalid input on field Email. Correct format is: an_accepted-email.example@domain.com.mx",
@@ -241,32 +234,28 @@ public class UserValidatorTest {
             () -> {
                 user.setPassword(null);
                 Exception errorMessagePassword = Assertions.assertThrows(BadRequestException.class, () -> {
-                    UserValidator userValidator = new UserValidator();
-                    userValidator.validate(user);
+                    userDataValidator.validate(user);
                 });
                 Assertions.assertEquals("Required field Password is missing.", errorMessagePassword.getMessage());
             },
             () -> {
                 user.setPassword("");
                 Exception errorMessagePassword = Assertions.assertThrows(BadRequestException.class, () -> {
-                    UserValidator userValidator = new UserValidator();
-                    userValidator.validate(user);
+                    userDataValidator.validate(user);
                 });
                 Assertions.assertEquals("Required field Password is missing.", errorMessagePassword.getMessage());
             },
             () -> {
                 user.setPassword("  ");
                 Exception errorMessagePassword = Assertions.assertThrows(BadRequestException.class, () -> {
-                    UserValidator userValidator = new UserValidator();
-                    userValidator.validate(user);
+                    userDataValidator.validate(user);
                 });
                 Assertions.assertEquals("Required field Password is missing.", errorMessagePassword.getMessage());
             },
             () -> {
                 user.setPassword("hiWorld");
                 Exception errorMessagePassword = Assertions.assertThrows(BadRequestException.class, () -> {
-                    UserValidator userValidator = new UserValidator();
-                    userValidator.validate(user);
+                    userDataValidator.validate(user);
                 });
                 Assertions.assertEquals(
                     "Invalid input on field Password. Correct format is: 10 characters minimum with "
@@ -277,8 +266,7 @@ public class UserValidatorTest {
             () -> {
                 user.setPassword("helloworld");
                 Exception errorMessagePassword = Assertions.assertThrows(BadRequestException.class, () -> {
-                    UserValidator userValidator = new UserValidator();
-                    userValidator.validate(user);
+                    userDataValidator.validate(user);
                 });
                 Assertions.assertEquals(
                         "Invalid input on field Password. Correct format is: 10 characters minimum with "
@@ -289,8 +277,7 @@ public class UserValidatorTest {
             () -> {
                 user.setPassword("helloWorld");
                 Exception errorMessagePassword = Assertions.assertThrows(BadRequestException.class, () -> {
-                    UserValidator userValidator = new UserValidator();
-                    userValidator.validate(user);
+                    userDataValidator.validate(user);
                 });
                 Assertions.assertEquals(
                         "Invalid input on field Password. Correct format is: 10 characters minimum with "
@@ -314,8 +301,7 @@ public class UserValidatorTest {
             () -> {
                 user.setStatus(null);
                 Exception errorMessageStatus = Assertions.assertThrows(BadRequestException.class, () -> {
-                    UserValidator userValidator = new UserValidator();
-                    userValidator.validate(user);
+                    userDataValidator.validate(user);
                 });
                 Assertions.assertEquals(
                         "Required field Status of user is missing.",
@@ -325,8 +311,7 @@ public class UserValidatorTest {
             () -> {
                 user.setStatus(-1);
                 Exception errorMessageStatus = Assertions.assertThrows(BadRequestException.class, () -> {
-                    UserValidator userValidator = new UserValidator();
-                    userValidator.validate(user);
+                    userDataValidator.validate(user);
                 });
                 Assertions.assertEquals(
                     "Invalid input on field Status of user. Correct format is: Number 0 for unavailable or "
@@ -337,8 +322,7 @@ public class UserValidatorTest {
             () -> {
                 user.setStatus(2);
                 Exception errorMessageStatus = Assertions.assertThrows(BadRequestException.class, () -> {
-                    UserValidator userValidator = new UserValidator();
-                    userValidator.validate(user);
+                    userDataValidator.validate(user);
                 });
                 Assertions.assertEquals(
                         "Invalid input on field Status of user. Correct format is: Number 0 for unavailable or "
@@ -349,8 +333,7 @@ public class UserValidatorTest {
             () -> {
                 user.setStatus(10);
                 Exception errorMessageStatus = Assertions.assertThrows(BadRequestException.class, () -> {
-                    UserValidator userValidator = new UserValidator();
-                    userValidator.validate(user);
+                    userDataValidator.validate(user);
                 });
                 Assertions.assertEquals(
                         "Invalid input on field Status of user. Correct format is: Number 0 for unavailable or "
@@ -361,8 +344,7 @@ public class UserValidatorTest {
             () -> {
                 user.setStatus(-10);
                 Exception errorMessageStatus = Assertions.assertThrows(BadRequestException.class, () -> {
-                    UserValidator userValidator = new UserValidator();
-                    userValidator.validate(user);
+                    userDataValidator.validate(user);
                 });
                 Assertions.assertEquals(
                         "Invalid input on field Status of user. Correct format is: Number 0 for unavailable or "
@@ -372,8 +354,7 @@ public class UserValidatorTest {
             },
             () -> {
                 user.setStatus(0);
-                UserValidator userValidator = new UserValidator();
-                userValidator.validate(user);
+                userDataValidator.validate(user);
             }
         );
     }

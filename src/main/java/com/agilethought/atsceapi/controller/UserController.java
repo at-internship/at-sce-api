@@ -106,7 +106,7 @@ public class UserController {
     })
 	public UpdateUserResponse putUser(@RequestBody UpdateUserRequest request, @PathVariable String id) {
 
-        return userService.updateUser(request,id);
+        return userService.updateUserById(request, id);
 
 	}
 	
