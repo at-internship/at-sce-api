@@ -3,21 +3,21 @@ package com.agilethought.atsceapi.service.implementation;
 import static com.agilethought.atsceapi.exception.ErrorMessage.INVALID_CREDENTIALS;
 import static com.agilethought.atsceapi.exception.ErrorMessage.UNAVAILABLE_ENTITY;
 import static com.agilethought.atsceapi.exception.ErrorMessage.NOT_FOUND_RESOURCE;
-import static com.agilethought.atsceapi.exception.ErrorMessage.ALREADY_EXISTING_EMAIL;
 import static com.agilethought.atsceapi.exception.ErrorMessage.USER;
 
 import java.util.List;
 import java.util.Optional;
 
 import com.agilethought.atsceapi.dto.user.*;
-import com.agilethought.atsceapi.exception.BadRequestException;
 import com.agilethought.atsceapi.service.UserService;
+import com.agilethought.atsceapi.validator.user.LoginValidator;
+import com.agilethought.atsceapi.validator.user.NewUserValidator;
+import com.agilethought.atsceapi.validator.user.UpdateUserValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.agilethought.atsceapi.model.User;
-import com.agilethought.atsceapi.validator.Validator;
-import com.agilethought.atsceapi.validator.user.UserValidator;
+import com.agilethought.atsceapi.validator.user.UserDataValidator;
 import com.agilethought.atsceapi.exception.NotFoundException;
 import com.agilethought.atsceapi.exception.UnauthorizedException;
 import com.agilethought.atsceapi.repository.UserRepository;
@@ -37,10 +37,13 @@ public class UserServiceImpl implements UserService {
 	private MapperFacade orikaMapperFacade;
 
 	@Autowired
-	private Validator<LoginRequest> loginValidator;
+	private LoginValidator loginValidator;
 
 	@Autowired
-	private UserValidator userValidator;
+	private NewUserValidator newUserValidator;
+
+	@Autowired
+	private UpdateUserValidator updateUserValidator;
 
 	@Override
 	public LoginResponse loginUser(LoginRequest loginRequest) {
@@ -99,11 +102,7 @@ public class UserServiceImpl implements UserService {
 	public NewUserResponse createUser(NewUserRequest request) {
 
 		User user = orikaMapperFacade.map(request, User.class);
-		userValidator.validate(user);
-		if (userRepository.existsByEmail(user.getEmail()))
-			throw new BadRequestException(
-					String.format(ALREADY_EXISTING_EMAIL, user.getEmail())
-			);
+		newUserValidator.validate(user);
 		setLetterCases(user);
 		User savedUsers = userRepository.save(user);
 		return orikaMapperFacade.map(savedUsers, NewUserResponse.class);
@@ -111,18 +110,13 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public UpdateUserResponse updateUser(UpdateUserRequest request, String id) {
+	public UpdateUserResponse updateUserById(UpdateUserRequest request, String id) {
 
-		Optional<User> userFoundById = userRepository.findById(id);
-		if (!userFoundById.isPresent())
-			throw new NotFoundException(
-					String.format(NOT_FOUND_RESOURCE, USER, id)
-			);
 		request.setId(id);
-		User user = orikaMapperFacade.map(request, User.class);
-		userValidator.validate(user);
-		setLetterCases(user);
-		User updatedUser = userRepository.save(user);
+		User userUpdatedFields = orikaMapperFacade.map(request, User.class);
+		updateUserValidator.validate(userUpdatedFields);
+		setLetterCases(userUpdatedFields);
+		User updatedUser = userRepository.save(userUpdatedFields);
 		return orikaMapperFacade.map(updatedUser, UpdateUserResponse.class);
 
 	}
