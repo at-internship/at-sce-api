@@ -10,12 +10,14 @@ import java.util.Optional;
 
 import com.agilethought.atsceapi.dto.user.*;
 import com.agilethought.atsceapi.service.UserService;
+import com.agilethought.atsceapi.validator.user.LoginValidator;
+import com.agilethought.atsceapi.validator.user.NewUserValidator;
+import com.agilethought.atsceapi.validator.user.UpdateUserValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.agilethought.atsceapi.model.User;
-import com.agilethought.atsceapi.validator.Validator;
-import com.agilethought.atsceapi.validator.user.UserValidator;
+import com.agilethought.atsceapi.validator.user.UserDataValidator;
 import com.agilethought.atsceapi.exception.NotFoundException;
 import com.agilethought.atsceapi.exception.UnauthorizedException;
 import com.agilethought.atsceapi.repository.UserRepository;
@@ -35,10 +37,13 @@ public class UserServiceImpl implements UserService {
 	private MapperFacade orikaMapperFacade;
 
 	@Autowired
-	private Validator<LoginRequest> loginValidator;
+	private LoginValidator loginValidator;
 
 	@Autowired
-	private UserValidator userValidator;
+	private NewUserValidator newUserValidator;
+
+	@Autowired
+	private UpdateUserValidator updateUserValidator;
 
 	@Override
 	public LoginResponse loginUser(LoginRequest loginRequest) {
@@ -97,7 +102,7 @@ public class UserServiceImpl implements UserService {
 	public NewUserResponse createUser(NewUserRequest request) {
 
 		User user = orikaMapperFacade.map(request, User.class);
-		userValidator.validate(user);
+		newUserValidator.validate(user);
 		setLetterCases(user);
 		User savedUsers = userRepository.save(user);
 		return orikaMapperFacade.map(savedUsers, NewUserResponse.class);
@@ -105,16 +110,11 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public UpdateUserResponse updateUser(UpdateUserRequest request, String id) {
+	public UpdateUserResponse updateUserById(UpdateUserRequest request, String id) {
 
-		Optional<User> userFoundById = userRepository.findById(id);
-		if (!userFoundById.isPresent())
-			throw new NotFoundException(
-					String.format(NOT_FOUND_RESOURCE, USER, id)
-			);
 		request.setId(id);
 		User userUpdatedFields = orikaMapperFacade.map(request, User.class);
-		userValidator.validate(userUpdatedFields);
+		updateUserValidator.validate(userUpdatedFields);
 		setLetterCases(userUpdatedFields);
 		User updatedUser = userRepository.save(userUpdatedFields);
 		return orikaMapperFacade.map(updatedUser, UpdateUserResponse.class);

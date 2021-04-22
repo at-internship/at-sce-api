@@ -99,7 +99,7 @@ public class UserControllerTest {
     public void testPutUser() throws Exception {
 
         String putMapping = "/users/1234";
-        when(userService.updateUser(any(UpdateUserRequest.class), anyString()))
+        when(userService.updateUserById(any(UpdateUserRequest.class), anyString()))
                 .thenReturn(new UpdateUserResponse());
         mockMvc.perform(
                 put(REQUEST_MAPPING + putMapping)

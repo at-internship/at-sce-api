@@ -3,6 +3,7 @@ package com.agilethought.atsceapi.exception;
 public class ErrorMessage {
 
     public static final String MISSING_REQUIRED_INPUT = "Required field %s is missing.";
+    public static final String ID = "Id";
 
     public static final String INVALID_INPUT = "Invalid input on field %s. Correct format is: %s";
     public static final String CORRECT_FORMAT_NUMERIC = "A number with or " +
