@@ -1,5 +1,6 @@
 package com.agilethought.atsceapi.validator.user;
 
+import static com.agilethought.atsceapi.exception.ErrorMessage.VALIDATION_ERROR;
 import com.agilethought.atsceapi.exception.BadRequestException;
 import com.agilethought.atsceapi.model.User;
 import org.junit.Before;
@@ -32,7 +33,7 @@ public class UserDataValidatorTest {
                     userDataValidator.validate(user);
                 });
                 Assertions.assertEquals(
-                        "Required field Type is missing.",
+                		VALIDATION_ERROR,
                         errorMessageException.getMessage()
                 );
             },
@@ -43,7 +44,7 @@ public class UserDataValidatorTest {
                     userDataValidator.validate(user);
                 });
                 Assertions.assertEquals(
-                        "Invalid input on field Type. Correct format is: Number 1 for admin or number 2 for normal user",
+                		VALIDATION_ERROR,
                         errorMessageException.getMessage()
                 );
             },
@@ -54,7 +55,7 @@ public class UserDataValidatorTest {
                     userDataValidator.validate(user);
                 });
                 Assertions.assertEquals(
-                        "Invalid input on field Type. Correct format is: Number 1 for admin or number 2 for normal user",
+                		VALIDATION_ERROR,
                         errorMessageException.getMessage()
                 );
             },
@@ -65,7 +66,7 @@ public class UserDataValidatorTest {
                     userDataValidator.validate(user);
                 });
                 Assertions.assertEquals(
-                        "Invalid input on field Type. Correct format is: Number 1 for admin or number 2 for normal user",
+                		VALIDATION_ERROR,
                         errorMessageException.getMessage()
                 );
             }
@@ -88,8 +89,8 @@ public class UserDataValidatorTest {
                     userDataValidator.validate(user);
                 });
                 Assertions.assertEquals(
-                        "Required field First name is missing.",
-                        exception.getMessage()
+                		VALIDATION_ERROR,
+                		exception.getMessage()
                 );
             },
             () -> {
@@ -98,8 +99,8 @@ public class UserDataValidatorTest {
                     userDataValidator.validate(user);
                 });
                 Assertions.assertEquals(
-                        "Required field First name is missing.",
-                        exception.getMessage()
+                		VALIDATION_ERROR,
+                		exception.getMessage()
                 );
             },
             () -> {
@@ -108,8 +109,8 @@ public class UserDataValidatorTest {
                     userDataValidator.validate(user);
                 });
                 Assertions.assertEquals(
-                        "Required field First name is missing.",
-                        exception.getMessage()
+                		VALIDATION_ERROR,
+                		exception.getMessage()
                 );
             }
         );
@@ -131,8 +132,8 @@ public class UserDataValidatorTest {
                         userDataValidator.validate(user);
                     });
                     Assertions.assertEquals(
-                            "Required field Last name is missing.",
-                            exception.getMessage()
+                    		VALIDATION_ERROR,
+                    		exception.getMessage()
                     );
                 },
                 () -> {
@@ -141,8 +142,8 @@ public class UserDataValidatorTest {
                         userDataValidator.validate(user);
                     });
                     Assertions.assertEquals(
-                            "Required field Last name is missing.",
-                            exception.getMessage()
+                    		VALIDATION_ERROR,
+                    		exception.getMessage()
                     );
                 },
                 () -> {
@@ -151,8 +152,8 @@ public class UserDataValidatorTest {
                         userDataValidator.validate(user);
                     });
                     Assertions.assertEquals(
-                            "Required field Last name is missing.",
-                            exception.getMessage()
+                    		VALIDATION_ERROR,
+                    		exception.getMessage()
                     );
                 }
         );
@@ -175,8 +176,8 @@ public class UserDataValidatorTest {
                     userDataValidator.validate(user);
                 });
                 Assertions.assertEquals(
-                        "Required field Email is missing.",
-                        exception.getMessage()
+                		VALIDATION_ERROR,
+                		exception.getMessage()
                 );
             },
             () -> {
@@ -185,8 +186,8 @@ public class UserDataValidatorTest {
                     userDataValidator.validate(user);
                 });
                 Assertions.assertEquals(
-                        "Required field Email is missing.",
-                        exception.getMessage()
+                		VALIDATION_ERROR,
+                		exception.getMessage()
                 );
             },
             () -> {
@@ -194,8 +195,9 @@ public class UserDataValidatorTest {
                 Exception exception = Assertions.assertThrows(BadRequestException.class, () -> {
                     userDataValidator.validate(user);
                 });
-                Assertions.assertEquals("Required field Email is missing.",
-                        exception.getMessage()
+                Assertions.assertEquals(
+                		VALIDATION_ERROR,
+                		exception.getMessage()
                 );
             },
             () -> {
@@ -204,8 +206,8 @@ public class UserDataValidatorTest {
                     userDataValidator.validate(user);
                 });
                 Assertions.assertEquals(
-                        "Invalid input on field Email. Correct format is: an_accepted-email.example@domain.com.mx",
-                        exception.getMessage()
+                		VALIDATION_ERROR,
+                		exception.getMessage()
                 );
             },
             () -> {
@@ -214,8 +216,8 @@ public class UserDataValidatorTest {
                     userDataValidator.validate(user);
                 });
                 Assertions.assertEquals(
-                        "Invalid input on field Email. Correct format is: an_accepted-email.example@domain.com.mx",
-                        exception.getMessage()
+                		VALIDATION_ERROR,
+                		exception.getMessage()
                 );
             }
         );
@@ -236,21 +238,21 @@ public class UserDataValidatorTest {
                 Exception errorMessagePassword = Assertions.assertThrows(BadRequestException.class, () -> {
                     userDataValidator.validate(user);
                 });
-                Assertions.assertEquals("Required field Password is missing.", errorMessagePassword.getMessage());
+                Assertions.assertEquals(VALIDATION_ERROR, errorMessagePassword.getMessage());
             },
             () -> {
                 user.setPassword("");
                 Exception errorMessagePassword = Assertions.assertThrows(BadRequestException.class, () -> {
                     userDataValidator.validate(user);
                 });
-                Assertions.assertEquals("Required field Password is missing.", errorMessagePassword.getMessage());
+                Assertions.assertEquals(VALIDATION_ERROR, errorMessagePassword.getMessage());
             },
             () -> {
                 user.setPassword("  ");
                 Exception errorMessagePassword = Assertions.assertThrows(BadRequestException.class, () -> {
                     userDataValidator.validate(user);
                 });
-                Assertions.assertEquals("Required field Password is missing.", errorMessagePassword.getMessage());
+                Assertions.assertEquals(VALIDATION_ERROR, errorMessagePassword.getMessage());
             },
             () -> {
                 user.setPassword("hiWorld");
@@ -258,8 +260,7 @@ public class UserDataValidatorTest {
                     userDataValidator.validate(user);
                 });
                 Assertions.assertEquals(
-                    "Invalid input on field Password. Correct format is: 10 characters minimum with "
-                        + "at least one lowercase letter, one uppercase letter, and one number.",
+                		VALIDATION_ERROR,
                         errorMessagePassword.getMessage()
                 );
             },
@@ -269,8 +270,7 @@ public class UserDataValidatorTest {
                     userDataValidator.validate(user);
                 });
                 Assertions.assertEquals(
-                        "Invalid input on field Password. Correct format is: 10 characters minimum with "
-                                + "at least one lowercase letter, one uppercase letter, and one number.",
+                		VALIDATION_ERROR,
                         errorMessagePassword.getMessage()
                 );
             },
@@ -280,8 +280,7 @@ public class UserDataValidatorTest {
                     userDataValidator.validate(user);
                 });
                 Assertions.assertEquals(
-                        "Invalid input on field Password. Correct format is: 10 characters minimum with "
-                                + "at least one lowercase letter, one uppercase letter, and one number.",
+                		VALIDATION_ERROR,
                         errorMessagePassword.getMessage()
                 );
             }
@@ -304,7 +303,7 @@ public class UserDataValidatorTest {
                     userDataValidator.validate(user);
                 });
                 Assertions.assertEquals(
-                        "Required field Status of user is missing.",
+                		VALIDATION_ERROR,
                         errorMessageStatus.getMessage()
                 );
             },
@@ -314,8 +313,7 @@ public class UserDataValidatorTest {
                     userDataValidator.validate(user);
                 });
                 Assertions.assertEquals(
-                    "Invalid input on field Status of user. Correct format is: Number 0 for unavailable or "
-                        + "number 1 for available",
+                		VALIDATION_ERROR,
                         errorMessageStatus.getMessage()
                 );
             },
@@ -325,8 +323,7 @@ public class UserDataValidatorTest {
                     userDataValidator.validate(user);
                 });
                 Assertions.assertEquals(
-                        "Invalid input on field Status of user. Correct format is: Number 0 for unavailable or "
-                                + "number 1 for available",
+                		VALIDATION_ERROR,
                         errorMessageStatus.getMessage()
                 );
             },
@@ -336,8 +333,7 @@ public class UserDataValidatorTest {
                     userDataValidator.validate(user);
                 });
                 Assertions.assertEquals(
-                        "Invalid input on field Status of user. Correct format is: Number 0 for unavailable or "
-                                + "number 1 for available",
+                		VALIDATION_ERROR,
                         errorMessageStatus.getMessage()
                 );
             },
@@ -347,8 +343,7 @@ public class UserDataValidatorTest {
                     userDataValidator.validate(user);
                 });
                 Assertions.assertEquals(
-                        "Invalid input on field Status of user. Correct format is: Number 0 for unavailable or "
-                                + "number 1 for available",
+                		VALIDATION_ERROR,
                         errorMessageStatus.getMessage()
                 );
             },

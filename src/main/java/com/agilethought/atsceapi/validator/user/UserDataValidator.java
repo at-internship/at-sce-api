@@ -3,10 +3,16 @@ package com.agilethought.atsceapi.validator.user;
 import static com.agilethought.atsceapi.exception.ErrorMessage.*;
 import static com.agilethought.atsceapi.validator.user.ValidationUtils.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.agilethought.atsceapi.validator.Validator;
+
+import org.apache.commons.collections.CollectionUtils;
 import org.springframework.stereotype.Service;
 
 import com.agilethought.atsceapi.exception.BadRequestException;
+import com.agilethought.atsceapi.exception.GlobalExceptionBody.ErrorDetails;
 import com.agilethought.atsceapi.model.User;
 
 @Service
@@ -31,92 +37,113 @@ public class UserDataValidator implements Validator<User> {
 
     @Override
     public void validate(User user) {
-
-        validateType(user.getType());
-        validateFirstName(user.getFirstName());
-        validateLastName(user.getLastName());
-        validateEmailFormat(user.getEmail());
-        validatePassword(user.getPassword());
-        validateStatus(user.getStatus());
-
+    	List<ErrorDetails> errorDetails = new ArrayList<ErrorDetails>();
+        validateType(user.getType(), errorDetails);
+        validateFirstName(user.getFirstName(), errorDetails);
+        validateLastName(user.getLastName(), errorDetails);
+        validateEmailFormat(user.getEmail(), errorDetails);
+        validatePassword(user.getPassword(), errorDetails);
+        validateStatus(user.getStatus(), errorDetails);
+        if (CollectionUtils.isNotEmpty(errorDetails))
+			throw new BadRequestException(VALIDATION_ERROR, errorDetails);
     }
 
-    private void validateType(Integer type) {
+    private void validateType(Integer type, List<ErrorDetails> errorDetails) {
 
         if (type == null) {
-            throw new BadRequestException(
-                    String.format(MISSING_REQUIRED_INPUT, TYPE)
-            );
+			ErrorDetails error = new ErrorDetails();
+			error.setErrorMessage(String.format(MISSING_REQUIRED_INPUT, TYPE));
+			error.setFieldName(TYPE);
+			errorDetails.add(error);
+			return;
         }
         if (type < 1 || type > 2) {
-            throw new BadRequestException(
-                    String.format(INVALID_INPUT, TYPE, CORRECT_FORMAT_TYPE)
-            );
+			ErrorDetails error = new ErrorDetails();
+			error.setErrorMessage(String.format(INVALID_INPUT, TYPE, CORRECT_FORMAT_TYPE));
+			error.setFieldName(TYPE);
+			errorDetails.add(error);
+			return;
         }
 
     }
 
-    private void validateFirstName(String firstName) {
+    private void validateFirstName(String firstName, List<ErrorDetails> errorDetails) {
 
         if (!isValidString(firstName)) {
-            throw new BadRequestException(
-                    String.format(MISSING_REQUIRED_INPUT, FIRST_NAME)
-            );
+			ErrorDetails error = new ErrorDetails();
+			error.setErrorMessage(String.format(MISSING_REQUIRED_INPUT, FIRST_NAME));
+			error.setFieldName(FIRST_NAME);
+			errorDetails.add(error);
+			return;
         }
 
     }
 
-    private void validateLastName(String lastName) {
+    private void validateLastName(String lastName, List<ErrorDetails> errorDetails) {
 
         if (!isValidString(lastName)) {
-            throw new BadRequestException(
-                    String.format(MISSING_REQUIRED_INPUT, LAST_NAME)
-            );
-        }
+			ErrorDetails error = new ErrorDetails();
+			error.setErrorMessage(String.format(MISSING_REQUIRED_INPUT, LAST_NAME));
+			error.setFieldName(LAST_NAME);
+			errorDetails.add(error);
+			return;
+		}
 
     }
 
-    private void validateEmailFormat(String email) {
+    private void validateEmailFormat(String email, List<ErrorDetails> errorDetails) {
 
         if (!isValidString(email)) {
-            throw new BadRequestException(
-                    String.format(MISSING_REQUIRED_INPUT, EMAIL)
-            );
+			ErrorDetails error = new ErrorDetails();
+			error.setErrorMessage(String.format(MISSING_REQUIRED_INPUT, EMAIL));
+			error.setFieldName(EMAIL);
+			errorDetails.add(error);
+			return;
         }
         if (!isValidEmail(email)) {
-            throw new BadRequestException(
-                    String.format(INVALID_INPUT, EMAIL, CORRECT_FORMAT_EMAIL)
-            );
+			ErrorDetails error = new ErrorDetails();
+			error.setErrorMessage(String.format(INVALID_INPUT, EMAIL, CORRECT_FORMAT_EMAIL));
+			error.setFieldName(EMAIL);
+			errorDetails.add(error);
+			return;
         }
 
     }
 
-    private void validatePassword(String password) {
+    private void validatePassword(String password, List<ErrorDetails> errorDetails) {
 
         if (!isValidString(password)) {
-            throw new BadRequestException(
-                    String.format(MISSING_REQUIRED_INPUT, PASSWORD)
-            );
+			ErrorDetails error = new ErrorDetails();
+			error.setErrorMessage(String.format(MISSING_REQUIRED_INPUT, PASSWORD));
+			error.setFieldName(PASSWORD);
+			errorDetails.add(error);
+			return;
         }
         if (!isValidPassword(password)) {
-            throw new BadRequestException(
-                    String.format(INVALID_INPUT, PASSWORD, CORRECT_FORMAT_PASSWORD)
-            );
+			ErrorDetails error = new ErrorDetails();
+			error.setErrorMessage(String.format(INVALID_INPUT, PASSWORD, CORRECT_FORMAT_PASSWORD));
+			error.setFieldName(PASSWORD);
+			errorDetails.add(error);
+			return;
         }
 
     }
 
-    private void validateStatus(Integer status) {
+    private void validateStatus(Integer status, List<ErrorDetails> errorDetails) {
 
         if (status == null) {
-            throw new BadRequestException(
-                    String.format(MISSING_REQUIRED_INPUT, STATUS)
-            );
+			ErrorDetails error = new ErrorDetails();
+			error.setErrorMessage(String.format(MISSING_REQUIRED_INPUT, STATUS));
+			error.setFieldName(STATUS);
+			errorDetails.add(error);
+			return;
         }
         if( status < 0 || status > 1) {
-                throw new BadRequestException(
-                        String.format(INVALID_INPUT, STATUS, CORRECT_FORMAT_STATUS)
-                );
+			ErrorDetails error = new ErrorDetails();
+			error.setErrorMessage(String.format(INVALID_INPUT, STATUS, CORRECT_FORMAT_STATUS));
+			error.setFieldName(STATUS);
+			errorDetails.add(error);
+			return;
         }
 
     }

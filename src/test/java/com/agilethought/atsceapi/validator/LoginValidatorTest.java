@@ -1,5 +1,6 @@
 package com.agilethought.atsceapi.validator;
 
+import static com.agilethought.atsceapi.exception.ErrorMessage.VALIDATION_ERROR;
 import com.agilethought.atsceapi.dto.user.LoginRequest;
 import com.agilethought.atsceapi.exception.BadRequestException;
 import com.agilethought.atsceapi.exception.UnauthorizedException;
@@ -24,7 +25,7 @@ public class LoginValidatorTest {
                         loginValidator.validate(loginRequest);
                     });
                     Assertions.assertEquals(
-                            "Required field Email is missing.",
+                    		VALIDATION_ERROR,
                             exception.getMessage()
                     );
                 },
@@ -35,7 +36,7 @@ public class LoginValidatorTest {
                         loginValidator.validate(loginRequest);
                     });
                     Assertions.assertEquals(
-                            "Required field Email is missing.",
+                    		VALIDATION_ERROR,
                             exception.getMessage()
                     );
                 },
@@ -45,7 +46,7 @@ public class LoginValidatorTest {
                         LoginValidator loginValidator = new LoginValidator();
                         loginValidator.validate(loginRequest);
                     });
-                    Assertions.assertEquals("Required field Email is missing.",
+                    Assertions.assertEquals(VALIDATION_ERROR,
                             exception.getMessage()
                     );
                 },
@@ -87,7 +88,7 @@ public class LoginValidatorTest {
                         LoginValidator loginValidator = new LoginValidator();
                         loginValidator.validate(loginRequest);
                     });
-                    Assertions.assertEquals("Required field Password is missing.", errorMessagePassword.getMessage());
+                    Assertions.assertEquals(VALIDATION_ERROR, errorMessagePassword.getMessage());
                 },
                 () -> {
                     loginRequest.setPassword("");
@@ -95,7 +96,7 @@ public class LoginValidatorTest {
                         LoginValidator loginValidator = new LoginValidator();
                         loginValidator.validate(loginRequest);
                     });
-                    Assertions.assertEquals("Required field Password is missing.", errorMessagePassword.getMessage());
+                    Assertions.assertEquals(VALIDATION_ERROR, errorMessagePassword.getMessage());
                 },
                 () -> {
                     loginRequest.setPassword("  ");
@@ -103,7 +104,7 @@ public class LoginValidatorTest {
                         LoginValidator loginValidator = new LoginValidator();
                         loginValidator.validate(loginRequest);
                     });
-                    Assertions.assertEquals("Required field Password is missing.", errorMessagePassword.getMessage());
+                    Assertions.assertEquals(VALIDATION_ERROR, errorMessagePassword.getMessage());
                 },
                 () -> {
                     loginRequest.setPassword("hiWorld");
