@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.math3.util.Precision;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -466,7 +467,7 @@ public class HistoryValidator implements Validator<NewHistoryRequest> {
 			errorDetails.add(error);
 			return;
 		}
-		if (receivedTotal != calculatedTotal) {
+		if (!Precision.equals(receivedTotal, calculatedTotal)) {
 			ErrorDetails error = new ErrorDetails();
 			error.setErrorMessage(String.format(INVALID_INPUT, FIXED_EXPENSES_TOTAL, CORRECT_FORMAT_TOTAL));
 			error.setFieldName(FIXED_EXPENSES_TOTAL);
