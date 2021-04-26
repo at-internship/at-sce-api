@@ -1,8 +1,10 @@
 package com.agilethought.atsceapi.validator.history;
 
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -14,6 +16,7 @@ import org.mockito.MockitoAnnotations;
 import com.agilethought.atsceapi.domain.FixedExpenses;
 import com.agilethought.atsceapi.dto.history.NewHistoryRequest;
 import com.agilethought.atsceapi.exception.BadRequestException;
+import com.agilethought.atsceapi.exception.GlobalExceptionBody.ErrorDetails;
 import com.agilethought.atsceapi.repository.UserRepository;
 
 public class HistoryValidatorTest {
@@ -21,9 +24,6 @@ public class HistoryValidatorTest {
 	public NewHistoryRequest newHistoryRequest;
 
 	public FixedExpenses fixedExpenses;
-
-	@Mock
-	public FixedExpensesValidator fixedExpensesValidator;
 
 	@Mock
 	public UserRepository userRepository;
@@ -65,74 +65,65 @@ public class HistoryValidatorTest {
 	}
 
 	@Test
-	public void itShouldThrowErrorMessageInTypeField() {
-
-		doNothing().when(fixedExpensesValidator).validate(fixedExpenses);
+	public void itShouldThrowErrorMessageHistoryInTypeField() {
 
 		Assertions.assertAll(() -> {
 			newHistoryRequest.setType(null);
 			Exception errorMessageException = Assertions.assertThrows(BadRequestException.class, () -> {
 				historyValidator.validate(newHistoryRequest);
 			});
-			Assertions.assertEquals("Required field Type is missing.", errorMessageException.getMessage());
+			Assertions.assertEquals("One or more fields are invalid", errorMessageException.getMessage());
 		}, () -> {
 			newHistoryRequest.setType(0);
 			Exception errorMessageException = Assertions.assertThrows(BadRequestException.class, () -> {
 				historyValidator.validate(newHistoryRequest);
 			});
-			Assertions.assertEquals(
-					"Invalid input on field Type. Correct format is: Number 1 for Custom Web, number 2 for e-Commerce, number 3 for Android app, or number 4 for iOS app.",
-					errorMessageException.getMessage());
+			Assertions.assertEquals("One or more fields are invalid", errorMessageException.getMessage());
 		}, () -> {
 			newHistoryRequest.setType(5);
 			Exception errorMessageException = Assertions.assertThrows(BadRequestException.class, () -> {
 				historyValidator.validate(newHistoryRequest);
 			});
-			Assertions.assertEquals(
-					"Invalid input on field Type. Correct format is: Number 1 for Custom Web, number 2 for e-Commerce, number 3 for Android app, or number 4 for iOS app.",
-					errorMessageException.getMessage());
+			Assertions.assertEquals("One or more fields are invalid", errorMessageException.getMessage());
 		});
 
 	}
 
 	@Test
-	public void itShouldThrowErrorMessageInUserIdField() {
-
-		doNothing().when(fixedExpensesValidator).validate(fixedExpenses);
+	public void itShouldThrowErrorMessageInHistoryUserIdField() {
 
 		Assertions.assertAll(() -> {
 			newHistoryRequest.setUser_id(null);
 			Exception errorMessageException = Assertions.assertThrows(BadRequestException.class, () -> {
 				historyValidator.validate(newHistoryRequest);
 			});
-			Assertions.assertEquals("Required field User id is missing.", errorMessageException.getMessage());
+			Assertions.assertEquals("One or more fields are invalid", errorMessageException.getMessage());
 		}, () -> {
 			newHistoryRequest.setUser_id("");
 			Exception errorMessageException = Assertions.assertThrows(BadRequestException.class, () -> {
 				historyValidator.validate(newHistoryRequest);
 			});
-			Assertions.assertEquals("Required field User id is missing.", errorMessageException.getMessage());
+			Assertions.assertEquals("One or more fields are invalid", errorMessageException.getMessage());
 		}, () -> {
 			newHistoryRequest.setUser_id("	");
 			Exception errorMessageException = Assertions.assertThrows(BadRequestException.class, () -> {
 				historyValidator.validate(newHistoryRequest);
 			});
-			Assertions.assertEquals("Required field User id is missing.", errorMessageException.getMessage());
+			Assertions.assertEquals("One or more fields are invalid", errorMessageException.getMessage());
 		}, () -> {
 			newHistoryRequest.setUser_id("1");
 			when((userRepository).existsById(anyString())).thenReturn(false);
 			Exception errorMessageException = Assertions.assertThrows(BadRequestException.class, () -> {
 				historyValidator.validate(newHistoryRequest);
 			});
-			Assertions.assertEquals("Required field User id is missing.", errorMessageException.getMessage());
+			Assertions.assertEquals("One or more fields are invalid", errorMessageException.getMessage());
 		});
 
 	}
 
 	@Test
-	public void itShouldThrowErrorMessageInTotalHoursField() {
+	public void itShouldThrowErrorMessageInHistoryTotalHoursField() {
 
-		doNothing().when(fixedExpensesValidator).validate(fixedExpenses);
 		when((userRepository).existsById(anyString())).thenReturn(true);
 
 		Assertions.assertAll(() -> {
@@ -140,24 +131,20 @@ public class HistoryValidatorTest {
 			Exception errorMessageException = Assertions.assertThrows(BadRequestException.class, () -> {
 				historyValidator.validate(newHistoryRequest);
 			});
-			Assertions.assertEquals("Required field Total number of hours is missing.",
-					errorMessageException.getMessage());
+			Assertions.assertEquals("One or more fields are invalid", errorMessageException.getMessage());
 		}, () -> {
 			newHistoryRequest.setTotalHours(-1);
 			Exception errorMessageException = Assertions.assertThrows(BadRequestException.class, () -> {
 				historyValidator.validate(newHistoryRequest);
 			});
-			Assertions.assertEquals(
-					"Invalid input on field Total number of hours. Correct format is: An integer number greater than or equal to zero.",
-					errorMessageException.getMessage());
+			Assertions.assertEquals("One or more fields are invalid", errorMessageException.getMessage());
 		});
 
 	}
 
 	@Test
-	public void itShouldThrowErrorMessageInTotalDaysField() {
+	public void itShouldThrowErrorMessageInHistoryTotalDaysField() {
 
-		doNothing().when(fixedExpensesValidator).validate(fixedExpenses);
 		when((userRepository).existsById(anyString())).thenReturn(true);
 
 		Assertions.assertAll(() -> {
@@ -165,23 +152,19 @@ public class HistoryValidatorTest {
 			Exception errorMessageException = Assertions.assertThrows(BadRequestException.class, () -> {
 				historyValidator.validate(newHistoryRequest);
 			});
-			Assertions.assertEquals("Required field Total number of days is missing.",
-					errorMessageException.getMessage());
+			Assertions.assertEquals("One or more fields are invalid", errorMessageException.getMessage());
 		}, () -> {
 			newHistoryRequest.setTotalDays(-1);
 			Exception errorMessageException = Assertions.assertThrows(BadRequestException.class, () -> {
 				historyValidator.validate(newHistoryRequest);
 			});
-			Assertions.assertEquals(
-					"Invalid input on field Total number of days. Correct format is: An integer number greater than or equal to zero.",
-					errorMessageException.getMessage());
+			Assertions.assertEquals("One or more fields are invalid", errorMessageException.getMessage());
 		});
 	}
 
 	@Test
-	public void itShouldThrowErrorMessageInCostDayField() {
+	public void itShouldThrowErrorMessageInHistoryCostDayField() {
 
-		doNothing().when(fixedExpensesValidator).validate(fixedExpenses);
 		when((userRepository).existsById(anyString())).thenReturn(true);
 
 		Assertions.assertAll(() -> {
@@ -189,22 +172,19 @@ public class HistoryValidatorTest {
 			Exception errorMessageException = Assertions.assertThrows(BadRequestException.class, () -> {
 				historyValidator.validate(newHistoryRequest);
 			});
-			Assertions.assertEquals("Required field Cost per day is missing.", errorMessageException.getMessage());
+			Assertions.assertEquals("One or more fields are invalid", errorMessageException.getMessage());
 		}, () -> {
 			newHistoryRequest.setCostDay(-1.0);
 			Exception errorMessageException = Assertions.assertThrows(BadRequestException.class, () -> {
 				historyValidator.validate(newHistoryRequest);
 			});
-			Assertions.assertEquals(
-					"Invalid input on field Cost per day. Correct format is: A number with or without a decimal point.",
-					errorMessageException.getMessage());
+			Assertions.assertEquals("One or more fields are invalid", errorMessageException.getMessage());
 		});
 	}
 
 	@Test
-	public void itShouldThrowErrorMessageInCostHourField() {
+	public void itShouldThrowErrorMessageInHistoryCostHourField() {
 
-		doNothing().when(fixedExpensesValidator).validate(fixedExpenses);
 		when((userRepository).existsById(anyString())).thenReturn(true);
 
 		Assertions.assertAll(() -> {
@@ -212,22 +192,19 @@ public class HistoryValidatorTest {
 			Exception errorMessageException = Assertions.assertThrows(BadRequestException.class, () -> {
 				historyValidator.validate(newHistoryRequest);
 			});
-			Assertions.assertEquals("Required field Cost per hour is missing.", errorMessageException.getMessage());
+			Assertions.assertEquals("One or more fields are invalid", errorMessageException.getMessage());
 		}, () -> {
 			newHistoryRequest.setCostHour(-1.0);
 			Exception errorMessageException = Assertions.assertThrows(BadRequestException.class, () -> {
 				historyValidator.validate(newHistoryRequest);
 			});
-			Assertions.assertEquals(
-					"Invalid input on field Cost per hour. Correct format is: A number with or without a decimal point.",
-					errorMessageException.getMessage());
+			Assertions.assertEquals("One or more fields are invalid", errorMessageException.getMessage());
 		});
 	}
 
 	@Test
-	public void itShouldThrowErrorMessageInProjectCostField() {
+	public void itShouldThrowErrorMessageInHistoryProjectCostField() {
 
-		doNothing().when(fixedExpensesValidator).validate(fixedExpenses);
 		when((userRepository).existsById(anyString())).thenReturn(true);
 
 		Assertions.assertAll(() -> {
@@ -235,23 +212,19 @@ public class HistoryValidatorTest {
 			Exception errorMessageException = Assertions.assertThrows(BadRequestException.class, () -> {
 				historyValidator.validate(newHistoryRequest);
 			});
-			Assertions.assertEquals("Required field Cost of the project is missing.",
-					errorMessageException.getMessage());
+			Assertions.assertEquals("One or more fields are invalid", errorMessageException.getMessage());
 		}, () -> {
 			newHistoryRequest.setProjectCost(-1.0);
 			Exception errorMessageException = Assertions.assertThrows(BadRequestException.class, () -> {
 				historyValidator.validate(newHistoryRequest);
 			});
-			Assertions.assertEquals(
-					"Invalid input on field Cost of the project. Correct format is: A number with or without a decimal point.",
-					errorMessageException.getMessage());
+			Assertions.assertEquals("One or more fields are invalid", errorMessageException.getMessage());
 		});
 	}
 
 	@Test
-	public void itShouldThrowErrorMessageInTaxIVAField() {
+	public void itShouldThrowErrorMessageInHistoryTaxIVAField() {
 
-		doNothing().when(fixedExpensesValidator).validate(fixedExpenses);
 		when((userRepository).existsById(anyString())).thenReturn(true);
 
 		Assertions.assertAll(() -> {
@@ -259,22 +232,19 @@ public class HistoryValidatorTest {
 			Exception errorMessageException = Assertions.assertThrows(BadRequestException.class, () -> {
 				historyValidator.validate(newHistoryRequest);
 			});
-			Assertions.assertEquals("Required field Tax IVA is missing.", errorMessageException.getMessage());
+			Assertions.assertEquals("One or more fields are invalid", errorMessageException.getMessage());
 		}, () -> {
 			newHistoryRequest.setTaxIVA(-1.0);
 			Exception errorMessageException = Assertions.assertThrows(BadRequestException.class, () -> {
 				historyValidator.validate(newHistoryRequest);
 			});
-			Assertions.assertEquals(
-					"Invalid input on field Tax IVA. Correct format is: A number with or without a decimal point.",
-					errorMessageException.getMessage());
+			Assertions.assertEquals("One or more fields are invalid", errorMessageException.getMessage());
 		});
 	}
 
 	@Test
-	public void itShouldThrowErrorMessageInTaxISR_rField() {
+	public void itShouldThrowErrorMessageInHistoryTaxISR_rField() {
 
-		doNothing().when(fixedExpensesValidator).validate(fixedExpenses);
 		when((userRepository).existsById(anyString())).thenReturn(true);
 
 		Assertions.assertAll(() -> {
@@ -282,22 +252,19 @@ public class HistoryValidatorTest {
 			Exception errorMessageException = Assertions.assertThrows(BadRequestException.class, () -> {
 				historyValidator.validate(newHistoryRequest);
 			});
-			Assertions.assertEquals("Required field Tax ISR R is missing.", errorMessageException.getMessage());
+			Assertions.assertEquals("One or more fields are invalid", errorMessageException.getMessage());
 		}, () -> {
 			newHistoryRequest.setTaxISR_r(-1.0);
 			Exception errorMessageException = Assertions.assertThrows(BadRequestException.class, () -> {
 				historyValidator.validate(newHistoryRequest);
 			});
-			Assertions.assertEquals(
-					"Invalid input on field Tax ISR R. Correct format is: A number with or without a decimal point.",
-					errorMessageException.getMessage());
+			Assertions.assertEquals("One or more fields are invalid", errorMessageException.getMessage());
 		});
 	}
 
 	@Test
-	public void itShouldThrowErrorMessageInTaxIVA_rField() {
+	public void itShouldThrowErrorMessageInHistoryTaxIVA_rField() {
 
-		doNothing().when(fixedExpensesValidator).validate(fixedExpenses);
 		when((userRepository).existsById(anyString())).thenReturn(true);
 
 		Assertions.assertAll(() -> {
@@ -305,22 +272,19 @@ public class HistoryValidatorTest {
 			Exception errorMessageException = Assertions.assertThrows(BadRequestException.class, () -> {
 				historyValidator.validate(newHistoryRequest);
 			});
-			Assertions.assertEquals("Required field Tax IVA R is missing.", errorMessageException.getMessage());
+			Assertions.assertEquals("One or more fields are invalid", errorMessageException.getMessage());
 		}, () -> {
 			newHistoryRequest.setTaxIVA_r(-1.0);
 			Exception errorMessageException = Assertions.assertThrows(BadRequestException.class, () -> {
 				historyValidator.validate(newHistoryRequest);
 			});
-			Assertions.assertEquals(
-					"Invalid input on field Tax IVA R. Correct format is: A number with or without a decimal point.",
-					errorMessageException.getMessage());
+			Assertions.assertEquals("One or more fields are invalid", errorMessageException.getMessage());
 		});
 	}
 
 	@Test
-	public void itShouldThrowErrorMessageInTotalField() {
+	public void itShouldThrowErrorMessageInHistoryTotalField() {
 
-		doNothing().when(fixedExpensesValidator).validate(fixedExpenses);
 		when((userRepository).existsById(anyString())).thenReturn(true);
 
 		Assertions.assertAll(() -> {
@@ -328,23 +292,19 @@ public class HistoryValidatorTest {
 			Exception errorMessageException = Assertions.assertThrows(BadRequestException.class, () -> {
 				historyValidator.validate(newHistoryRequest);
 			});
-			Assertions.assertEquals("Required field Total cost of the project is missing.",
-					errorMessageException.getMessage());
+			Assertions.assertEquals("One or more fields are invalid", errorMessageException.getMessage());
 		}, () -> {
 			newHistoryRequest.setTotal(-1.0);
 			Exception errorMessageException = Assertions.assertThrows(BadRequestException.class, () -> {
 				historyValidator.validate(newHistoryRequest);
 			});
-			Assertions.assertEquals(
-					"Invalid input on field Total cost of the project. Correct format is: A number with or without a decimal point.",
-					errorMessageException.getMessage());
+			Assertions.assertEquals("One or more fields are invalid", errorMessageException.getMessage());
 		});
 	}
 
 	@Test
-	public void itShouldThrowErrorMessageInRevenueField() {
+	public void itShouldThrowErrorMessageInHistoryRevenueField() {
 
-		doNothing().when(fixedExpensesValidator).validate(fixedExpenses);
 		when((userRepository).existsById(anyString())).thenReturn(true);
 
 		Assertions.assertAll(() -> {
@@ -352,22 +312,19 @@ public class HistoryValidatorTest {
 			Exception errorMessageException = Assertions.assertThrows(BadRequestException.class, () -> {
 				historyValidator.validate(newHistoryRequest);
 			});
-			Assertions.assertEquals("Required field Project revenue is missing.", errorMessageException.getMessage());
+			Assertions.assertEquals("One or more fields are invalid", errorMessageException.getMessage());
 		}, () -> {
 			newHistoryRequest.setRevenue(-1.0);
 			Exception errorMessageException = Assertions.assertThrows(BadRequestException.class, () -> {
 				historyValidator.validate(newHistoryRequest);
 			});
-			Assertions.assertEquals(
-					"Invalid input on field Project revenue. Correct format is: A number with or without a decimal point.",
-					errorMessageException.getMessage());
+			Assertions.assertEquals("One or more fields are invalid", errorMessageException.getMessage());
 		});
 	}
 
 	@Test
-	public void itShouldThrowErrorMessageInStatusField() {
+	public void itShouldThrowErrorMessageInHistoryStatusField() {
 
-		doNothing().when(fixedExpensesValidator).validate(fixedExpenses);
 		when((userRepository).existsById(anyString())).thenReturn(true);
 
 		Assertions.assertAll(() -> {
@@ -375,23 +332,140 @@ public class HistoryValidatorTest {
 			Exception errorMessageException = Assertions.assertThrows(BadRequestException.class, () -> {
 				historyValidator.validate(newHistoryRequest);
 			});
-			Assertions.assertEquals("Required field Project status is missing.", errorMessageException.getMessage());
+			Assertions.assertEquals("One or more fields are invalid", errorMessageException.getMessage());
 		}, () -> {
 			newHistoryRequest.setStatus(-1);
 			Exception errorMessageException = Assertions.assertThrows(BadRequestException.class, () -> {
 				historyValidator.validate(newHistoryRequest);
 			});
-			Assertions.assertEquals(
-					"Invalid input on field Project status. Correct format is: Number 0 for unavailable ornumber 1 for available",
-					errorMessageException.getMessage());
+			Assertions.assertEquals("One or more fields are invalid", errorMessageException.getMessage());
 		}, () -> {
 			newHistoryRequest.setStatus(2);
 			Exception errorMessageException = Assertions.assertThrows(BadRequestException.class, () -> {
 				historyValidator.validate(newHistoryRequest);
 			});
-			Assertions.assertEquals(
-					"Invalid input on field Project status. Correct format is: Number 0 for unavailable ornumber 1 for available",
-					errorMessageException.getMessage());
+			Assertions.assertEquals("One or more fields are invalid", errorMessageException.getMessage());
 		});
+	}
+
+	@Test
+	public void itShouldThrowErrorMessageFixedExpensesInRentField() {
+
+		Assertions.assertAll(() -> {
+			fixedExpenses.setRent(null);
+			Exception errorMessageException = Assertions.assertThrows(BadRequestException.class, () -> {
+				historyValidator.validate(newHistoryRequest);
+			});
+			Assertions.assertEquals("One or more fields are invalid", errorMessageException.getMessage());
+		}, () -> {
+			fixedExpenses.setRent(-1.0);
+			Exception errorMessageException = Assertions.assertThrows(BadRequestException.class, () -> {
+				historyValidator.validate(newHistoryRequest);
+			});
+			Assertions.assertEquals("One or more fields are invalid", errorMessageException.getMessage());
+		});
+
+	}
+
+	@Test
+	public void itShouldThrowErrorMessageInFixedExpensesTransportField() {
+
+		Assertions.assertAll(() -> {
+			fixedExpenses.setTransport(null);
+			Exception errorMessageException = Assertions.assertThrows(BadRequestException.class, () -> {
+				historyValidator.validate(newHistoryRequest);
+			});
+			Assertions.assertEquals("One or more fields are invalid", errorMessageException.getMessage());
+		}, () -> {
+			fixedExpenses.setTransport(-1.0);
+			Exception errorMessageException = Assertions.assertThrows(BadRequestException.class, () -> {
+				historyValidator.validate(newHistoryRequest);
+			});
+			Assertions.assertEquals("One or more fields are invalid", errorMessageException.getMessage());
+		});
+
+	}
+
+	@Test
+	public void itShouldThrowErrorMessageInFixedExpensesInternetField() {
+
+		Assertions.assertAll(() -> {
+			fixedExpenses.setInternet(null);
+			Exception errorMessageException = Assertions.assertThrows(BadRequestException.class, () -> {
+				historyValidator.validate(newHistoryRequest);
+			});
+			Assertions.assertEquals("One or more fields are invalid", errorMessageException.getMessage());
+		}, () -> {
+			fixedExpenses.setInternet(-1.0);
+			Exception errorMessageException = Assertions.assertThrows(BadRequestException.class, () -> {
+				historyValidator.validate(newHistoryRequest);
+			});
+			Assertions.assertEquals("One or more fields are invalid", errorMessageException.getMessage());
+		});
+
+	}
+
+	@Test
+	public void itShouldThrowErrorMessageInFixedExpensesFeedField() {
+
+		Assertions.assertAll(() -> {
+			fixedExpenses.setFeed(null);
+			Exception errorMessageException = Assertions.assertThrows(BadRequestException.class, () -> {
+				historyValidator.validate(newHistoryRequest);
+			});
+			Assertions.assertEquals("One or more fields are invalid", errorMessageException.getMessage());
+		}, () -> {
+			fixedExpenses.setFeed(-1.0);
+			Exception errorMessageException = Assertions.assertThrows(BadRequestException.class, () -> {
+				historyValidator.validate(newHistoryRequest);
+			});
+			Assertions.assertEquals("One or more fields are invalid", errorMessageException.getMessage());
+		});
+
+	}
+
+	@Test
+	public void itShouldThrowErrorMessageInFixedExpensesOthersField() {
+
+		Assertions.assertAll(() -> {
+			fixedExpenses.setOthers(null);
+			Exception errorMessageException = Assertions.assertThrows(BadRequestException.class, () -> {
+				historyValidator.validate(newHistoryRequest);
+			});
+			Assertions.assertEquals("One or more fields are invalid", errorMessageException.getMessage());
+		}, () -> {
+			fixedExpenses.setOthers(-1.0);
+			Exception errorMessageException = Assertions.assertThrows(BadRequestException.class, () -> {
+				historyValidator.validate(newHistoryRequest);
+			});
+			Assertions.assertEquals("One or more fields are invalid", errorMessageException.getMessage());
+		});
+
+	}
+
+	@Test
+	public void itShouldThrowErrorMessageInFixedExpensesTotalField() {
+
+		Assertions.assertAll(() -> {
+			fixedExpenses.setTotal(null);
+			Exception errorMessageException = Assertions.assertThrows(BadRequestException.class, () -> {
+				historyValidator.validate(newHistoryRequest);
+			});
+			Assertions.assertEquals("One or more fields are invalid", errorMessageException.getMessage());
+		}, () -> {
+			fixedExpenses.setTotal(-1.0);
+			Exception errorMessageException = Assertions.assertThrows(BadRequestException.class, () -> {
+				historyValidator.validate(newHistoryRequest);
+			});
+			Assertions.assertEquals("One or more fields are invalid", errorMessageException.getMessage());
+		}, () -> {
+			fixedExpenses.setTotal(4.0);
+			Exception errorMessageException = Assertions.assertThrows(BadRequestException.class, () -> {
+				historyValidator.validate(newHistoryRequest);
+			});
+			Assertions.assertEquals("One or more fields are invalid", errorMessageException.getMessage());
+			Assertions.assertEquals("One or more fields are invalid", errorMessageException.getMessage());
+		});
+
 	}
 }
