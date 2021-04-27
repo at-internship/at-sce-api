@@ -114,8 +114,7 @@
 				<version>3.0.4</version>
 				<configuration>
 					<processTypes>
-						<web>java -Dserver.port=$PORT $JAVA_OPTS -jar
-							target/${project.name}-${project.version}.jar</web>
+						<web>java -Dserver.port=$PORT $JAVA_OPTS -jar target/${project.name}-${project.version}.jar</web>
 					</processTypes>
 				</configuration>
 			</plugin>
