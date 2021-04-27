@@ -18,10 +18,10 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import com.agilethought.atsceapi.domain.FixedExpenses;
 import com.agilethought.atsceapi.dto.history.HistoryDTO;
 import com.agilethought.atsceapi.dto.history.NewHistoryRequest;
 import com.agilethought.atsceapi.dto.history.NewHistoryResponse;
+import com.agilethought.atsceapi.dummy.DummyNewHistoryRequest;
 import com.agilethought.atsceapi.model.History;
 import com.agilethought.atsceapi.population.HistoryPopulation;
 import com.agilethought.atsceapi.repository.HistoryRepository;
@@ -32,6 +32,7 @@ import ma.glasnost.orika.MapperFacade;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 public class HistoryServiceImplTest {
+	public DummyNewHistoryRequest dummyNewHistoryRequest;
 
 	@Mock
 	public MapperFacade orikaMapperFacade;
@@ -51,6 +52,9 @@ public class HistoryServiceImplTest {
 	@Before
 	public void setUp() {
 		MockitoAnnotations.initMocks(this);
+
+		dummyNewHistoryRequest = new DummyNewHistoryRequest();
+		dummyNewHistoryRequest.populateHistoryRequest();
 	}
 
 	@Test
@@ -65,36 +69,13 @@ public class HistoryServiceImplTest {
 
 	@Test
 	public void testCreateHistory() {
-		FixedExpenses fixedExpenses = new FixedExpenses();
-		fixedExpenses.setRent(1.0);
-		fixedExpenses.setTransport(1.0);
-		fixedExpenses.setInternet(1.0);
-		fixedExpenses.setFeed(1.0);
-		fixedExpenses.setOthers(1.0);
-		fixedExpenses.setTotal(5.0);
-
-		NewHistoryRequest newHistoryRequest = new NewHistoryRequest();
-		newHistoryRequest.setType(1);
-		newHistoryRequest.setUser_id("1");
-		newHistoryRequest.setFixedExpenses(fixedExpenses);
-		newHistoryRequest.setTotalHours(1);
-		newHistoryRequest.setTotalDays(1);
-		newHistoryRequest.setCostDay(1.0);
-		newHistoryRequest.setCostHour(1.0);
-		newHistoryRequest.setProjectCost(1.0);
-		newHistoryRequest.setTaxIVA(1.0);
-		newHistoryRequest.setTaxISR_r(1.0);
-		newHistoryRequest.setTaxIVA_r(1.0);
-		newHistoryRequest.setTotal(1.0);
-		newHistoryRequest.setRevenue(1.0);
-		newHistoryRequest.setStatus(1);
 
 		doNothing().when(historyValidator).validate(any());
 		when((orikaMapperFacade).map(any(NewHistoryRequest.class), any())).thenReturn(new History());
 		when((historyRepository).save(any())).thenReturn(new History());
 		when((orikaMapperFacade).map(any(History.class), any())).thenReturn(new NewHistoryResponse());
 
-		NewHistoryResponse result = historyService.createHistory(newHistoryRequest);
+		NewHistoryResponse result = historyService.createHistory(dummyNewHistoryRequest);
 
 		assertNotNull(result);
 	}
