@@ -1,6 +1,10 @@
 package com.agilethought.atsceapi.service;
 
+import static com.agilethought.atsceapi.exception.ErrorMessage.NOT_FOUND_RESOURCE;
+import static com.agilethought.atsceapi.exception.ErrorMessage.USER;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -22,6 +26,7 @@ import com.agilethought.atsceapi.dto.history.HistoryDTO;
 import com.agilethought.atsceapi.dto.history.NewHistoryRequest;
 import com.agilethought.atsceapi.dto.history.NewHistoryResponse;
 import com.agilethought.atsceapi.dummy.DummyNewHistoryRequest;
+import com.agilethought.atsceapi.exception.NotFoundException;
 import com.agilethought.atsceapi.model.History;
 import com.agilethought.atsceapi.population.HistoryPopulation;
 import com.agilethought.atsceapi.repository.HistoryRepository;
@@ -58,14 +63,23 @@ public class HistoryServiceImplTest {
 	}
 
 	@Test
-	public void testGetAllHistory() {
+	public void testGetAllHistorySuccessfully() {
 		when((historyRepository).findAllByUserId(anyString())).thenReturn(new ArrayList<>());
 		when((orikaMapperFacade).mapAsList(anyList(), any())).thenReturn(new ArrayList<>());
-
 		List<HistoryDTO> result = historyService.getUserHistories("15781212");
-
 		assertNotNull(result);
 	}
+	
+	@Test
+    public void testGetAllHistoryWithIdNotFound() {
+	 when((historyRepository).findAllByUserId(anyString())).thenReturn(any());
+        NotFoundException thrownException = assertThrows(
+                NotFoundException.class,
+                () -> historyService.getUserHistories(anyString()));
+        assertEquals(
+                String.format(NOT_FOUND_RESOURCE, USER, ""),
+                thrownException.getMessage());
+    }
 
 	@Test
 	public void testCreateHistory() {
