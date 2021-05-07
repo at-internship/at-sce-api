@@ -42,7 +42,7 @@ public class UpdateUserValidatorTest {
                 }
         );
         assertEquals(
-                "Required field Id is missing.",
+                "Required field id is missing.",
                 thrownException.getMessage()
         );
 
@@ -98,7 +98,7 @@ public class UpdateUserValidatorTest {
                 }
         );
         assertEquals(
-                "Email my_email@example.com is already in use, try with another one or login.",
+                "email my_email@example.com is already in use, try with another one or login.",
                 thrownException.getMessage()
         );
 

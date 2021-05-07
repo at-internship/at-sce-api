@@ -21,40 +21,38 @@ import ma.glasnost.orika.MapperFacade;
 
 @Service
 public class HistoryServiceImpl implements HistoryService {
-   
+
 	@Autowired
-    private HistoryRepository historyRepository;
-    
-    @Autowired
-    private HistoryValidator historyValidator;
-    
-    @Autowired
-   	private MapperFacade orikaMapperFacade;
-    
-    @Autowired
+	private HistoryRepository historyRepository;
+
+	@Autowired
+	private HistoryValidator historyValidator;
+
+	@Autowired
+	private MapperFacade orikaMapperFacade;
+
+	@Autowired
 	private UserRepository userRepository;
 
-    @Override
-    public NewHistoryResponse createHistory(NewHistoryRequest request) {
+	@Override
+	public NewHistoryResponse createHistory(NewHistoryRequest request) {
 
-    	historyValidator.validate(request);
-    	History newHistory = orikaMapperFacade.map(request, History.class);
-        HistoryPopulation.populate(newHistory);
-    	History savedHistory = historyRepository.save(newHistory);
-        return orikaMapperFacade.map(savedHistory, NewHistoryResponse.class);
-    }
-    
+		historyValidator.validate(request);
+		History newHistory = orikaMapperFacade.map(request, History.class);
+		HistoryPopulation.populate(newHistory);
+		History savedHistory = historyRepository.save(newHistory);
+		return orikaMapperFacade.map(savedHistory, NewHistoryResponse.class);
+	}
+
 	@Override
 	public List<HistoryDTO> getUserHistories(String userId) {
-		
+
 		Optional<User> userFound = userRepository.findById(userId);
 		List<History> historyList = historyRepository.findAllByUserId(userId);
-		
+
 		if (userFound.isPresent())
-				return orikaMapperFacade.mapAsList(historyList, HistoryDTO.class);
-		
-		throw new NotFoundException(
-				String.format(NOT_FOUND_RESOURCE, USER, userId)
-		);
-    }
+			return orikaMapperFacade.mapAsList(historyList, HistoryDTO.class);
+
+		throw new NotFoundException(String.format(NOT_FOUND_RESOURCE, USER, userId));
+	}
 }

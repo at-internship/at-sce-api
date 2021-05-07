@@ -43,7 +43,7 @@ public class NewUserValidatorTest {
         );
         assertEquals(
                 String.format(
-                        "Email %s is already in use, try with another one or login.",
+                        "email %s is already in use, try with another one or login.",
                         mockCreateUser.getEmail()
                 ),
                 thrownException.getMessage()

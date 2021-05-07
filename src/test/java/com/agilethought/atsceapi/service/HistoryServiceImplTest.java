@@ -2,6 +2,7 @@ package com.agilethought.atsceapi.service;
 
 import static com.agilethought.atsceapi.exception.ErrorMessage.NOT_FOUND_RESOURCE;
 import static com.agilethought.atsceapi.exception.ErrorMessage.USER;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThrows;
@@ -13,23 +14,22 @@ import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import com.agilethought.atsceapi.dto.history.HistoryDTO;
-import com.agilethought.atsceapi.dto.history.NewHistoryRequest;
-import com.agilethought.atsceapi.dto.history.NewHistoryResponse;
+import com.agilethought.atsceapi.dto.history.*;
 import com.agilethought.atsceapi.dummy.DummyNewHistoryRequest;
 import com.agilethought.atsceapi.exception.NotFoundException;
 import com.agilethought.atsceapi.model.History;
+import com.agilethought.atsceapi.model.User;
 import com.agilethought.atsceapi.population.HistoryPopulation;
-import com.agilethought.atsceapi.repository.HistoryRepository;
+import com.agilethought.atsceapi.repository.*;
 import com.agilethought.atsceapi.service.implementation.HistoryServiceImpl;
 import com.agilethought.atsceapi.validator.history.HistoryValidator;
 
@@ -38,6 +38,9 @@ import ma.glasnost.orika.MapperFacade;
 @RunWith(SpringJUnit4ClassRunner.class)
 public class HistoryServiceImplTest {
 	public DummyNewHistoryRequest dummyNewHistoryRequest;
+
+	@Mock
+	public UserRepository userRepository;
 
 	@Mock
 	public MapperFacade orikaMapperFacade;
@@ -56,8 +59,6 @@ public class HistoryServiceImplTest {
 
 	@Before
 	public void setUp() {
-		MockitoAnnotations.initMocks(this);
-
 		dummyNewHistoryRequest = new DummyNewHistoryRequest();
 		dummyNewHistoryRequest.populateHistoryRequest();
 	}
@@ -66,20 +67,20 @@ public class HistoryServiceImplTest {
 	public void testGetAllHistorySuccessfully() {
 		when((historyRepository).findAllByUserId(anyString())).thenReturn(new ArrayList<>());
 		when((orikaMapperFacade).mapAsList(anyList(), any())).thenReturn(new ArrayList<>());
+		when((userRepository).findById(anyString())).thenReturn(Optional.of(new User()));
 		List<HistoryDTO> result = historyService.getUserHistories("15781212");
 		assertNotNull(result);
 	}
-	
+
 	@Test
-    public void testGetAllHistoryWithIdNotFound() {
-	 when((historyRepository).findAllByUserId(anyString())).thenReturn(any());
-        NotFoundException thrownException = assertThrows(
-                NotFoundException.class,
-                () -> historyService.getUserHistories(anyString()));
-        assertEquals(
-                String.format(NOT_FOUND_RESOURCE, USER, ""),
-                thrownException.getMessage());
-    }
+	public void testGetAllHistoryWithIdNotFound() {
+		when((userRepository).findById(anyString())).thenReturn(Optional.empty());
+		when((historyRepository).findAllByUserId(anyString())).thenReturn(new ArrayList<>());
+		Exception notFoundMessage = assertThrows(NotFoundException.class, () -> {
+			historyService.getUserHistories("15781212");
+		});
+		assertEquals(String.format(NOT_FOUND_RESOURCE, USER, "15781212"), notFoundMessage.getMessage());
+	}
 
 	@Test
 	public void testCreateHistory() {
