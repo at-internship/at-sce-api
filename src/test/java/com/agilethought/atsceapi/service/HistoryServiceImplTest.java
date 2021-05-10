@@ -3,9 +3,8 @@ package com.agilethought.atsceapi.service;
 import static com.agilethought.atsceapi.exception.ErrorMessage.NOT_FOUND_RESOURCE;
 import static com.agilethought.atsceapi.exception.ErrorMessage.USER;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertThrows;
+import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.ArgumentMatchers.anyString;
