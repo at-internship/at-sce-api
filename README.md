@@ -76,7 +76,7 @@
   <tbody>
     <tr>
 		  <td>Blanca Angelica Galindo Carbajal</td>
-		  <td>?</td>
+		  <td>bgalindo04@gmail.com</td>
 	  </tr>
     <tr>
 		  <td>Jose Luis Ochoa Monroy</td>
