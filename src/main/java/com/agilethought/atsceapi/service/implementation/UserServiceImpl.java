@@ -10,6 +10,7 @@ import java.util.Optional;
 
 import com.agilethought.atsceapi.dto.user.*;
 import com.agilethought.atsceapi.service.UserService;
+import com.agilethought.atsceapi.service.security.RsaPasswordEncoder;
 import com.agilethought.atsceapi.validator.user.LoginValidator;
 import com.agilethought.atsceapi.validator.user.NewUserValidator;
 import com.agilethought.atsceapi.validator.user.UpdateUserValidator;
@@ -18,6 +19,7 @@ import org.springframework.stereotype.Service;
 
 import com.agilethought.atsceapi.model.User;
 import com.agilethought.atsceapi.validator.user.UserDataValidator;
+import com.agilethought.atsceapi.exception.BadRequestException;
 import com.agilethought.atsceapi.exception.NotFoundException;
 import com.agilethought.atsceapi.exception.UnauthorizedException;
 import com.agilethought.atsceapi.repository.UserRepository;
@@ -44,18 +46,20 @@ public class UserServiceImpl implements UserService {
 
 	@Autowired
 	private UpdateUserValidator updateUserValidator;
+	
+	@Autowired
+	private RsaPasswordEncoder rsaPasswordEncoder;
 
 	@Override
 	public LoginResponse loginUser(LoginRequest loginRequest) {
-
+		String decryptedPassword = rsaPasswordEncoder.decode(loginRequest.getPassword());
+		loginRequest.setPassword(decryptedPassword);
 		loginValidator.validate(loginRequest);
-		List<User> users = userRepository.findUserWithCredentials(
-				loginRequest.getEmail(),
-				loginRequest.getPassword()
-		);
-		if (!users.isEmpty()) {
-			log.info("UserServiceImpl.loginUser: got user " + users.get(0) + " from Database");
-			User user = users.get(0);
+
+		User user = userRepository.findByEmail(loginRequest.getEmail());
+		boolean bothPasswordsMatch = rsaPasswordEncoder.matches(decryptedPassword, user.getPassword());
+		if (bothPasswordsMatch) { //Grant Access
+			log.info("UserServiceImpl.loginUser: got user " + user + " from Database");
 			if (user.getStatus() == 0)
 				throw new UnauthorizedException(
 						String.format(UNAVAILABLE_ENTITY, USER)
@@ -100,10 +104,15 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public NewUserResponse createUser(NewUserRequest request) {
-
 		User user = orikaMapperFacade.map(request, User.class);
+		try{
+			user.setPassword(rsaPasswordEncoder.decode(request.getPassword()));
+		} catch (Exception e){
+			throw new BadRequestException("Error decrypting data");
+		}
 		newUserValidator.validate(user);
 		setLetterCases(user);
+		user.setPassword(request.getPassword());
 		User savedUsers = userRepository.save(user);
 		return orikaMapperFacade.map(savedUsers, NewUserResponse.class);
 

@@ -25,6 +25,7 @@ import com.agilethought.atsceapi.exception.NotFoundException;
 import com.agilethought.atsceapi.exception.UnauthorizedException;
 import com.agilethought.atsceapi.model.User;
 import com.agilethought.atsceapi.service.implementation.UserServiceImpl;
+import com.agilethought.atsceapi.service.security.RsaPasswordEncoder;
 import com.agilethought.atsceapi.repository.UserRepository;
 
 import ma.glasnost.orika.MapperFacade;
@@ -46,6 +47,9 @@ public class UserServiceImplTest {
 
     @Mock
     private UpdateUserValidator updateUserValidator;
+    
+    @Mock
+    private RsaPasswordEncoder rsaPasswordEncoder;
 
     @InjectMocks
     private UserServiceImpl userService;
@@ -73,14 +77,15 @@ public class UserServiceImplTest {
         mockLoginRequest.setEmail("");
         mockLoginRequest.setPassword("");
 
-        List<User> mockUsersList = new ArrayList<>();
-        mockUsersList.add(new User());
-        mockUsersList.get(0).setStatus(1);
+        
+        User mockUser = new User();
+        mockUser.setStatus(1);
 
-        // Then
+        when(rsaPasswordEncoder.decode(any())).thenReturn("4giLeThought");
         doNothing().when(loginValidator).validate(any());
-        when(userRepository.findUserWithCredentials(anyString(), anyString()))
-                .thenReturn(mockUsersList);
+        when(userRepository.findByEmail(mockLoginRequest.getEmail()))
+                .thenReturn(mockUser);
+        when(rsaPasswordEncoder.matches(any(), any())).thenReturn(true);
         when(orikaMapperFacade.map(any(), any())).thenReturn(new LoginResponse());
         LoginResponse testResult = userService.loginUser(mockLoginRequest);
         assertNotNull(testResult);
@@ -95,14 +100,15 @@ public class UserServiceImplTest {
         mockLoginRequest.setEmail("");
         mockLoginRequest.setPassword("");
 
-        List<User> mockUsersList = new ArrayList<>();
-        mockUsersList.add(new User());
-        mockUsersList.get(0).setStatus(0);
+        User mockUser = new User();
+        mockUser.setStatus(0);
 
         // Then
         doNothing().when(loginValidator).validate(any());
-        when(userRepository.findUserWithCredentials(anyString(), anyString()))
-                .thenReturn(mockUsersList);
+        when(userRepository.findByEmail(anyString()))
+                .thenReturn(mockUser);
+        
+        when(rsaPasswordEncoder.matches(any(), any())).thenReturn(true);
         UnauthorizedException thrownException = assertThrows(
                 UnauthorizedException.class,
                 () -> userService.loginUser(mockLoginRequest)
@@ -124,8 +130,8 @@ public class UserServiceImplTest {
 
         // Then
         doNothing().when(loginValidator).validate(any());
-        when(userRepository.findUserWithCredentials(anyString(), anyString()))
-                .thenReturn(new ArrayList<>());
+        when(userRepository.findByEmail(anyString()))
+                .thenReturn(new User());
         UnauthorizedException thrownException = assertThrows(
                 UnauthorizedException.class,
                 () -> userService.loginUser(mockLoginRequest)
@@ -203,7 +209,16 @@ public class UserServiceImplTest {
         when(userRepository.existsByEmail(anyString())).thenReturn(false);
         when(userRepository.save(any())).thenReturn(new User());
         when(orikaMapperFacade.map(any(User.class), any())).thenReturn(new NewUserResponse());
-        assertNotNull(userService.createUser(new NewUserRequest()));
+        NewUserRequest newUserRequest = new NewUserRequest();
+        newUserRequest.setType(1);
+        newUserRequest.setFirstName("Gabriel");
+        newUserRequest.setLastName("Cordero");
+        newUserRequest.setEmail("gabcor@gmail.com");
+        //Original: Password: 4giLeThought
+        String encrytedPassword = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAt11+BTT9iuYCw8srSHH23MyK8A9052WeGQOtUUVCVSju7jdpE70D7Sd2FDh0kfJBd8YV5EgXYRTgPIGIo/azqUHwi6ga0l/CQqnzfrbzVGzs5GG46uDiIbkTy0ZLgPyuWx2um1mzYCyGDMGOcnipl3O9Em2ynkfgbZWvHPRMDUhYve3c+/SI5b4J2L9Be1J5rpNFz254d10diULe+QxaLtJn0Mokh7o5ABy8GTsTXMtDogXjcQARDoFS+pbCNfIzasU14sSMlejkTrqerZLHg8QX436ap8ZR2btAiBGcppAZbW+Jz5c7LHx5cu8ZqEagS61i7KVyubA5S6HZMhctDQIDAQAB";
+        newUserRequest.setPassword(encrytedPassword);
+        newUserRequest.setStatus(1);
+        assertNotNull(userService.createUser(newUserRequest));
 
     }
 
