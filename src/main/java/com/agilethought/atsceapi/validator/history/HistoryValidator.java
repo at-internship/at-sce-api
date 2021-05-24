@@ -5,11 +5,12 @@ import static com.agilethought.atsceapi.exception.ErrorMessage.INVALID_INPUT;
 import static com.agilethought.atsceapi.exception.ErrorMessage.MISSING_REQUIRED_INPUT;
 import static com.agilethought.atsceapi.exception.ErrorMessage.NOT_FOUND_RESOURCE;
 import static com.agilethought.atsceapi.exception.ErrorMessage.VALIDATION_ERROR;
-import static com.agilethought.atsceapi.validator.user.ValidationUtils.isValidString;
+import static com.agilethought.atsceapi.validator.ValidationUtils.isValidString;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import com.agilethought.atsceapi.adaptor.sso.SSOAdaptor;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.math3.util.Precision;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +20,6 @@ import com.agilethought.atsceapi.domain.FixedExpenses;
 import com.agilethought.atsceapi.dto.history.NewHistoryRequest;
 import com.agilethought.atsceapi.exception.BadRequestException;
 import com.agilethought.atsceapi.exception.GlobalExceptionBody.ErrorDetails;
-import com.agilethought.atsceapi.repository.UserRepository;
 import com.agilethought.atsceapi.validator.Validator;
 
 @Service
@@ -69,7 +69,7 @@ public class HistoryValidator implements Validator<NewHistoryRequest> {
 			+ " fields in the Fixed Expenses section.";
 
 	@Autowired
-	private UserRepository userRepository;
+	private SSOAdaptor ssoAdaptor;
 
 	@Override
 	public void validate(NewHistoryRequest historyRequest) {
@@ -138,12 +138,18 @@ public class HistoryValidator implements Validator<NewHistoryRequest> {
 			errorDetails.add(error);
 			return;
 		}
-		if (!userRepository.existsById(user_id)) {
-			ErrorDetails error = new ErrorDetails();
-			error.setErrorMessage(String.format(NOT_FOUND_RESOURCE, USER_ID, user_id));
-			error.setFieldName(USER_ID);
-			errorDetails.add(error);
-			return;
+		boolean userIdExists = false;
+		try {
+			userIdExists = ssoAdaptor.existsById(user_id);
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		} finally {
+			if (!userIdExists) {
+				ErrorDetails error = new ErrorDetails();
+				error.setErrorMessage(String.format(NOT_FOUND_RESOURCE, USER_ID, user_id));
+				error.setFieldName(USER_ID);
+				errorDetails.add(error);
+			}
 		}
 	}
 

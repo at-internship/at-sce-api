@@ -1,4 +1,4 @@
-package com.agilethought.atsceapi.validator.user;
+package com.agilethought.atsceapi.validator;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;

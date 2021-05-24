@@ -4,8 +4,8 @@ import static com.agilethought.atsceapi.exception.ErrorMessage.NOT_FOUND_RESOURC
 import static com.agilethought.atsceapi.exception.ErrorMessage.USER;
 
 import java.util.List;
-import java.util.Optional;
 
+import com.agilethought.atsceapi.adaptor.sso.SSOAdaptor;
 import com.agilethought.atsceapi.service.HistoryService;
 import com.agilethought.atsceapi.population.HistoryPopulation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,11 +32,10 @@ public class HistoryServiceImpl implements HistoryService {
 	private MapperFacade orikaMapperFacade;
 
 	@Autowired
-	private UserRepository userRepository;
+	private SSOAdaptor ssoAdaptor;
 
 	@Override
 	public NewHistoryResponse createHistory(NewHistoryRequest request) {
-
 		historyValidator.validate(request);
 		History newHistory = orikaMapperFacade.map(request, History.class);
 		HistoryPopulation.populate(newHistory);
@@ -46,13 +45,10 @@ public class HistoryServiceImpl implements HistoryService {
 
 	@Override
 	public List<HistoryDTO> getUserHistories(String userId) {
-
-		Optional<User> userFound = userRepository.findById(userId);
-		List<History> historyList = historyRepository.findAllByUserId(userId);
-
-		if (userFound.isPresent())
+		if (ssoAdaptor.existsById(userId)) {
+			List<History> historyList = historyRepository.findAllByUserId(userId);
 			return orikaMapperFacade.mapAsList(historyList, HistoryDTO.class);
-
+		}
 		throw new NotFoundException(String.format(NOT_FOUND_RESOURCE, USER, userId));
 	}
 }

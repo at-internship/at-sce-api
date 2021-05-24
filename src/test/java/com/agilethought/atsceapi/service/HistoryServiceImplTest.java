@@ -13,8 +13,8 @@ import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
+import com.agilethought.atsceapi.adaptor.sso.SSOAdaptor;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -26,7 +26,6 @@ import com.agilethought.atsceapi.dto.history.*;
 import com.agilethought.atsceapi.dummy.DummyNewHistoryRequest;
 import com.agilethought.atsceapi.exception.NotFoundException;
 import com.agilethought.atsceapi.model.History;
-import com.agilethought.atsceapi.model.User;
 import com.agilethought.atsceapi.population.HistoryPopulation;
 import com.agilethought.atsceapi.repository.*;
 import com.agilethought.atsceapi.service.implementation.HistoryServiceImpl;
@@ -39,7 +38,7 @@ public class HistoryServiceImplTest {
 	public DummyNewHistoryRequest dummyNewHistoryRequest;
 
 	@Mock
-	public UserRepository userRepository;
+	public SSOAdaptor ssoAdaptor;
 
 	@Mock
 	public MapperFacade orikaMapperFacade;
@@ -66,14 +65,14 @@ public class HistoryServiceImplTest {
 	public void testGetAllHistorySuccessfully() {
 		when((historyRepository).findAllByUserId(anyString())).thenReturn(new ArrayList<>());
 		when((orikaMapperFacade).mapAsList(anyList(), any())).thenReturn(new ArrayList<>());
-		when((userRepository).findById(anyString())).thenReturn(Optional.of(new User()));
+		when((ssoAdaptor).existsById(anyString())).thenReturn(true);
 		List<HistoryDTO> result = historyService.getUserHistories("15781212");
 		assertNotNull(result);
 	}
 
 	@Test
 	public void testGetAllHistoryWithIdNotFound() {
-		when((userRepository).findById(anyString())).thenReturn(Optional.empty());
+		when((ssoAdaptor).existsById(anyString())).thenReturn(false);
 		when((historyRepository).findAllByUserId(anyString())).thenReturn(new ArrayList<>());
 		Exception notFoundMessage = assertThrows(NotFoundException.class, () -> {
 			historyService.getUserHistories("15781212");
