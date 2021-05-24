@@ -3,6 +3,7 @@ package com.agilethought.atsceapi.validator.history;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
+import com.agilethought.atsceapi.adaptor.sso.SSOAdaptor;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.jupiter.api.Assertions;
@@ -12,7 +13,6 @@ import org.mockito.MockitoAnnotations;
 
 import com.agilethought.atsceapi.dummy.DummyNewHistoryRequest;
 import com.agilethought.atsceapi.exception.BadRequestException;
-import com.agilethought.atsceapi.repository.UserRepository;
 
 public class HistoryValidatorTest {
 	private static final String EXCEPTION_ERROR_MESSAGE = "One or more fields are invalid";
@@ -20,7 +20,7 @@ public class HistoryValidatorTest {
 	public DummyNewHistoryRequest dummyNewHistoryRequest;
 
 	@Mock
-	public UserRepository userRepository;
+	public SSOAdaptor ssoAdaptor;
 
 	@InjectMocks
 	public HistoryValidator historyValidator;
@@ -81,7 +81,7 @@ public class HistoryValidatorTest {
 			Assertions.assertEquals(EXCEPTION_ERROR_MESSAGE, errorMessageException.getMessage());
 		}, () -> {
 			dummyNewHistoryRequest.setUser_id("1");
-			when((userRepository).existsById(anyString())).thenReturn(false);
+			when((ssoAdaptor).existsById(anyString())).thenReturn(false);
 			Exception errorMessageException = Assertions.assertThrows(BadRequestException.class, () -> {
 				historyValidator.validate(dummyNewHistoryRequest);
 			});
@@ -93,7 +93,7 @@ public class HistoryValidatorTest {
 	@Test
 	public void itShouldThrowErrorMessageInHistoryTotalHoursField() {
 
-		when((userRepository).existsById(anyString())).thenReturn(true);
+		when((ssoAdaptor).existsById(anyString())).thenReturn(true);
 
 		Assertions.assertAll(() -> {
 			dummyNewHistoryRequest.setTotalHours(null);
@@ -114,7 +114,7 @@ public class HistoryValidatorTest {
 	@Test
 	public void itShouldThrowErrorMessageInHistoryTotalDaysField() {
 
-		when((userRepository).existsById(anyString())).thenReturn(true);
+		when((ssoAdaptor).existsById(anyString())).thenReturn(true);
 
 		Assertions.assertAll(() -> {
 			dummyNewHistoryRequest.setTotalDays(null);
@@ -134,7 +134,7 @@ public class HistoryValidatorTest {
 	@Test
 	public void itShouldThrowErrorMessageInHistoryCostDayField() {
 
-		when((userRepository).existsById(anyString())).thenReturn(true);
+		when((ssoAdaptor).existsById(anyString())).thenReturn(true);
 
 		Assertions.assertAll(() -> {
 			dummyNewHistoryRequest.setCostDay(null);
@@ -154,7 +154,7 @@ public class HistoryValidatorTest {
 	@Test
 	public void itShouldThrowErrorMessageInHistoryCostHourField() {
 
-		when((userRepository).existsById(anyString())).thenReturn(true);
+		when((ssoAdaptor).existsById(anyString())).thenReturn(true);
 
 		Assertions.assertAll(() -> {
 			dummyNewHistoryRequest.setCostHour(null);
@@ -174,7 +174,7 @@ public class HistoryValidatorTest {
 	@Test
 	public void itShouldThrowErrorMessageInHistoryProjectCostField() {
 
-		when((userRepository).existsById(anyString())).thenReturn(true);
+		when((ssoAdaptor).existsById(anyString())).thenReturn(true);
 
 		Assertions.assertAll(() -> {
 			dummyNewHistoryRequest.setProjectCost(null);
@@ -194,7 +194,7 @@ public class HistoryValidatorTest {
 	@Test
 	public void itShouldThrowErrorMessageInHistoryTaxIVAField() {
 
-		when((userRepository).existsById(anyString())).thenReturn(true);
+		when((ssoAdaptor).existsById(anyString())).thenReturn(true);
 
 		Assertions.assertAll(() -> {
 			dummyNewHistoryRequest.setTaxIVA(null);
@@ -214,7 +214,7 @@ public class HistoryValidatorTest {
 	@Test
 	public void itShouldThrowErrorMessageInHistoryTaxISR_rField() {
 
-		when((userRepository).existsById(anyString())).thenReturn(true);
+		when((ssoAdaptor).existsById(anyString())).thenReturn(true);
 
 		Assertions.assertAll(() -> {
 			dummyNewHistoryRequest.setTaxISR_r(null);
@@ -234,7 +234,7 @@ public class HistoryValidatorTest {
 	@Test
 	public void itShouldThrowErrorMessageInHistoryTaxIVA_rField() {
 
-		when((userRepository).existsById(anyString())).thenReturn(true);
+		when((ssoAdaptor).existsById(anyString())).thenReturn(true);
 
 		Assertions.assertAll(() -> {
 			dummyNewHistoryRequest.setTaxIVA_r(null);
@@ -254,7 +254,7 @@ public class HistoryValidatorTest {
 	@Test
 	public void itShouldThrowErrorMessageInHistoryTotalField() {
 
-		when((userRepository).existsById(anyString())).thenReturn(true);
+		when((ssoAdaptor).existsById(anyString())).thenReturn(true);
 
 		Assertions.assertAll(() -> {
 			dummyNewHistoryRequest.setTotal(null);
@@ -274,7 +274,7 @@ public class HistoryValidatorTest {
 	@Test
 	public void itShouldThrowErrorMessageInHistoryRevenueField() {
 
-		when((userRepository).existsById(anyString())).thenReturn(true);
+		when((ssoAdaptor).existsById(anyString())).thenReturn(true);
 
 		Assertions.assertAll(() -> {
 			dummyNewHistoryRequest.setRevenue(null);
@@ -294,7 +294,7 @@ public class HistoryValidatorTest {
 	@Test
 	public void itShouldThrowErrorMessageInHistoryStatusField() {
 
-		when((userRepository).existsById(anyString())).thenReturn(true);
+		when((ssoAdaptor).existsById(anyString())).thenReturn(true);
 
 		Assertions.assertAll(() -> {
 			dummyNewHistoryRequest.setStatus(null);

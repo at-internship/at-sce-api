@@ -1,7 +1,6 @@
 package com.agilethought.atsceapi.controller;
 
 import java.util.List;
-import java.util.Map;
 
 import com.agilethought.atsceapi.dto.history.HistoryDTO;
 import com.agilethought.atsceapi.dto.history.NewHistoryRequest;

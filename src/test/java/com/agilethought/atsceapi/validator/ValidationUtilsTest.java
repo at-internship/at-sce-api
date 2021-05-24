@@ -1,8 +1,5 @@
-package com.agilethought.atsceapi.validator.user;
+package com.agilethought.atsceapi.validator;
 
-import com.agilethought.atsceapi.validator.user.ValidationUtils;
-import org.bson.assertions.Assertions;
-import org.junit.Assert;
 import org.junit.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
