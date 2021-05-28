@@ -47,7 +47,7 @@ pipeline {
                 branch 'develop'
             }
             steps {
-                build propagate: false, job: '../QA jobs/at-sso-api-qe'
+                build propagate: false, job: '../QA jobs/at-sce-api-qe'
             }
         }
     }
