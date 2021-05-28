@@ -41,5 +41,14 @@ pipeline {
                 }
             }
         }
+
+        stage('Trigger Cucumber QA reports') {
+            when {
+                branch 'develop'
+            }
+            steps {
+                build propagate: false, job: '../QA jobs/at-sso-api-qe'
+            }
+        }
     }
 }
